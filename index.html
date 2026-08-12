@@ -1,17 +1,282 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Projeto</title>
-</head>
-<body>
-    <h1>Meu Projeto da Disciplina</h1>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor de Decorações</title>
 
-    <p>Aluno: SEU NOME</p>
-    <p>Disciplina: Administração de Sistemas Proprietários</p>
-    <p>Tema: HTTP</p>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffe4f0, #e6ddff);
+      min-height: 100vh;
+      padding: 30px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #7b3f98;
+    }
+
+    .editor {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    /* Painel de decorações */
+    .painel {
+      width: 230px;
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .painel h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #7b3f98;
+    }
+
+    .decoracao-btn {
+      width: 100%;
+      padding: 13px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 12px;
+      background: #f3e8ff;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .decoracao-btn:hover {
+      background: #dfc5ff;
+      transform: scale(1.03);
+    }
+
+    .limpar {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: #ff6b81;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .limpar:hover {
+      background: #e84f67;
+    }
+
+    /* Área onde as decorações aparecem */
+    .area {
+      flex: 1;
+      min-height: 600px;
+      background: white;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+
+      background-image:
+        linear-gradient(#eeeeee 1px, transparent 1px),
+        linear-gradient(90deg, #eeeeee 1px, transparent 1px);
+      background-size: 25px 25px;
+    }
+
+    .decoracao {
+      position: absolute;
+      font-size: 45px;
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.15s;
+    }
+
+    .decoracao:hover {
+      transform: scale(1.15);
+    }
+
+    .decoracao:active {
+      cursor: grabbing;
+    }
+
+    .instrucoes {
+      text-align: center;
+      color: #888;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .editor {
+        flex-direction: column;
+      }
+
+      .painel {
+        width: 100%;
+      }
+
+      .area {
+        width: 100%;
+        min-height: 500px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>✨ Meu Editor de Decorações ✨</h1>
+
+  <div class="editor">
+
+    <div class="painel">
+      <h2>🎨 Decorações</h2>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('🌸')">
+        🌸 Flor
+      </button>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('🌹')">
+        🌹 Rosa
+      </button>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('💖')">
+        💖 Coração
+      </button>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('⭐')">
+        ⭐ Estrela
+      </button>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('✨')">
+        ✨ Brilho
+      </button>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('🎈')">
+        🎈 Balão
+      </button>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('🦋')">
+        🦋 Borboleta
+      </button>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('🎀')">
+        🎀 Laço
+      </button>
+
+      <button class="decoracao-btn" onclick="adicionarDecoracao('🌿')">
+        🌿 Folha
+      </button>
+
+      <button class="limpar" onclick="limparArea()">
+        🗑️ Limpar tudo
+      </button>
+    </div>
+
+    <div
+      class="area"
+      id="area"
+      ondragover="permitirSoltar(event)"
+      ondrop="soltar(event)"
+    >
+      <div class="instrucoes">
+        Escolha uma decoração no painel para adicioná-la aqui.
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const area = document.getElementById("area");
+
+    function adicionarDecoracao(emoji) {
+
+      const decoracao = document.createElement("div");
+
+      decoracao.classList.add("decoracao");
+      decoracao.textContent = emoji;
+
+      // Posição aleatória
+      const maxX = area.clientWidth - 60;
+      const maxY = area.clientHeight - 60;
+
+      decoracao.style.left =
+        Math.max(10, Math.random() * maxX) + "px";
+
+      decoracao.style.top =
+        Math.max(10, Math.random() * maxY) + "px";
+
+      // Permite arrastar
+      decoracao.draggable = true;
+
+      decoracao.addEventListener("dragstart", function(event) {
+        event.dataTransfer.setData(
+          "text/plain",
+          "movendo"
+        );
+
+        decoracao.classList.add("arrastando");
+      });
+
+      decoracao.addEventListener("dragend", function() {
+        decoracao.classList.remove("arrastando");
+      });
+
+      // Duplo clique remove a decoração
+      decoracao.addEventListener("dblclick", function() {
+        decoracao.remove();
+      });
+
+      area.appendChild(decoracao);
+    }
+
+    function permitirSoltar(event) {
+      event.preventDefault();
+    }
+
+    function soltar(event) {
+      event.preventDefault();
+
+      const elemento =
+        document.querySelector(".arrastando");
+
+      if (!elemento) return;
+
+      const rect = area.getBoundingClientRect();
+
+      let x = event.clientX - rect.left - 20;
+      let y = event.clientY - rect.top - 20;
+
+      // Impede que saia da área
+      x = Math.max(0, Math.min(x, area.clientWidth - 60));
+      y = Math.max(0, Math.min(y, area.clientHeight - 60));
+
+      elemento.style.left = x + "px";
+      elemento.style.top = y + "px";
+    }
+
+    function limparArea() {
+      const decoracoes =
+        area.querySelectorAll(".decoracao");
+
+      decoracoes.forEach(elemento => elemento.remove());
+    }
+  </script>
+
 </body>
 </html>
-<h2>Meu primeiro site publicado!</h2>
-<p>Este projeto utiliza GitHub Pages.</p>
