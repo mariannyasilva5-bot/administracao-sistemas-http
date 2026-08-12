@@ -5,36 +5,672 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Meu Projeto - Editor de Decorações</title>
+    <title>Meu Projeto - BTS e Stray Kids</title>
 
     <style>
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #ffe4f0, #e6ddff);
+            background:
+                radial-gradient(circle at top, #6f42c1, #241044 45%, #10051f);
+            color: white;
             min-height: 100vh;
-            padding: 30px;
-            color: #333;
+            padding: 25px;
         }
 
-        /* Informações do projeto */
-        .cabecalho {
+        /* CABEÇALHO */
+
+        header {
             max-width: 1100px;
-            margin: 0 auto 25px;
-            background: white;
+            margin: auto;
+            text-align: center;
+            padding: 30px;
+            border-radius: 25px;
+
+            background: rgba(255,255,255,0.10);
+            backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255,255,255,0.2);
+
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        header h1 {
+            color: #e5c6ff;
+            font-size: 38px;
+            margin-bottom: 20px;
+        }
+
+        header p {
+            margin: 8px;
+            font-size: 17px;
+        }
+
+
+        /* TÍTULO */
+
+        .titulo {
+            text-align: center;
+            margin: 35px 0 25px;
+        }
+
+        .titulo h2 {
+            font-size: 32px;
+            color: #d9a7ff;
+        }
+
+        .titulo p {
+            margin-top: 10px;
+            color: #ddd;
+        }
+
+
+        /* CARTÕES */
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(230px, 1fr));
+
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.10);
+
+            border: 1px solid rgba(255,255,255,0.15);
+
+            border-radius: 20px;
+
             padding: 25px;
-            border-radius: 18px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+            text-align: center;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.03);
+
+            background: rgba(255,255,255,0.16);
+
+            box-shadow:
+                0 15px 35px rgba(140,70,255,0.4);
+        }
+
+        .animal {
+            font-size: 70px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #e4c1ff;
+            margin-bottom: 8px;
+        }
+
+        .grupo {
+            color: #bca2d9;
+            font-size: 14px;
+        }
+
+
+        /* SEÇÕES */
+
+        .secao {
+            max-width: 1100px;
+            margin: 45px auto 20px;
+
             text-align: center;
         }
 
-        .cabecalho h1 {
-            color: #7b3f98;
+        .secao h2 {
+            color: #e5c6ff;
+            font-size: 28px;
+        }
+
+
+        /* DECORAÇÕES */
+
+        .decoracoes {
+            max-width: 1100px;
+            margin: auto;
+
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+
+            gap: 15px;
+        }
+
+        .decoracao {
+            font-size: 45px;
+
+            padding: 15px;
+
+            background: rgba(255,255,255,0.08);
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .decoracao:hover {
+            transform: rotate(10deg) scale(1.2);
+
+            background: rgba(180,100,255,0.25);
+        }
+
+
+        /* BOTÕES */
+
+        .botoes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+
+            margin-top: 30px;
+        }
+
+        button {
+            border: none;
+
+            padding: 14px 25px;
+
+            border-radius: 30px;
+
+            background: linear-gradient(
+                135deg,
+                #9b59ff,
+                #6525a8
+            );
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 5px 20px rgba(130,50,255,0.4);
+        }
+
+        button:hover {
+            transform: scale(1.08);
+
+            background: linear-gradient(
+                135deg,
+                #c084ff,
+                #8039d1
+            );
+        }
+
+
+        /* MENSAGEM */
+
+        #mensagem {
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #e5c6ff;
+
+            font-size: 18px;
+
+            min-height: 25px;
+        }
+
+
+        /* RODAPÉ */
+
+        footer {
+            max-width: 1100px;
+
+            margin: 50px auto 0;
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #bda9d0;
+
+            border-top:
+                1px solid rgba(255,255,255,0.15);
+        }
+
+
+        /* CELULAR */
+
+        @media(max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 28px;
+            }
+
+            .titulo h2 {
+                font-size: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- CABEÇALHO DO PROJETO -->
+
+    <header>
+
+        <h1>💜 Meu Projeto da Disciplina 💜</h1>
+
+        <p>
+            <strong>Nome:</strong> Marianny
+        </p>
+
+        <p>
+            <strong>Disciplina:</strong>
+            COLOQUE O NOME DA DISCIPLINA
+        </p>
+
+        <p>
+            <strong>Tema:</strong>
+            COLOQUE O TEMA
+        </p>
+
+    </header>
+
+
+    <!-- APRESENTAÇÃO -->
+
+    <section class="titulo">
+
+        <h2>
+            💜 BTS & Stray Kids 💜
+        </h2>
+
+        <p>
+            Um cantinho roxo dedicado aos grupos e aos animais
+            que representam seus integrantes.
+        </p>
+
+    </section>
+
+
+    <!-- BTS -->
+
+    <section class="secao">
+
+        <h2>💜 BTS</h2>
+
+    </section>
+
+
+    <div class="container">
+
+
+        <div class="card">
+
+            <div class="animal">🐨</div>
+
+            <h3>RM</h3>
+
+            <p class="grupo">
+                Líder do BTS
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐹</div>
+
+            <h3>Jin</h3>
+
+            <p class="grupo">
+                BTS
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐱</div>
+
+            <h3>SUGA</h3>
+
+            <p class="grupo">
+                BTS
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐿️</div>
+
+            <h3>J-Hope</h3>
+
+            <p class="grupo">
+                BTS
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐥</div>
+
+            <h3>Jimin</h3>
+
+            <p class="grupo">
+                BTS
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐻</div>
+
+            <h3>V</h3>
+
+            <p class="grupo">
+                BTS
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐰</div>
+
+            <h3>Jungkook</h3>
+
+            <p class="grupo">
+                BTS
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- STRAY KIDS -->
+
+    <section class="secao">
+
+        <h2>🖤 Stray Kids</h2>
+
+    </section>
+
+
+    <div class="container">
+
+
+        <div class="card">
+
+            <div class="animal">🐺</div>
+
+            <h3>Bang Chan</h3>
+
+            <p class="grupo">
+                Líder do Stray Kids
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐰</div>
+
+            <h3>Lee Know</h3>
+
+            <p class="grupo">
+                Stray Kids
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐷🐰</div>
+
+            <h3>Changbin</h3>
+
+            <p class="grupo">
+                Stray Kids
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐿️</div>
+
+            <h3>Hyunjin</h3>
+
+            <p class="grupo">
+                Stray Kids
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐿️</div>
+
+            <h3>Han</h3>
+
+            <p class="grupo">
+                Stray Kids
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐥</div>
+
+            <h3>Felix</h3>
+
+            <p class="grupo">
+                Stray Kids
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐶</div>
+
+            <h3>Seungmin</h3>
+
+            <p class="grupo">
+                Stray Kids
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="animal">🐰</div>
+
+            <h3>I.N</h3>
+
+            <p class="grupo">
+                Stray Kids
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- DECORAÇÕES -->
+
+    <section class="secao">
+
+        <h2>✨ Decorações ✨</h2>
+
+    </section>
+
+
+    <div class="decoracoes">
+
+        <div class="decoracao">💜</div>
+        <div class="decoracao">🖤</div>
+        <div class="decoracao">💜</div>
+        <div class="decoracao">✨</div>
+        <div class="decoracao">⭐</div>
+        <div class="decoracao">🌙</div>
+        <div class="decoracao">🦋</div>
+        <div class="decoracao">🌸</div>
+        <div class="decoracao">🌹</div>
+        <div class="decoracao">🎀</div>
+        <div class="decoracao">🐱</div>
+        <div class="decoracao">🐶</div>
+        <div class="decoracao">🐰</div>
+        <div class="decoracao">🐻</div>
+        <div class="decoracao">🐺</div>
+        <div class="decoracao">🐨</div>
+        <div class="decoracao">🦊</div>
+        <div class="decoracao">🐹</div>
+        <div class="decoracao">🐥</div>
+        <div class="decoracao">🌈</div>
+
+    </div>
+
+
+    <!-- BOTÕES -->
+
+    <div class="botoes">
+
+        <button onclick="mensagemBTS()">
+            💜 BTS
+        </button>
+
+        <button onclick="mensagemSKZ()">
+            🖤 Stray Kids
+        </button>
+
+        <button onclick="mensagemAnimais()">
+            🐾 Animais
+        </button>
+
+    </div>
+
+
+    <div id="mensagem"></div>
+
+
+    <!-- RODAPÉ -->
+
+    <footer>
+
+        <p>
+            💜 Projeto desenvolvido por Marianny 💜
+        </p>
+
+        <p>
+            BTS • Stray Kids • K-pop • Animais
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        function mensagemBTS() {
+
+            document.getElementById("mensagem").innerHTML =
+                "💜 BTS — Kim Namjoon, Kim Seokjin, Min Yoongi, Jung Hoseok, Park Jimin, Kim Taehyung e Jeon Jungkook! 💜";
+
+        }
+
+
+        function mensagemSKZ() {
+
+            document.getElementById("mensagem").innerHTML =
+                "🖤 Stray Kids — Bang Chan, Lee Know, Changbin, Hyunjin, Han, Felix, Seungmin e I.N! 🖤";
+
+        }
+
+
+        function mensagemAnimais() {
+
+            document.getElementById("mensagem").innerHTML =
+                "🐾 Cada animal deixa o site ainda mais fofo e divertido! 🐾";
+
+        }
+
+
+        // Animação das decorações
+
+        const decoracoes =
+            document.querySelectorAll(".decoracao");
+
+
+        decoracoes.forEach(function(item) {
+
+            item.addEventListener("click", function() {
+
+                item.style.transform =
+                    "scale(1.4) rotate(15deg)";
+
+                setTimeout(function() {
+
+                    item.style.transform = "";
+
+                }, 500);
+
+            });
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>            color: #7b3f98;
             margin-bottom: 15px;
         }
 
