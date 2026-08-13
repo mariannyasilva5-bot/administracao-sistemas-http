@@ -4,21 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>♡ Marianny | ASP ♡</title>
+<title>Marianny • ASP • Magical World</title>
+
+<meta name="description" content="Site mágico da Marianny - Disciplina ASP">
 
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Pacifico&display=swap');
-
-:root {
-    --roxo: #9b5de5;
-    --roxo-escuro: #5b21b6;
-    --lilas: #c084fc;
-    --rosa: #f0abfc;
-    --branco: #ffffff;
-    --vidro: rgba(255,255,255,.13);
-    --borda: rgba(255,255,255,.28);
-}
+/* =========================================================
+   RESET
+========================================================= */
 
 * {
     margin: 0;
@@ -31,10 +24,2305 @@ html {
 }
 
 body {
-    min-height: 100vh;
+    font-family: Georgia, "Times New Roman", serif;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(255, 160, 220, .16), transparent 25%),
+        radial-gradient(circle at 80% 20%, rgba(130, 100, 255, .16), transparent 30%),
+        linear-gradient(135deg, #080512, #130a24 45%, #090716);
+    color: #fff;
     overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #090611;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(#e9a8ff, #7d6cff);
+    border-radius: 20px;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+#loader {
+    position: fixed;
+    inset: 0;
+    background: #07040e;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+#loader.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.magic-book {
+    width: 80px;
+    height: 60px;
+    margin: auto;
+    position: relative;
+    animation: float 2s ease-in-out infinite;
+}
+
+.magic-book::before,
+.magic-book::after {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 60px;
+    background: linear-gradient(135deg, #b66cff, #ff9de7);
+    border-radius: 6px 2px 2px 6px;
+    box-shadow: 0 0 25px #d889ff;
+}
+
+.magic-book::before {
+    left: 0;
+    transform: skewY(-5deg);
+}
+
+.magic-book::after {
+    right: 0;
+    transform: skewY(5deg);
+}
+
+.loader-content h2 {
+    margin-top: 30px;
+    font-size: 2rem;
+    color: #ffd9ff;
+    text-shadow: 0 0 20px #d77cff;
+}
+
+.loader-content p {
+    margin-top: 8px;
+    color: #bba7d8;
+}
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+#particles {
+    position: fixed;
+    inset: 0;
+    z-index: -5;
+    pointer-events: none;
+}
+
+.aurora {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: .16;
+    z-index: -4;
+    pointer-events: none;
+}
+
+.aurora.one {
+    background: #c55cff;
+    top: -200px;
+    left: -200px;
+    animation: auroraMove 15s infinite alternate ease-in-out;
+}
+
+.aurora.two {
+    background: #4d70ff;
+    bottom: -250px;
+    right: -200px;
+    animation: auroraMove 18s infinite alternate-reverse ease-in-out;
+}
+
+/* =========================================================
+   MAGIC PARTICLES
+========================================================= */
+
+.sparkle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: white;
+    box-shadow:
+        0 0 8px white,
+        0 0 15px #eaa6ff,
+        0 0 30px #a978ff;
+    pointer-events: none;
+    z-index: 20;
+    animation: sparkleFloat linear infinite;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+nav {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(94%, 1200px);
+    padding: 12px 20px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 30px;
+    background: rgba(16, 9, 29, .60);
+    backdrop-filter: blur(18px);
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.3),
+        inset 0 0 30px rgba(255,255,255,.02);
+    z-index: 5000;
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #ffd7ff;
+    text-shadow: 0 0 15px #d47dff;
+}
+
+.logo span {
+    color: #a99aff;
+}
+
+.nav-links {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: #ddd2ee;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 20px;
+    transition: .3s;
+}
+
+.nav-links a:hover {
+    background: rgba(255,255,255,.09);
+    color: #fff;
+    box-shadow: 0 0 18px rgba(219,140,255,.2);
+}
+
+.menu-btn {
+    display: none;
+    background: none;
+    border: 0;
     color: white;
-    font-family: "Fredoka", sans-serif;
+    font-size: 1.7rem;
+    cursor: pointer;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 120px 7% 80px;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 1100px;
+    text-align: center;
+    position: relative;
+    z-index: 5;
+}
+
+.badge {
+    display: inline-block;
+    padding: 8px 18px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 50px;
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(10px);
+    color: #e8caff;
+    margin-bottom: 25px;
+    animation: fadeSlide .8s .2s both;
+}
+
+.hero h1 {
+    font-size: clamp(4rem, 11vw, 9rem);
+    line-height: .85;
+    letter-spacing: -5px;
+    background: linear-gradient(
+        90deg,
+        #fff,
+        #ffc8ef,
+        #d6b8ff,
+        #9dbbff,
+        #fff
+    );
+    background-size: 300%;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation:
+        heroTitle 1s .3s both,
+        gradientFlow 8s linear infinite;
+    text-shadow: 0 0 50px rgba(222,133,255,.15);
+}
+
+.hero h1 small {
+    display: block;
+    font-size: .22em;
+    letter-spacing: 10px;
+    margin-top: 25px;
+    color: #c9b5e7;
+}
+
+.hero-description {
+    max-width: 700px;
+    margin: 35px auto;
+    color: #c9bed9;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    animation: fadeSlide 1s .7s both;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    animation: fadeSlide 1s 1s both;
+}
+
+.magic-btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 26px;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,.2);
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(
+        135deg,
+        rgba(218,118,255,.45),
+        rgba(105,103,255,.35)
+    );
+    box-shadow: 0 0 25px rgba(194,112,255,.2);
+    transition: .35s;
+}
+
+.magic-btn::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 200%;
+    background: rgba(255,255,255,.3);
+    transform: rotate(25deg) translateX(-180px);
+    transition: .6s;
+}
+
+.magic-btn:hover::before {
+    transform: rotate(25deg) translateX(300px);
+}
+
+.magic-btn:hover {
+    transform: translateY(-5px) scale(1.04);
+    box-shadow: 0 0 35px rgba(212,128,255,.5);
+}
+
+/* =========================================================
+   FLOATING DECORATIONS
+========================================================= */
+
+.floating {
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    animation: float 5s ease-in-out infinite;
+}
+
+.cat {
+    font-size: 4rem;
+}
+
+.panda {
+    font-size: 4rem;
+}
+
+.dragon {
+    font-size: 5rem;
+    filter: drop-shadow(0 0 20px #b67cff);
+}
+
+.flower {
+    font-size: 3rem;
+}
+
+.f1 { left: 6%; top: 25%; animation-delay: -.5s; }
+.f2 { right: 8%; top: 30%; animation-delay: -1.5s; }
+.f3 { left: 15%; bottom: 15%; animation-delay: -2s; }
+.f4 { right: 15%; bottom: 10%; animation-delay: -3s; }
+.f5 { left: 50%; top: 12%; animation-delay: -4s; }
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+section {
+    padding: 120px 7%;
+    position: relative;
+}
+
+.section-heading {
+    max-width: 850px;
+    margin: 0 auto 65px;
+    text-align: center;
+}
+
+.section-heading .mini {
+    color: #d99aff;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: .8rem;
+}
+
+.section-heading h2 {
+    margin: 15px 0;
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    background: linear-gradient(90deg, #fff, #dfb8ff, #ffb9e9);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.section-heading p {
+    color: #aaa0ba;
+    line-height: 1.8;
+}
+
+/* =========================================================
+   GLASS CARDS
+========================================================= */
+
+.glass {
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.09),
+        rgba(255,255,255,.025)
+    );
+    border: 1px solid rgba(255,255,255,.12);
+    backdrop-filter: blur(18px);
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.2),
+        inset 0 0 30px rgba(255,255,255,.015);
+}
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about-grid {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 25px;
+}
+
+.profile-card {
+    border-radius: 30px;
+    padding: 35px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-orb {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 25px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 30% 30%, #fff, #ffb8ed 10%, #b18aff 50%, #5b55bd);
+    box-shadow:
+        0 0 30px #d785ff,
+        0 0 80px rgba(188,113,255,.4);
+    animation: pulse 4s infinite;
+}
+
+.profile-card h3 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.profile-card p {
+    color: #b7aeca;
+}
+
+.info-card {
+    padding: 40px;
+    border-radius: 30px;
+}
+
+.info-card h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.info-card p {
+    color: #bbb0c8;
+    line-height: 1.9;
+}
+
+.info-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.pill {
+    padding: 9px 15px;
+    border-radius: 30px;
+    background: rgba(218,139,255,.1);
+    border: 1px solid rgba(221,154,255,.2);
+    color: #e5caff;
+}
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.stats {
+    max-width: 1000px;
+    margin: 70px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.stat {
+    padding: 25px;
+    border-radius: 22px;
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #f0c6ff;
+}
+
+.stat-label {
+    color: #a99eb8;
+    font-size: .9rem;
+}
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+
+.favorites-grid {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.favorite-card {
+    min-height: 260px;
+    border-radius: 28px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    transition: .45s;
+}
+
+.favorite-card::after {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: conic-gradient(
+        transparent,
+        rgba(255,160,240,.15),
+        transparent 30%
+    );
+    animation: rotate 8s linear infinite;
+    pointer-events: none;
+}
+
+.favorite-card:hover {
+    transform: translateY(-10px) rotateX(2deg);
+    border-color: rgba(240,170,255,.35);
+    box-shadow: 0 25px 60px rgba(174,95,255,.2);
+}
+
+.favorite-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.favorite-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.favorite-card p {
+    color: #aca0ba;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   KPOP
+========================================================= */
+
+.kpop-wrapper {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.artist-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.artist {
+    position: relative;
+    min-height: 210px;
+    padding: 30px;
+    border-radius: 28px;
+    overflow: hidden;
+    transition: .4s;
+}
+
+.artist:hover {
+    transform: scale(1.03);
+}
+
+.artist::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(255,255,255,.25), transparent 30%),
+        linear-gradient(135deg, rgba(255,120,230,.2), transparent);
+}
+
+.artist-icon {
+    font-size: 3rem;
+    position: relative;
+}
+
+.artist h3,
+.artist p {
+    position: relative;
+}
+
+.artist h3 {
+    font-size: 1.5rem;
+    margin-top: 15px;
+}
+
+.artist p {
+    color: #b9afc8;
+    margin-top: 8px;
+}
+
+/* =========================================================
+   BOOKS
+========================================================= */
+
+.library {
+    max-width: 1100px;
+    margin: auto;
+    perspective: 1000px;
+}
+
+.bookshelf {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    align-items: end;
+}
+
+.book {
+    height: 270px;
+    border-radius: 7px 18px 18px 7px;
+    position: relative;
+    padding: 20px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    writing-mode: vertical-rl;
+    transform-origin: bottom;
+    transition: .5s;
+    box-shadow: -8px 10px 30px rgba(0,0,0,.4);
+}
+
+.book:hover {
+    transform: rotateY(-15deg) translateY(-15px);
+}
+
+.book:nth-child(1) {
+    background: linear-gradient(#6b35a8, #27134c);
+}
+
+.book:nth-child(2) {
+    background: linear-gradient(#b44d86, #4a1738);
+}
+
+.book:nth-child(3) {
+    background: linear-gradient(#4761bd, #171d52);
+}
+
+.book:nth-child(4) {
+    background: linear-gradient(#b46d38, #4e2616);
+}
+
+.book::after {
+    content: "✦";
+    position: absolute;
+    top: 12px;
+    left: 10px;
+    color: #ffe5ff;
+}
+
+.book-title {
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+/* =========================================================
+   MOVIES
+========================================================= */
+
+.media-grid {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.media-card {
+    border-radius: 25px;
+    overflow: hidden;
+    transition: .4s;
+}
+
+.media-card:hover {
+    transform: translateY(-8px);
+}
+
+.media-cover {
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    background:
+        radial-gradient(circle, rgba(255,255,255,.25), transparent),
+        linear-gradient(135deg, #563e9e, #c058a8);
+}
+
+.media-content {
+    padding: 25px;
+}
+
+.media-content h3 {
+    margin-bottom: 8px;
+}
+
+.media-content p {
+    color: #aaa1b8;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   MUSIC PLAYER
+========================================================= */
+
+.music-player {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 330px;
+    padding: 18px;
+    border-radius: 25px;
+    z-index: 4000;
+    transform: translateY(120%);
+    transition: .5s;
+}
+
+.music-player.visible {
+    transform: translateY(0);
+}
+
+.music-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.music-disc {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, #fff 5%, #d59aff 7%, #6533a8 30%, #171022 65%);
+    box-shadow: 0 0 20px #bf7cff;
+    animation: spin 4s linear infinite;
+    animation-play-state: paused;
+}
+
+.music-disc.playing {
+    animation-play-state: running;
+}
+
+.music-info {
+    flex: 1;
+}
+
+.music-info strong {
+    display: block;
+    font-size: .95rem;
+}
+
+.music-info small {
+    color: #a99cb8;
+}
+
+.music-controls {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+}
+
+.music-controls button {
+    border: 0;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    background: rgba(255,255,255,.1);
+    transition: .3s;
+}
+
+.music-controls button:hover {
+    background: rgba(218,135,255,.35);
+    transform: scale(1.08);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    padding: 80px 7% 40px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.footer-magic {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+footer h2 {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+footer p {
+    color: #9e94ad;
+}
+
+.footer-line {
+    width: 150px;
+    height: 2px;
+    margin: 30px auto;
+    background: linear-gradient(90deg, transparent, #d693ff, transparent);
+}
+
+/* =========================================================
+   REVEAL ANIMATION
+========================================================= */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition:
+        opacity .9s ease,
+        transform .9s cubic-bezier(.2,.7,.2,1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.from-left {
+    transform: translateX(-70px);
+}
+
+.from-right {
+    transform: translateX(70px);
+}
+
+.from-left.active,
+.from-right.active {
+    transform: translateX(0);
+}
+
+/* =========================================================
+   CURSOR
+========================================================= */
+
+.cursor {
+    position: fixed;
+    width: 22px;
+    height: 22px;
+    border: 1px solid #efc7ff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition:
+        width .2s,
+        height .2s,
+        background .2s;
+    box-shadow: 0 0 15px #d38cff;
+}
+
+.cursor-dot {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #fff;
+}
+
+/* =========================================================
+   SCROLL PROGRESS
+========================================================= */
+
+.progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #ff9de7, #b88aff, #7aa8ff);
+    z-index: 10000;
+    box-shadow: 0 0 15px #d783ff;
+}
+
+/* =========================================================
+   KEYFRAMES
+========================================================= */
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes heroTitle {
+    from {
+        opacity: 0;
+        transform: scale(.8) translateY(40px);
+        filter: blur(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes gradientFlow {
+    to {
+        background-position: 300%;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+
+    50% {
+        transform: translateY(-25px) rotate(3deg);
+    }
+}
+
+@keyframes pulse {
+    0%,100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes sparkleFloat {
+    from {
+        transform: translateY(100vh) scale(.5);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-20vh) scale(1.4);
+        opacity: 0;
+    }
+}
+
+@keyframes auroraMove {
+    from {
+        transform: translate(0,0) scale(1);
+    }
+
+    to {
+        transform: translate(180px,100px) scale(1.3);
+    }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        padding: 15px;
+        border-radius: 20px;
+        background: rgba(15,8,27,.95);
+        backdrop-filter: blur(20px);
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .favorites-grid,
+    .artist-grid,
+    .media-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bookshelf {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+
+    section {
+        padding: 85px 5%;
+    }
+
+    .hero {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .hero h1 {
+        letter-spacing: -2px;
+    }
+
+    .floating {
+        opacity: .45;
+    }
+
+    .cat,
+    .panda {
+        font-size: 2.5rem;
+    }
+
+    .dragon {
+        font-size: 3rem;
+    }
+
+    .favorites-grid,
+    .artist-grid,
+    .media-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bookshelf {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .book {
+        height: 210px;
+    }
+
+    .music-player {
+        left: 12px;
+        right: 12px;
+        width: auto;
+        bottom: 12px;
+    }
+
+    .cursor,
+    .cursor-dot {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     LOADER
+========================================================= -->
+
+<div id="loader">
+    <div class="loader-content">
+        <div class="magic-book"></div>
+        <h2>Entrando no mundo mágico...</h2>
+        <p>Flores • Dragões • Livros • Música</p>
+    </div>
+</div>
+
+<!-- =========================================================
+     EFFECTS
+========================================================= -->
+
+<div class="progress"></div>
+<div id="particles"></div>
+
+<div class="aurora one"></div>
+<div class="aurora two"></div>
+
+<div class="cursor"></div>
+<div class="cursor-dot"></div>
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<nav>
+    <div class="nav-inner">
+
+        <div class="logo">
+            Marianny <span>✦ ASP</span>
+        </div>
+
+        <button class="menu-btn" id="menuBtn">
+            ☰
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#favoritos">Favoritos</a></li>
+            <li><a href="#kpop">K-pop</a></li>
+            <li><a href="#livros">Livros</a></li>
+            <li><a href="#filmes">Filmes & Séries</a></li>
+        </ul>
+
+    </div>
+</nav>
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<header class="hero" id="inicio">
+
+    <div class="floating flower f1">🌸</div>
+    <div class="floating cat f2">🐈</div>
+    <div class="floating panda f3">🐼</div>
+    <div class="floating dragon f4">🐉</div>
+    <div class="floating flower f5">🌺</div>
+
+    <div class="hero-content">
+
+        <div class="badge">
+            ✦ Bem-vindo ao meu universo ✦
+        </div>
+
+        <h1>
+            Marianny
+            <small>DISCIPLINA • ASP</small>
+        </h1>
+
+        <p class="hero-description">
+            Um pequeno universo feito de flores mágicas, criaturas
+            fantásticas, livros, música, K-pop, filmes, séries e
+            sonhos que parecem ter saído de um conto de fantasia.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#sobre" class="magic-btn">
+                ✨ Conhecer meu mundo
+            </a>
+
+            <a href="#kpop" class="magic-btn">
+                🎤 Entrar no K-pop
+            </a>
+        </div>
+
+    </div>
+
+</header>
+
+<!-- =========================================================
+     SOBRE
+========================================================= -->
+
+<section id="sobre">
+
+    <div class="section-heading reveal">
+
+        <span class="mini">✦ meu universo ✦</span>
+
+        <h2>
+            Entre páginas e estrelas
+        </h2>
+
+        <p>
+            Este espaço representa um pouco da minha personalidade,
+            das coisas que gosto e dos mundos imaginários que tornam
+            cada dia mais especial.
+        </p>
+
+    </div>
+
+    <div class="about-grid">
+
+        <div class="profile-card glass reveal from-left">
+
+            <div class="profile-orb"></div>
+
+            <h3>Marianny</h3>
+
+            <p>
+                Disciplina: <strong>ASP</strong>
+            </p>
+
+            <div class="info-pills">
+                <span class="pill">🌸 Flores</span>
+                <span class="pill">🐱 Gatos</span>
+                <span class="pill">🐼 Pandas</span>
+                <span class="pill">🐉 Dragões</span>
+                <span class="pill">📚 Livros</span>
+                <span class="pill">🎵 K-pop</span>
+            </div>
+
+        </div>
+
+        <div class="info-card glass reveal from-right">
+
+            <h3>
+                ✨ Meu cantinho mágico
+            </h3>
+
+            <p>
+                Imagine uma biblioteca escondida dentro de uma floresta
+                encantada. Flores brilham durante a noite, pequenos gatos
+                mágicos passeiam entre as estantes, pandas guardam os livros
+                secretos e dragões voam sobre um céu cheio de estrelas.
+            </p>
+
+            <br>
+
+            <p>
+                É nessa mistura de fantasia, música, histórias e imaginação
+                que este site foi inspirado.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="stats">
+
+        <div class="stat glass reveal">
+            <span class="stat-number" data-target="100">0</span>
+            <span class="stat-label">% imaginação</span>
+        </div>
+
+        <div class="stat glass reveal">
+            <span class="stat-number" data-target="999">0</span>
+            <span class="stat-label">aventuras</span>
+        </div>
+
+        <div class="stat glass reveal">
+            <span class="stat-number" data-target="24">0</span>
+            <span class="stat-label">horas de música</span>
+        </div>
+
+        <div class="stat glass reveal">
+            <span class="stat-number" data-target="∞">∞</span>
+            <span class="stat-label">mundos para descobrir</span>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     FAVORITOS
+========================================================= -->
+
+<section id="favoritos">
+
+    <div class="section-heading reveal">
+
+        <span class="mini">✦ coisas que amo ✦</span>
+
+        <h2>
+            Meu jardim de favoritos
+        </h2>
+
+        <p>
+            Um jardim imaginário onde cada paixão floresce de uma maneira diferente.
+        </p>
+
+    </div>
+
+    <div class="favorites-grid">
+
+        <article class="favorite-card glass reveal">
+            <div class="favorite-icon">🌹</div>
+            <h3>Flores</h3>
+            <p>
+                Rosas, sakuras, flores mágicas e jardins iluminados
+                pela luz da lua.
+            </p>
+        </article>
+
+        <article class="favorite-card glass reveal">
+            <div class="favorite-icon">🐈</div>
+            <h3>Gatos</h3>
+            <p>
+                Pequenos companheiros mágicos que aparecem entre
+                as páginas dos livros.
+            </p>
+        </article>
+
+        <article class="favorite-card glass reveal">
+            <div class="favorite-icon">🐼</div>
+            <h3>Pandas</h3>
+            <p>
+                Fofura, tranquilidade e pequenos guardiões da
+                floresta encantada.
+            </p>
+        </article>
+
+        <article class="favorite-card glass reveal">
+            <div class="favorite-icon">🐉</div>
+            <h3>Dragões</h3>
+            <p>
+                Criaturas lendárias que voam sobre castelos,
+                montanhas e reinos distantes.
+            </p>
+        </article>
+
+        <article class="favorite-card glass reveal">
+            <div class="favorite-icon">📚</div>
+            <h3>Livros</h3>
+            <p>
+                Histórias que transformam uma simples página em
+                um portal para outro universo.
+            </p>
+        </article>
+
+        <article class="favorite-card glass reveal">
+            <div class="favorite-icon">🌙</div>
+            <h3>Fantasia</h3>
+            <p>
+                Magia, estrelas, castelos, criaturas fantásticas
+                e mundos impossíveis.
+            </p>
+        </article>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     KPOP
+========================================================= -->
+
+<section id="kpop">
+
+    <div class="section-heading reveal">
+
+        <span class="mini">✦ minha playlist ✦</span>
+
+        <h2>
+            K-pop Universe
+        </h2>
+
+        <p>
+            Um espaço especial para alguns dos grupos e artistas
+            que fazem parte do meu universo musical.
+        </p>
+
+    </div>
+
+    <div class="artist-grid">
+
+        <article class="artist glass reveal">
+            <div class="artist-icon">💜</div>
+            <h3>BTS</h3>
+            <p>
+                Música, memórias, energia e muitos momentos especiais.
+            </p>
+        </article>
+
+        <article class="artist glass reveal">
+            <div class="artist-icon">🔥</div>
+            <h3>Stray Kids</h3>
+            <p>
+                Intensidade, criatividade e uma identidade única.
+            </p>
+        </article>
+
+        <article class="artist glass reveal">
+            <div class="artist-icon">🌌</div>
+            <h3>ASTRO</h3>
+            <p>
+                Um universo musical cheio de brilho e emoção.
+            </p>
+        </article>
+
+        <article class="artist glass reveal">
+            <div class="artist-icon">⚡</div>
+            <h3>CORTIS</h3>
+            <p>
+                Uma nova estrela brilhando no meu universo musical.
+            </p>
+        </article>
+
+        <article class="artist glass reveal">
+            <div class="artist-icon">🚀</div>
+            <h3>Lngshot</h3>
+            <p>
+                Energia, personalidade e novas descobertas musicais.
+            </p>
+        </article>
+
+        <article class="artist glass reveal">
+            <div class="artist-icon">💙</div>
+            <h3>BOYNEXTDOOR</h3>
+            <p>
+                Música leve, divertida e cheia de personalidade.
+            </p>
+        </article>
+
+    </div>
+
+    <div class="glass reveal"
+         style="
+         max-width:1000px;
+         margin:40px auto 0;
+         padding:35px;
+         border-radius:30px;
+         text-align:center;
+         ">
+
+        <h3 style="font-size:1.7rem;">
+            🎧 K-pop em geral
+        </h3>
+
+        <p style="
+            color:#aaa0b9;
+            line-height:1.8;
+            margin-top:12px;
+        ">
+            E claro: este universo não termina aqui.
+            Há espaço para muitos outros artistas, grupos,
+            músicas e descobertas.
+        </p>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     BOOKS
+========================================================= -->
+
+<section id="livros">
+
+    <div class="section-heading reveal">
+
+        <span class="mini">✦ biblioteca encantada ✦</span>
+
+        <h2>
+            Entre livros e dragões
+        </h2>
+
+        <p>
+            Uma biblioteca onde cada livro pode abrir um portal
+            para uma nova história.
+        </p>
+
+    </div>
+
+    <div class="library">
+
+        <div class="bookshelf">
+
+            <div class="book reveal">
+                <span class="book-title">
+                    O Reino das Flores
+                </span>
+            </div>
+
+            <div class="book reveal">
+                <span class="book-title">
+                    O Dragão Lunar
+                </span>
+            </div>
+
+            <div class="book reveal">
+                <span class="book-title">
+                    A Biblioteca Secreta
+                </span>
+            </div>
+
+            <div class="book reveal">
+                <span class="book-title">
+                    As Estrelas Perdidas
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     FILMES E SÉRIES
+========================================================= -->
+
+<section id="filmes">
+
+    <div class="section-heading reveal">
+
+        <span class="mini">✦ tela mágica ✦</span>
+
+        <h2>
+            Filmes & Séries
+        </h2>
+
+        <p>
+            Histórias para assistir quando quiser entrar em outro mundo.
+        </p>
+
+    </div>
+
+    <div class="media-grid">
+
+        <article class="media-card glass reveal">
+
+            <div class="media-cover">
+                🏰
+            </div>
+
+            <div class="media-content">
+
+                <h3>Fantasia</h3>
+
+                <p>
+                    Reinos mágicos, criaturas lendárias,
+                    castelos e aventuras.
+                </p>
+
+            </div>
+
+        </article>
+
+        <article class="media-card glass reveal">
+
+            <div class="media-cover">
+                🐉
+            </div>
+
+            <div class="media-content">
+
+                <h3>Dragões</h3>
+
+                <p>
+                    Mundos onde dragões podem ser aliados,
+                    guardiões ou grandes lendas.
+                </p>
+
+            </div>
+
+        </article>
+
+        <article class="media-card glass reveal">
+
+            <div class="media-cover">
+                🎬
+            </div>
+
+            <div class="media-content">
+
+                <h3>Meu cinema</h3>
+
+                <p>
+                    Filmes e séries que conseguem prender
+                    a atenção e criar memórias.
+                </p>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     MAGIC QUOTE
+========================================================= -->
+
+<section>
+
+    <div class="glass reveal"
+         style="
+         max-width:1000px;
+         margin:auto;
+         padding:70px 35px;
+         border-radius:40px;
+         text-align:center;
+         position:relative;
+         overflow:hidden;
+         ">
+
+        <div style="
+            font-size:4rem;
+            margin-bottom:20px;
+        ">
+            🌙
+        </div>
+
+        <h2 style="
+            font-size:clamp(2rem,5vw,4rem);
+            background:linear-gradient(
+                90deg,
+                #fff,
+                #e3a8ff,
+                #ffb8df
+            );
+            -webkit-background-clip:text;
+            color:transparent;
+        ">
+            “Alguns mundos existem
+            apenas para quem acredita neles.”
+        </h2>
+
+        <p style="
+            margin-top:25px;
+            color:#9f94ad;
+        ">
+            ✦ Marianny's Magical Universe ✦
+        </p>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     MUSIC PLAYER
+========================================================= -->
+
+<div class="music-player glass" id="musicPlayer">
+
+    <div class="music-top">
+
+        <div class="music-disc" id="musicDisc"></div>
+
+        <div class="music-info">
+
+            <strong>
+                They's Nobody's Know
+            </strong>
+
+            <small>
+                BTS • Magical playlist
+            </small>
+
+        </div>
+
+    </div>
+
+    <div class="music-controls">
+
+        <button id="playBtn">
+            ▶
+        </button>
+
+        <button id="muteBtn">
+            🔊
+        </button>
+
+    </div>
+
+</div>
+
+<!--
+    COLOQUE SEU ARQUIVO DE ÁUDIO LEGALMENTE OBTIDO AQUI:
+
+    music/
+        theys-nobodys-know.mp3
+
+    O navegador poderá tocar o arquivo local quando disponível.
+-->
+
+<audio id="audio" loop>
+    <source
+        src="music/theys-nobodys-know.mp3"
+        type="audio/mpeg"
+    >
+</audio>
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="footer-magic">
+        🌸 🐉 📚 🐈 🐼 🌙
+    </div>
+
+    <h2>
+        Marianny • ASP
+    </h2>
+
+    <div class="footer-line"></div>
+
+    <p>
+        Feito com imaginação, música e um pouquinho de magia.
+    </p>
+
+    <p style="margin-top:12px;">
+        ✦ Que cada página seja uma nova aventura ✦
+    </p>
+
+</footer>
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   LOADER
+========================================================= */
+
+window.addEventListener("load", () => {
+
+    setTimeout(() => {
+
+        document
+            .getElementById("loader")
+            .classList.add("hide");
+
+        document
+            .getElementById("musicPlayer")
+            .classList.add("visible");
+
+    }, 1500);
+
+});
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", () => {
+
+    navLinks.classList.toggle("open");
+
+    menuBtn.textContent =
+        navLinks.classList.contains("open")
+        ? "✕"
+        : "☰";
+
+});
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        navLinks.classList.remove("open");
+
+        menuBtn.textContent = "☰";
+
+    });
+
+});
+
+
+/* =========================================================
+   REVEAL ON SCROLL
+========================================================= */
+
+const revealElements =
+    document.querySelectorAll(".reveal");
+
+const observer = new IntersectionObserver(
+    entries => {
+
+        entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+                entry.target.classList.add("active");
+
+                observer.unobserve(entry.target);
+
+            }
+
+        });
+
+    },
+    {
+        threshold: .12
+    }
+);
+
+revealElements.forEach(element => {
+
+    observer.observe(element);
+
+});
+
+
+/* =========================================================
+   SCROLL PROGRESS
+========================================================= */
+
+const progress =
+    document.querySelector(".progress");
+
+window.addEventListener("scroll", () => {
+
+    const scrollTop =
+        window.scrollY;
+
+    const height =
+        document.documentElement.scrollHeight -
+        window.innerHeight;
+
+    const percentage =
+        (scrollTop / height) * 100;
+
+    progress.style.width =
+        percentage + "%";
+
+});
+
+
+/* =========================================================
+   CUSTOM CURSOR
+========================================================= */
+
+const cursor =
+    document.querySelector(".cursor");
+
+const cursorDot =
+    document.querySelector(".cursor-dot");
+
+document.addEventListener("mousemove", event => {
+
+    cursor.style.left =
+        event.clientX + "px";
+
+    cursor.style.top =
+        event.clientY + "px";
+
+    cursorDot.style.left =
+        event.clientX + "px";
+
+    cursorDot.style.top =
+        event.clientY + "px";
+
+});
+
+document
+    .querySelectorAll("a, button, .favorite-card, .artist, .book")
+    .forEach(element => {
+
+        element.addEventListener("mouseenter", () => {
+
+            cursor.style.width = "42px";
+            cursor.style.height = "42px";
+            cursor.style.background =
+                "rgba(220,140,255,.12)";
+
+        });
+
+        element.addEventListener("mouseleave", () => {
+
+            cursor.style.width = "22px";
+            cursor.style.height = "22px";
+            cursor.style.background = "transparent";
+
+        });
+
+    });
+
+
+/* =========================================================
+   SPARKLES
+========================================================= */
+
+const particleContainer =
+    document.getElementById("particles");
+
+for (let i = 0; i < 70; i++) {
+
+    const sparkle =
+        document.createElement("div");
+
+    sparkle.classList.add("sparkle");
+
+    sparkle.style.left =
+        Math.random() * 100 + "%";
+
+    sparkle.style.animationDuration =
+        (5 + Math.random() * 10) + "s";
+
+    sparkle.style.animationDelay =
+        (-Math.random() * 10) + "s";
+
+    sparkle.style.opacity =
+        Math.random();
+
+    const size =
+        2 + Math.random() * 4;
+
+    sparkle.style.width =
+        size + "px";
+
+    sparkle.style.height =
+        size + "px";
+
+    particleContainer.appendChild(sparkle);
+
+}
+
+
+/* =========================================================
+   PARALLAX
+========================================================= */
+
+const floatingElements =
+    document.querySelectorAll(".floating");
+
+window.addEventListener("scroll", () => {
+
+    const scroll =
+        window.scrollY;
+
+    floatingElements.forEach((element, index) => {
+
+        const speed =
+            .08 + (index * .025);
+
+        element.style.transform =
+            `translateY(${scroll * speed}px)`;
+
+    });
+
+});
+
+
+/* =========================================================
+   COUNT UP
+========================================================= */
+
+const statNumbers =
+    document.querySelectorAll(".stat-number");
+
+const statObserver =
+    new IntersectionObserver(entries => {
+
+        entries.forEach(entry => {
+
+            if (!entry.isIntersecting)
+                return;
+
+            const element =
+                entry.target;
+
+            const target =
+                element.dataset.target;
+
+            if (target === "∞")
+                return;
+
+            let current = 0;
+
+            const duration = 1400;
+
+            const start =
+                performance.now();
+
+            function update(time) {
+
+                const progress =
+                    Math.min(
+                        (time - start) / duration,
+                        1
+                    );
+
+                current =
+                    Math.floor(
+                        progress * Number(target)
+                    );
+
+                element.textContent =
+                    current;
+
+                if (progress < 1) {
+
+                    requestAnimationFrame(update);
+
+                } else {
+
+                    element.textContent =
+                        target;
+
+                }
+
+            }
+
+            requestAnimationFrame(update);
+
+            statObserver.unobserve(element);
+
+        });
+
+    });
+
+statNumbers.forEach(number => {
+
+    statObserver.observe(number);
+
+});
+
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+const audio =
+    document.getElementById("audio");
+
+const playBtn =
+    document.getElementById("playBtn");
+
+const muteBtn =
+    document.getElementById("muteBtn");
+
+const musicDisc =
+    document.getElementById("musicDisc");
+
+let playing = false;
+
+playBtn.addEventListener("click", async () => {
+
+    if (!playing) {
+
+        try {
+
+            await audio.play();
+
+            playing = true;
+
+            playBtn.textContent = "❚❚";
+
+            musicDisc.classList.add("playing");
+
+        } catch (error) {
+
+            alert(
+                "Adicione o arquivo music/theys-nobodys-know.mp3 ao projeto para reproduzir a música."
+            );
+
+        }
+
+    } else {
+
+        audio.pause();
+
+        playing = false;
+
+        playBtn.textContent = "▶";
+
+        musicDisc.classList.remove("playing");
+
+    }
+
+});
+
+
+muteBtn.addEventListener("click", () => {
+
+    audio.muted =
+        !audio.muted;
+
+    muteBtn.textContent =
+        audio.muted
+        ? "🔇"
+        : "🔊";
+
+});
+
+
+/* =========================================================
+   CARD 3D EFFECT
+========================================================= */
+
+document
+    .querySelectorAll(".favorite-card, .artist")
+    .forEach(card => {
+
+        card.addEventListener("mousemove", event => {
+
+            const rect =
+                card.getBoundingClientRect();
+
+            const x =
+                event.clientX - rect.left;
+
+            const y =
+                event.clientY - rect.top;
+
+            const centerX =
+                rect.width / 2;
+
+            const centerY =
+                rect.height / 2;
+
+            const rotateX =
+                ((y - centerY) / centerY) * -4;
+
+            const rotateY =
+                ((x - centerX) / centerX) * 4;
+
+            card.style.transform =
+                `perspective(800px)
+                 rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 translateY(-6px)`;
+
+        });
+
+        card.addEventListener("mouseleave", () => {
+
+            card.style.transform = "";
+
+        });
+
+    });
+
+
+/* =========================================================
+   MAGICAL CLICK SPARK
+========================================================= */
+
+document.addEventListener("click", event => {
+
+    for (let i = 0; i < 8; i++) {
+
+        const spark =
+            document.createElement("span");
+
+        spark.style.position = "fixed";
+        spark.style.left =
+            event.clientX + "px";
+        spark.style.top =
+            event.clientY + "px";
+
+        spark.style.width = "5px";
+        spark.style.height = "5px";
+        spark.style.borderRadius = "50%";
+        spark.style.background =
+            "#f2c7ff";
+
+        spark.style.boxShadow =
+            "0 0 10px #e294ff";
+
+        spark.style.pointerEvents =
+            "none";
+
+        spark.style.zIndex =
+            "99999";
+
+        document.body.appendChild(spark);
+
+        const angle =
+            (Math.PI * 2 / 8) * i;
+
+        const distance =
+            25 + Math.random() * 35;
+
+        const x =
+            Math.cos(angle) * distance;
+
+        const y =
+            Math.sin(angle) * distance;
+
+        spark.animate(
+            [
+                {
+                    transform: "translate(-50%,-50%)",
+                    opacity: 1
+                },
+                {
+                    transform:
+                        `translate(
+                            calc(-50% + ${x}px),
+                            calc(-50% + ${y}px)
+                        )`,
+                    opacity: 0
+                }
+            ],
+            {
+                duration: 600,
+                easing: "cubic-bezier(.2,.8,.3,1)"
+            }
+        );
+
+        setTimeout(() => {
+
+            spark.remove();
+
+        }, 650);
+
+    }
+
+});
+
+
+/* =========================================================
+   TITLE PARALLAX
+========================================================= */
+
+const heroTitle =
+    document.querySelector(".hero h1");
+
+window.addEventListener("mousemove", event => {
+
+    const x =
+        (event.clientX / window.innerWidth - .5);
+
+    const y =
+        (event.clientY / window.innerHeight - .5);
+
+    heroTitle.style.transform =
+        `translate(
+            ${x * 12}px,
+            ${y * 12}px
+        )`;
+
+});
+
+</script>
+
+</body>
+</html>    font-family: "Fredoka", sans-serif;
 
     background:
         radial-gradient(circle at 20% 20%, #c084fc55, transparent 30%),
