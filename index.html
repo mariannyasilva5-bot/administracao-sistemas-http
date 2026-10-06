@@ -3,569 +3,787 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Escola Nightmare</title>
+<title>ESCOLA NIGHTMARE</title>
 
 <style>
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-body {
-    background: #000;
-    color: white;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
+body{
+    background:#020202;
+    color:#eee;
+    font-family:Arial,Helvetica,sans-serif;
+    overflow:hidden;
 }
 
-/* MENU */
+button{
+    border:1px solid #8b0000;
+    background:#260000;
+    color:white;
+    padding:12px 20px;
+    cursor:pointer;
+    font-weight:bold;
+}
 
-#menu {
-    position: fixed;
-    inset: 0;
+button:hover{
+    background:#720000;
+}
+
+button:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+#menu{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     background:
-        radial-gradient(circle, #300000, #050505 70%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
+        radial-gradient(circle at center,#3b0000,#050505 65%,#000);
 }
 
-.menu-box {
-    width: 90%;
-    max-width: 600px;
-    padding: 40px;
-    text-align: center;
-    background: rgba(0,0,0,.9);
-    border: 2px solid #700000;
-    box-shadow: 0 0 40px #600000;
+.menu{
+    width:min(90%,650px);
+    padding:45px;
+    background:rgba(3,3,3,.95);
+    border:1px solid #610000;
+    text-align:center;
+    box-shadow:0 0 80px rgba(120,0,0,.25);
 }
 
-h1 {
-    font-size: 55px;
-    color: #eee;
-    text-shadow: 0 0 20px red;
-    margin-bottom: 10px;
+.menu h1{
+    font-size:clamp(42px,8vw,82px);
+    letter-spacing:12px;
+    text-shadow:0 0 20px red;
 }
 
-h2 {
-    color: #a00000;
-    letter-spacing: 8px;
-    margin-bottom: 30px;
+.menu h2{
+    color:#a00000;
+    letter-spacing:8px;
+    margin-bottom:25px;
 }
 
-.menu-box p {
-    color: #aaa;
-    margin: 15px;
-    line-height: 1.5;
+.menu p{
+    color:#aaa;
+    margin:12px 0;
+    line-height:1.6;
 }
 
-button {
-    padding: 15px 30px;
-    margin-top: 20px;
-    background: #450000;
-    color: white;
-    border: 1px solid red;
-    cursor: pointer;
-    font-weight: bold;
+.warning{
+    color:#ff4444!important;
 }
 
-button:hover {
-    background: #900000;
+/* =========================================================
+   JOGO
+   ========================================================= */
+
+#game{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#000;
 }
 
-/* JOGO */
-
-#game {
-    display: none;
-    width: 100vw;
-    height: 100vh;
-    position: relative;
+#world{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
     background:
         radial-gradient(
-            circle at center,
-            #444 0%,
-            #181818 40%,
-            #000 100%
+            ellipse at center,
+            #3d3d3d 0%,
+            #181818 42%,
+            #030303 100%
         );
 }
 
-/* CORREDOR */
+/* chão */
 
-#corridor {
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(
-            90deg,
-            #090909,
-            #292929 20%,
-            #333 50%,
-            #292929 80%,
-            #090909
-        );
-}
-
-/* CHÃO */
-
-#floor {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 45%;
-
-    background:
-        repeating-linear-gradient(
-            90deg,
-            #151515 0px,
-            #151515 80px,
-            #202020 81px,
-            #202020 160px
-        );
-
-    transform: perspective(500px) rotateX(50deg);
-    transform-origin: bottom;
-}
-
-/* PAREDES */
-
-.wall {
-    position: absolute;
-    top: 15%;
-    width: 18%;
-    height: 65%;
-    background: linear-gradient(
-        #111,
-        #292929,
-        #090909
-    );
-}
-
-.left {
-    left: 0;
-}
-
-.right {
-    right: 0;
-}
-
-/* HUD */
-
-#hud {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 20;
-    font-size: 18px;
-    line-height: 1.8;
-    text-shadow: 0 2px 5px black;
-}
-
-#danger {
-    color: #40ff40;
-}
-
-/* MIRA */
-
-#crosshair {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 30px;
-    z-index: 20;
-    color: #aaa;
-}
-
-/* OBJETOS */
-
-.object {
-    position: absolute;
-    background: #352313;
-    border: 2px solid #1a0d05;
-    color: #777;
-    cursor: pointer;
-    z-index: 5;
-}
-
-.table {
-    width: 120px;
-    height: 65px;
-}
-
-.chair {
-    width: 60px;
-    height: 80px;
-    background: #292929;
-}
-
-/* CHAVES */
-
-.key {
-    position: absolute;
-    z-index: 10;
-    font-size: 30px;
-    cursor: pointer;
-
-    animation:
-        floating 1.5s infinite;
-    
-    filter:
-        drop-shadow(0 0 8px gold);
-}
-
-@keyframes floating {
-
-    0% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-8px);
-    }
-
-    100% {
-        transform: translateY(0);
-    }
-
-}
-
-/* PORTÃO */
-
-#gate {
-    position: absolute;
-    right: 4%;
-    top: 25%;
-    width: 220px;
-    height: 330px;
-
+#floor{
+    position:absolute;
+    left:-10%;
+    bottom:-20%;
+    width:120%;
+    height:58%;
     background:
         repeating-linear-gradient(
             90deg,
             #111 0px,
-            #111 20px,
-            #444 21px,
-            #444 25px
+            #111 70px,
+            #191919 71px,
+            #191919 140px
         );
-
-    border: 10px solid #222;
-
-    cursor: pointer;
-
-    z-index: 8;
+    transform:perspective(600px) rotateX(55deg);
+    transform-origin:center bottom;
 }
 
-#gate h3 {
-    text-align: center;
-    padding: 10px;
-    background: #050505;
+/* teto */
+
+#ceiling{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:32%;
+    background:
+        linear-gradient(#090909,#181818);
 }
 
-.locks {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 12px;
-    padding: 25px;
-}
+/* paredes */
 
-.lock {
-    font-size: 28px;
-    text-align: center;
-}
-
-.unlocked {
-    opacity: .25;
-}
-
-/* MENSAGEM */
-
-#message {
-    position: absolute;
-    bottom: 12%;
-    left: 50%;
-    transform: translateX(-50%);
-
-    background: rgba(0,0,0,.85);
-    border: 1px solid #444;
-
-    padding: 15px 25px;
-
-    opacity: 0;
-
-    transition: .3s;
-
-    z-index: 50;
-}
-
-#message.show {
-    opacity: 1;
-}
-
-/* MONSTRO */
-
-#monster {
-    position: absolute;
-
-    width: 170px;
-    height: 300px;
-
-    left: 50%;
-    top: -350px;
-
-    transform: translateX(-50%);
-
-    transition: top 1.5s;
-
-    z-index: 30;
-
-    pointer-events: none;
-}
-
-#monster.show {
-    top: 8%;
-}
-
-.hair {
-    position: absolute;
-    width: 180px;
-    height: 180px;
-
+.wall{
+    position:absolute;
+    top:18%;
+    height:65%;
+    width:18%;
     background:
         linear-gradient(
             90deg,
-            #705000,
-            #d8b235,
-            #705000
+            #050505,
+            #252525,
+            #090909
         );
-
-    border-radius: 50%;
 }
 
-.face {
-    position: absolute;
+.wall.left{
+    left:0;
+}
 
-    top: 60px;
-    left: 25px;
+.wall.right{
+    right:0;
+}
 
-    width: 120px;
-    height: 160px;
+/* =========================================================
+   HUD
+   ========================================================= */
 
+#hud{
+    position:absolute;
+    top:15px;
+    left:15px;
+    z-index:100;
+    width:260px;
+    padding:15px;
+    background:rgba(0,0,0,.65);
+    border-left:3px solid #700000;
+    font-size:14px;
+}
+
+.hud-title{
+    color:#b00000;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.bar{
+    height:8px;
+    background:#222;
+    margin-top:4px;
+    margin-bottom:10px;
+}
+
+.bar span{
+    display:block;
+    height:100%;
+    width:100%;
+}
+
+#batteryBar{
+    background:#e1c300;
+}
+
+#staminaBar{
+    background:#28d94f;
+}
+
+#noiseBar{
+    background:#c50000;
+}
+
+#dangerText{
+    color:#3cff3c;
+}
+
+/* =========================================================
+   OBJETOS
+   ========================================================= */
+
+.object{
+    position:absolute;
+    z-index:20;
+    cursor:pointer;
+    user-select:none;
+}
+
+.table{
+    width:120px;
+    height:65px;
+    background:
+        linear-gradient(#5a361d,#241206);
+    border:2px solid #120803;
+}
+
+.chair{
+    width:58px;
+    height:75px;
+    background:
+        linear-gradient(#3b3b3b,#111);
+    border:2px solid #080808;
+}
+
+.cabinet{
+    width:70px;
+    height:130px;
+    background:#292929;
+    border:3px solid #111;
+}
+
+/* =========================================================
+   PORTAS
+   ========================================================= */
+
+.door{
+    position:absolute;
+    z-index:25;
+    width:90px;
+    height:170px;
     background:
         linear-gradient(
-            #d4c4aa,
-            #817567
+            90deg,
+            #151515,
+            #3c2719,
+            #121212
         );
-
-    border-radius: 50%;
+    border:4px solid #080808;
+    cursor:pointer;
 }
 
-.eye {
-    position: absolute;
-
-    top: 55px;
-
-    width: 20px;
-    height: 30px;
-
-    background: black;
+.door.locked{
+    box-shadow:0 0 12px rgba(180,0,0,.35);
 }
 
-.eye1 {
-    left: 25px;
+.door.open{
+    background:#050505;
 }
 
-.eye2 {
-    right: 25px;
+/* =========================================================
+   CHAVES
+   ========================================================= */
+
+.key{
+    position:absolute;
+    z-index:40;
+    font-size:30px;
+    cursor:pointer;
+    filter:drop-shadow(0 0 8px gold);
+    animation:floatKey 1.4s ease-in-out infinite;
 }
 
-.mouth {
-    position: absolute;
-
-    bottom: 20px;
-    left: 25px;
-
-    width: 70px;
-    height: 45px;
-
-    background: black;
-
-    color: red;
-
-    text-align: center;
-
-    padding-top: 12px;
+@keyframes floatKey{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-8px);
+    }
 }
 
-/* JUMPSCARE */
+/* =========================================================
+   ESCONDERIJOS
+   ========================================================= */
 
-#jumpscare {
-    display: none;
-
-    position: fixed;
-    inset: 0;
-
-    z-index: 500;
-
-    background: black;
-
-    justify-content: center;
-    align-items: center;
-
-    animation: flash .1s infinite;
+.hideSpot{
+    position:absolute;
+    z-index:30;
+    width:100px;
+    height:100px;
+    border:2px dashed #555;
+    background:rgba(0,0,0,.35);
+    color:#777;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:pointer;
+    font-size:12px;
 }
 
-#jumpscare.active {
-    display: flex;
-}
+/* =========================================================
+   PORTÃO
+   ========================================================= */
 
-.big-face {
-    width: 350px;
-    height: 450px;
-
+#gate{
+    position:absolute;
+    right:4%;
+    top:23%;
+    width:240px;
+    height:370px;
+    z-index:35;
     background:
-        #d2c1a5;
-
-    border-radius: 50%;
-
-    position: relative;
-
-    transform: scale(1.3);
+        repeating-linear-gradient(
+            90deg,
+            #101010 0px,
+            #101010 18px,
+            #3b3b3b 19px,
+            #3b3b3b 23px
+        );
+    border:10px solid #222;
+    cursor:pointer;
 }
 
-.big-eye {
-    position: absolute;
-
-    top: 120px;
-
-    width: 55px;
-    height: 80px;
-
-    background: black;
+.gateTitle{
+    background:#030303;
+    padding:12px;
+    text-align:center;
+    color:#aaa;
 }
 
-.big-eye:nth-child(1) {
-    left: 70px;
+.locks{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    padding:25px;
 }
 
-.big-eye:nth-child(2) {
-    right: 70px;
+.lock{
+    font-size:30px;
+    text-align:center;
 }
 
-.big-mouth {
-    position: absolute;
-
-    bottom: 50px;
-    left: 55px;
-
-    width: 240px;
-    height: 120px;
-
-    background: black;
-
-    color: red;
-
-    text-align: center;
-
-    padding-top: 35px;
-
-    font-size: 25px;
+.lock.open{
+    opacity:.25;
 }
 
-@keyframes flash {
+/* =========================================================
+   MIRA
+   ========================================================= */
 
-    0% {
-        background: black;
-    }
-
-    50% {
-        background: #550000;
-    }
-
-    100% {
-        background: black;
-    }
+#crosshair{
+    position:absolute;
+    z-index:80;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    font-size:26px;
+    color:rgba(255,255,255,.5);
 }
 
-/* MORTE */
+/* =========================================================
+   LOCAL
+   ========================================================= */
 
-#death,
-#victory {
-
-    display: none;
-
-    position: fixed;
-    inset: 0;
-
-    z-index: 900;
-
-    justify-content: center;
-    align-items: center;
-
-    text-align: center;
+#location{
+    position:absolute;
+    z-index:90;
+    top:15px;
+    right:15px;
+    padding:10px 15px;
+    background:rgba(0,0,0,.7);
+    border-right:3px solid #700000;
+    font-weight:bold;
 }
 
-#death {
+/* =========================================================
+   INVENTÁRIO
+   ========================================================= */
+
+#inventory{
+    position:absolute;
+    bottom:20px;
+    left:20px;
+    z-index:100;
+    padding:10px;
+    background:rgba(0,0,0,.75);
+}
+
+.inventoryItem{
+    display:inline-block;
+    min-width:38px;
+    padding:8px;
+    margin:3px;
+    text-align:center;
+    border:1px solid #444;
+}
+
+/* =========================================================
+   MENSAGEM
+   ========================================================= */
+
+#message{
+    position:absolute;
+    z-index:200;
+    bottom:18%;
+    left:50%;
+    transform:translateX(-50%);
+    max-width:80%;
+    padding:14px 22px;
+    background:rgba(0,0,0,.88);
+    border:1px solid #444;
+    text-align:center;
+    opacity:0;
+    transition:.3s;
+}
+
+#message.show{
+    opacity:1;
+}
+
+/* =========================================================
+   MONSTRO
+   ========================================================= */
+
+#monster{
+    position:absolute;
+    z-index:70;
+    width:220px;
+    height:400px;
+    left:50%;
+    top:-450px;
+    transform:translateX(-50%);
+    transition:top 1.2s,transform .2s;
+    pointer-events:none;
+}
+
+#monster.visible{
+    top:5%;
+}
+
+.monsterHair{
+    position:absolute;
+    width:210px;
+    height:190px;
     background:
-        radial-gradient(circle,#500000,#000);
+        linear-gradient(
+            90deg,
+            #574000,
+            #d4ad2d,
+            #634900
+        );
+    border-radius:50%;
 }
 
-#victory {
+.monsterFace{
+    position:absolute;
+    top:70px;
+    left:30px;
+    width:160px;
+    height:210px;
+    background:
+        linear-gradient(
+            #d7c9ae,
+            #8d8171
+        );
+    border-radius:48%;
+}
+
+.monsterEye{
+    position:absolute;
+    top:68px;
+    width:25px;
+    height:35px;
+    background:#000;
+}
+
+.monsterEye.left{
+    left:38px;
+}
+
+.monsterEye.right{
+    right:38px;
+}
+
+.monsterMouth{
+    position:absolute;
+    bottom:25px;
+    left:32px;
+    width:95px;
+    height:60px;
+    background:#050505;
+    color:#c00000;
+    text-align:center;
+    padding-top:18px;
+}
+
+.monsterBody{
+    position:absolute;
+    bottom:0;
+    left:10px;
+    width:200px;
+    height:170px;
+    background:
+        linear-gradient(#191919,#050505);
+}
+
+/* =========================================================
+   TELA DE JUMPSCARE
+   ========================================================= */
+
+#jumpscare{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:#000;
+}
+
+#jumpscare.active{
+    display:flex;
+    animation:scareFlash .09s infinite;
+}
+
+@keyframes scareFlash{
+    0%{background:#000}
+    50%{background:#500000}
+    100%{background:#000}
+}
+
+.scareFace{
+    width:350px;
+    height:440px;
+    background:#d0c0a6;
+    border-radius:50%;
+    position:relative;
+    transform:scale(1.3);
+}
+
+.scareEye{
+    position:absolute;
+    top:110px;
+    width:60px;
+    height:85px;
+    background:#000;
+}
+
+.scareEye.one{
+    left:65px;
+}
+
+.scareEye.two{
+    right:65px;
+}
+
+.scareMouth{
+    position:absolute;
+    bottom:45px;
+    left:50px;
+    width:250px;
+    height:130px;
+    background:#000;
+    color:#ff0000;
+    text-align:center;
+    padding-top:40px;
+    font-size:28px;
+}
+
+/* =========================================================
+   TELAS FINAIS
+   ========================================================= */
+
+.endScreen{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+#deathScreen{
+    background:
+        radial-gradient(circle,#550000,#000);
+}
+
+#victoryScreen{
     background:
         radial-gradient(circle,#005000,#000);
 }
 
-.end-box {
-    padding: 50px;
+.endBox{
+    padding:50px;
 }
 
-#death h1 {
-    color: red;
+.endBox h1{
+    font-size:50px;
+    margin-bottom:20px;
 }
 
-#victory h1 {
-    color: #00ff55;
+#deathScreen h1{
+    color:#ff0000;
 }
 
+#victoryScreen h1{
+    color:#00ff55;
+}
+
+/* =========================================================
+   MAPA
+   ========================================================= */
+
+#mapPanel{
+    display:none;
+    position:absolute;
+    z-index:500;
+    inset:8%;
+    background:#080808;
+    border:2px solid #550000;
+    padding:25px;
+}
+
+#mapPanel h2{
+    color:#b00000;
+    margin-bottom:20px;
+}
+
+#schoolMap{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:8px;
+}
+
+.mapRoom{
+    min-height:60px;
+    padding:10px;
+    border:1px solid #333;
+    background:#151515;
+    text-align:center;
+    font-size:12px;
+}
+
+.mapRoom.current{
+    border-color:#00ff66;
+    color:#00ff66;
+}
+
+.mapRoom.visited{
+    background:#242424;
+}
+
+.closeMap{
+    margin-top:20px;
+}
+
+/* =========================================================
+   CONTROLES
+   ========================================================= */
+
+#controls{
+    position:absolute;
+    right:20px;
+    bottom:20px;
+    z-index:100;
+    color:#888;
+    font-size:12px;
+    text-align:right;
+}
+
+/* =========================================================
+   ESCURIDÃO
+   ========================================================= */
+
+#darkness{
+    position:absolute;
+    inset:0;
+    z-index:60;
+    pointer-events:none;
+    background:
+        radial-gradient(
+            circle at center,
+            transparent 0,
+            transparent 18%,
+            rgba(0,0,0,.5) 50%,
+            rgba(0,0,0,.96) 100%
+        );
+    transition:.3s;
+}
+
+#darkness.flashlightOff{
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0,0,0,.65),
+            rgba(0,0,0,.98)
+        );
+}
+
+/* =========================================================
+   RESPONSIVO
+   ========================================================= */
+
+@media(max-width:700px){
+
+    #hud{
+        width:200px;
+        font-size:11px;
+    }
+
+    #gate{
+        transform:scale(.7);
+        transform-origin:right top;
+    }
+
+    #controls{
+        display:none;
+    }
+
+    #schoolMap{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
 </style>
 </head>
 
 <body>
 
-<!-- ============================= -->
-<!-- MENU -->
-<!-- ============================= -->
+<!-- =======================================================
+     MENU
+     ======================================================= -->
 
 <div id="menu">
 
-    <div class="menu-box">
+    <div class="menu">
 
         <h1>ESCOLA</h1>
 
         <h2>NIGHTMARE</h2>
 
         <p>
-            A escola está abandonada.
+            Você ficou preso dentro de uma escola abandonada.
         </p>
 
         <p>
-            Encontre as 8 chaves.
+            Existem <strong>8 chaves</strong> espalhadas pelo prédio.
         </p>
 
         <p>
-            Cada chave abre uma fechadura
-            do portão principal.
+            Cada chave abre uma fechadura do portão principal.
         </p>
 
-        <p style="color:red;">
-            Cuidado com o que você faz.
-            O monstro escuta.
+        <p class="warning">
+            Existe uma criatura dentro da escola.
+            Ela não consegue enxergar você.
+            Ela escuta.
         </p>
 
-        <button onclick="startGame()">
+        <p>
+            Correr, bater em mesas, cadeiras ou portas
+            pode revelar sua posição.
+        </p>
+
+        <button id="startButton">
             ENTRAR NA ESCOLA
         </button>
 
@@ -574,47 +792,285 @@ button:hover {
 </div>
 
 
-<!-- ============================= -->
-<!-- JOGO -->
-<!-- ============================= -->
+<!-- =======================================================
+     JOGO
+     ======================================================= -->
 
 <div id="game">
 
-    <div id="corridor"></div>
+    <div id="world">
 
-    <div class="wall left"></div>
+        <div id="ceiling"></div>
 
-    <div class="wall right"></div>
+        <div id="floor"></div>
 
-    <div id="floor"></div>
+        <div class="wall left"></div>
+
+        <div class="wall right"></div>
+
+
+        <!-- PORTAS -->
+
+        <div
+            class="door"
+            data-room="Sala 01"
+            style="left:18%;top:32%;"
+        ></div>
+
+        <div
+            class="door"
+            data-room="Biblioteca"
+            style="left:32%;top:28%;"
+        ></div>
+
+        <div
+            class="door"
+            data-room="Laboratório"
+            style="left:46%;top:30%;"
+        ></div>
+
+        <div
+            class="door"
+            data-room="Porão"
+            style="left:60%;top:27%;"
+        ></div>
+
+
+        <!-- MESAS -->
+
+        <div
+            class="object table"
+            data-noise="28"
+            style="left:20%;top:60%;"
+        ></div>
+
+        <div
+            class="object table"
+            data-noise="32"
+            style="left:42%;top:67%;"
+        ></div>
+
+        <div
+            class="object table"
+            data-noise="25"
+            style="left:68%;top:62%;"
+        ></div>
+
+
+        <!-- CADEIRAS -->
+
+        <div
+            class="object chair"
+            data-noise="38"
+            style="left:31%;top:65%;"
+        ></div>
+
+        <div
+            class="object chair"
+            data-noise="42"
+            style="left:56%;top:72%;"
+        ></div>
+
+
+        <!-- ARMÁRIO -->
+
+        <div
+            class="object cabinet"
+            data-noise="20"
+            style="left:75%;top:38%;"
+        ></div>
+
+
+        <!-- ESCONDERIJO -->
+
+        <div
+            class="hideSpot"
+            id="hideSpot"
+            style="left:7%;top:55%;"
+        >
+            ESCONDERIJO
+            <br>
+            [H]
+        </div>
+
+
+        <!-- CHAVES -->
+
+        <div
+            class="key"
+            data-key="1"
+            style="left:15%;top:45%;"
+        >
+            🔑
+        </div>
+
+        <div
+            class="key"
+            data-key="2"
+            style="left:28%;top:24%;"
+        >
+            🔑
+        </div>
+
+        <div
+            class="key"
+            data-key="3"
+            style="left:41%;top:43%;"
+        >
+            🔑
+        </div>
+
+        <div
+            class="key"
+            data-key="4"
+            style="left:55%;top:22%;"
+        >
+            🔑
+        </div>
+
+        <div
+            class="key"
+            data-key="5"
+            style="left:69%;top:35%;"
+        >
+            🔑
+        </div>
+
+        <div
+            class="key"
+            data-key="6"
+            style="left:81%;top:53%;"
+        >
+            🔑
+        </div>
+
+        <div
+            class="key"
+            data-key="7"
+            style="left:36%;top:78%;"
+        >
+            🔑
+        </div>
+
+        <div
+            class="key"
+            data-key="8"
+            style="left:63%;top:80%;"
+        >
+            🔑
+        </div>
+
+
+        <!-- PORTÃO -->
+
+        <div id="gate">
+
+            <div class="gateTitle">
+                PORTÃO PRINCIPAL
+            </div>
+
+            <div class="locks">
+
+                <div class="lock" id="lock1">🔒</div>
+                <div class="lock" id="lock2">🔒</div>
+
+                <div class="lock" id="lock3">🔒</div>
+                <div class="lock" id="lock4">🔒</div>
+
+                <div class="lock" id="lock5">🔒</div>
+                <div class="lock" id="lock6">🔒</div>
+
+                <div class="lock" id="lock7">🔒</div>
+                <div class="lock" id="lock8">🔒</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MONSTRO -->
+
+        <div id="monster">
+
+            <div class="monsterHair"></div>
+
+            <div class="monsterFace">
+
+                <div class="monsterEye left"></div>
+
+                <div class="monsterEye right"></div>
+
+                <div class="monsterMouth">
+                    █████
+                </div>
+
+            </div>
+
+            <div class="monsterBody"></div>
+
+        </div>
+
+
+        <!-- ESCURIDÃO -->
+
+        <div id="darkness"></div>
+
+    </div>
 
 
     <!-- HUD -->
 
     <div id="hud">
 
+        <div class="hud-title">
+            ESCOLA NIGHTMARE
+        </div>
+
         <div>
             🔑 Chaves:
-            <span id="keys">0</span>/8
+            <strong>
+                <span id="keyCount">0</span>/8
+            </strong>
         </div>
 
         <div>
-            🔊 Som:
-            <span id="noise">0</span>
+            🔋 Lanterna
         </div>
 
-        <div id="danger">
-            👂 Perigo: BAIXO
-        </div>
-
-        <div>
-            WASD = andar
+        <div class="bar">
+            <span id="batteryBar"></span>
         </div>
 
         <div>
-            Clique nos objetos = fazer barulho
+            🏃 Energia
         </div>
 
+        <div class="bar">
+            <span id="staminaBar"></span>
+        </div>
+
+        <div>
+            🔊 Ruído
+        </div>
+
+        <div class="bar">
+            <span id="noiseBar"></span>
+        </div>
+
+        <div>
+            👂
+            <span id="dangerText">
+                Perigo baixo
+            </span>
+        </div>
+
+    </div>
+
+
+    <!-- LOCAL -->
+
+    <div id="location">
+        Entrada
     </div>
 
 
@@ -625,145 +1081,32 @@ button:hover {
     </div>
 
 
-    <!-- MESAS -->
+    <!-- INVENTÁRIO -->
 
-    <div
-        class="object table"
-        style="left:20%;top:55%;"
-        onclick="makeNoise(30)"
-    ></div>
+    <div id="inventory">
 
-    <div
-        class="object table"
-        style="left:45%;top:65%;"
-        onclick="makeNoise(35)"
-    ></div>
+        <strong>Inventário:</strong>
 
-
-    <!-- CADEIRAS -->
-
-    <div
-        class="object chair"
-        style="left:65%;top:58%;"
-        onclick="makeNoise(40)"
-    ></div>
-
-
-    <!-- ============================= -->
-    <!-- CHAVES -->
-    <!-- ============================= -->
-
-    <div
-        class="key"
-        style="left:20%;top:30%;"
-        onclick="collectKey(this)"
-    >
-        🔑
-    </div>
-
-    <div
-        class="key"
-        style="left:35%;top:45%;"
-        onclick="collectKey(this)"
-    >
-        🔑
-    </div>
-
-    <div
-        class="key"
-        style="left:50%;top:25%;"
-        onclick="collectKey(this)"
-    >
-        🔑
-    </div>
-
-    <div
-        class="key"
-        style="left:65%;top:35%;"
-        onclick="collectKey(this)"
-    >
-        🔑
-    </div>
-
-    <div
-        class="key"
-        style="left:80%;top:50%;"
-        onclick="collectKey(this)"
-    >
-        🔑
-    </div>
-
-    <div
-        class="key"
-        style="left:25%;top:70%;"
-        onclick="collectKey(this)"
-    >
-        🔑
-    </div>
-
-    <div
-        class="key"
-        style="left:55%;top:75%;"
-        onclick="collectKey(this)"
-    >
-        🔑
-    </div>
-
-    <div
-        class="key"
-        style="left:85%;top:70%;"
-        onclick="collectKey(this)"
-    >
-        🔑
-    </div>
-
-
-    <!-- ============================= -->
-    <!-- PORTÃO -->
-    <!-- ============================= -->
-
-    <div id="gate" onclick="tryGate()">
-
-        <h3>PORTÃO</h3>
-
-        <div class="locks">
-
-            <div class="lock" id="lock1">🔒</div>
-            <div class="lock" id="lock2">🔒</div>
-
-            <div class="lock" id="lock3">🔒</div>
-            <div class="lock" id="lock4">🔒</div>
-
-            <div class="lock" id="lock5">🔒</div>
-            <div class="lock" id="lock6">🔒</div>
-
-            <div class="lock" id="lock7">🔒</div>
-            <div class="lock" id="lock8">🔒</div>
-
-        </div>
+        <span
+            class="inventoryItem"
+            id="inventoryKeys"
+        >
+            🔑 0
+        </span>
 
     </div>
 
 
-    <!-- ============================= -->
-    <!-- MONSTRO -->
-    <!-- ============================= -->
+    <!-- CONTROLES -->
 
-    <div id="monster">
+    <div id="controls">
 
-        <div class="hair"></div>
-
-        <div class="face">
-
-            <div class="eye eye1"></div>
-
-            <div class="eye eye2"></div>
-
-            <div class="mouth">
-                😈
-            </div>
-
-        </div>
+        WASD — andar<br>
+        SHIFT — correr<br>
+        F — lanterna<br>
+        H — esconder<br>
+        M — mapa<br>
+        E — interagir
 
     </div>
 
@@ -772,23 +1115,84 @@ button:hover {
 
     <div id="message"></div>
 
+
+    <!-- MAPA -->
+
+    <div id="mapPanel">
+
+        <h2>MAPA DA ESCOLA</h2>
+
+        <div id="schoolMap">
+
+            <div class="mapRoom current">
+                ENTRADA
+            </div>
+
+            <div class="mapRoom">
+                CORREDOR A
+            </div>
+
+            <div class="mapRoom">
+                SALA 01
+            </div>
+
+            <div class="mapRoom">
+                SALA 02
+            </div>
+
+            <div class="mapRoom">
+                BIBLIOTECA
+            </div>
+
+            <div class="mapRoom">
+                LABORATÓRIO
+            </div>
+
+            <div class="mapRoom">
+                REFEITÓRIO
+            </div>
+
+            <div class="mapRoom">
+                GINÁSIO
+            </div>
+
+            <div class="mapRoom">
+                PORÃO
+            </div>
+
+            <div class="mapRoom">
+                PÁTIO / PORTÃO
+            </div>
+
+        </div>
+
+        <button
+            class="closeMap"
+            id="closeMap"
+        >
+            FECHAR MAPA
+        </button>
+
+    </div>
+
+
 </div>
 
 
-<!-- ============================= -->
-<!-- JUMPSCARE -->
-<!-- ============================= -->
+<!-- =======================================================
+     JUMPSCARE
+     ======================================================= -->
 
 <div id="jumpscare">
 
-    <div class="big-face">
+    <div class="scareFace">
 
-        <div class="big-eye"></div>
+        <div class="scareEye one"></div>
 
-        <div class="big-eye"></div>
+        <div class="scareEye two"></div>
 
-        <div class="big-mouth">
-            AAAAAA!
+        <div class="scareMouth">
+            AAAAAAA!
         </div>
 
     </div>
@@ -796,21 +1200,26 @@ button:hover {
 </div>
 
 
-<!-- ============================= -->
-<!-- MORTE -->
-<!-- ============================= -->
+<!-- =======================================================
+     MORTE
+     ======================================================= -->
 
-<div id="death">
+<div
+    id="deathScreen"
+    class="endScreen"
+>
 
-    <div class="end-box">
+    <div class="endBox">
 
-        <h1>VOCÊ FOI ENCONTRADO</h1>
+        <h1>
+            VOCÊ FOI ENCONTRADO
+        </h1>
 
         <p>
-            O monstro ouviu você.
+            A criatura seguiu o som até você.
         </p>
 
-        <button onclick="location.reload()">
+        <button id="restartDeath">
             TENTAR NOVAMENTE
         </button>
 
@@ -819,21 +1228,30 @@ button:hover {
 </div>
 
 
-<!-- ============================= -->
-<!-- VITÓRIA -->
-<!-- ============================= -->
+<!-- =======================================================
+     VITÓRIA
+     ======================================================= -->
 
-<div id="victory">
+<div
+    id="victoryScreen"
+    class="endScreen"
+>
 
-    <div class="end-box">
+    <div class="endBox">
 
-        <h1>VOCÊ ESCAPOU!</h1>
+        <h1>
+            VOCÊ ESCAPOU
+        </h1>
 
         <p>
-            Todas as 8 fechaduras foram abertas.
+            As oito fechaduras foram abertas.
         </p>
 
-        <button onclick="location.reload()">
+        <p>
+            Você conseguiu deixar a escola.
+        </p>
+
+        <button id="restartVictory">
             JOGAR NOVAMENTE
         </button>
 
@@ -844,352 +1262,1121 @@ button:hover {
 
 <script>
 
-/* ==========================================
-   VARIÁVEIS
-   ========================================== */
+/* =========================================================
+   ESTADO DO JOGO
+   ========================================================= */
 
-let keys = 0;
+const state = {
 
-let noise = 0;
+    running:false,
 
-let monsterAwareness = 0;
+    keys:0,
 
-let gameStarted = false;
+    totalKeys:8,
 
-let monsterComing = false;
+    battery:100,
 
+    stamina:100,
 
-/* ==========================================
-   INICIAR
-   ========================================== */
+    noise:0,
 
-function startGame() {
+    monsterAwareness:0,
 
-    document.getElementById("menu").style.display =
-        "none";
+    monsterDistance:100,
 
-    document.getElementById("game").style.display =
-        "block";
+    hiding:false,
 
-    gameStarted = true;
+    flashlight:true,
 
-    message(
-        "Encontre as 8 chaves!"
-    );
+    mapOpen:false,
 
-}
+    currentRoom:"Entrada",
 
+    visitedRooms:new Set(["Entrada"]),
 
-/* ==========================================
-   PEGAR CHAVE
-   ========================================== */
+    doorsOpened:0,
 
-function collectKey(key) {
+    time:0
 
-    if (!gameStarted) return;
+};
 
-    if (key.style.display === "none") {
-        return;
-    }
 
-    key.style.display = "none";
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
 
-    keys++;
+const menu =
+    document.getElementById("menu");
 
-    document.getElementById("keys").textContent =
-        keys;
+const game =
+    document.getElementById("game");
 
-    /* abre uma fechadura */
+const startButton =
+    document.getElementById("startButton");
 
-    let lock =
-        document.getElementById(
-            "lock" + keys
-        );
+const keyCount =
+    document.getElementById("keyCount");
 
-    if (lock) {
+const inventoryKeys =
+    document.getElementById("inventoryKeys");
 
-        lock.textContent = "🔓";
+const batteryBar =
+    document.getElementById("batteryBar");
 
-        lock.classList.add(
-            "unlocked"
-        );
+const staminaBar =
+    document.getElementById("staminaBar");
 
-    }
+const noiseBar =
+    document.getElementById("noiseBar");
 
-    message(
-        "Você encontrou uma chave!"
-    );
+const dangerText =
+    document.getElementById("dangerText");
 
-    /* pegar chave faz pouco barulho */
+const messageBox =
+    document.getElementById("message");
 
-    makeNoise(5);
+const monster =
+    document.getElementById("monster");
 
-}
+const darkness =
+    document.getElementById("darkness");
 
+const locationBox =
+    document.getElementById("location");
 
-/* ==========================================
-   FAZER BARULHO
-   ========================================== */
+const mapPanel =
+    document.getElementById("mapPanel");
 
-function makeNoise(amount) {
+const jumpscare =
+    document.getElementById("jumpscare");
 
-    if (!gameStarted) return;
+const deathScreen =
+    document.getElementById("deathScreen");
 
-    noise += amount;
+const victoryScreen =
+    document.getElementById("victoryScreen");
 
-    monsterAwareness +=
-        amount;
 
-    noise = Math.min(
-        noise,
-        100
-    );
+/* =========================================================
+   TECLAS
+   ========================================================= */
 
-    monsterAwareness =
-        Math.min(
-            monsterAwareness,
-            100
-        );
+const keysDown = {
 
-    document.getElementById(
-        "noise"
-    ).textContent =
-        noise;
+    w:false,
+    a:false,
+    s:false,
+    d:false,
+    shift:false
 
-    updateDanger();
+};
 
-}
-
-
-/* ==========================================
-   PERIGO
-   ========================================== */
-
-function updateDanger() {
-
-    const danger =
-        document.getElementById(
-            "danger"
-        );
-
-    if (monsterAwareness < 20) {
-
-        danger.textContent =
-            "👂 Perigo: BAIXO";
-
-        danger.style.color =
-            "#40ff40";
-
-    }
-
-    else if (monsterAwareness < 50) {
-
-        danger.textContent =
-            "👂 Perigo: ATENÇÃO";
-
-        danger.style.color =
-            "yellow";
-
-    }
-
-    else if (monsterAwareness < 80) {
-
-        danger.textContent =
-            "👂 Perigo: ALTO";
-
-        danger.style.color =
-            "orange";
-
-    }
-
-    else {
-
-        danger.textContent =
-            "👂 PERIGO: O MONSTRO ESTÁ PERTO!";
-
-        danger.style.color =
-            "red";
-
-        if (!monsterComing) {
-
-            monsterComing = true;
-
-            document
-                .getElementById("monster")
-                .classList.add("show");
-
-        }
-
-    }
-
-}
-
-
-/* ==========================================
-   PORTÃO
-   ========================================== */
-
-function tryGate() {
-
-    if (keys < 8) {
-
-        message(
-            "O portão está trancado! " +
-            "Você precisa encontrar todas as 8 chaves."
-        );
-
-        makeNoise(20);
-
-        return;
-    }
-
-    document.getElementById(
-        "victory"
-    ).style.display =
-        "flex";
-
-    gameStarted = false;
-
-}
-
-
-/* ==========================================
-   MENSAGEM
-   ========================================== */
-
-function message(text) {
-
-    const box =
-        document.getElementById(
-            "message"
-        );
-
-    box.textContent =
-        text;
-
-    box.classList.add("show");
-
-    setTimeout(
-        function() {
-
-            box.classList.remove(
-                "show"
-            );
-
-        },
-        2500
-    );
-
-}
-
-
-/* ==========================================
-   JUMPSCARE
-   ========================================== */
-
-function jumpscare() {
-
-    if (!gameStarted) return;
-
-    gameStarted = false;
-
-    document
-        .getElementById("jumpscare")
-        .classList.add("active");
-
-    setTimeout(
-        function() {
-
-            document
-                .getElementById("jumpscare")
-                .classList.remove("active");
-
-            document
-                .getElementById("death")
-                .style.display =
-                "flex";
-
-        },
-        2000
-    );
-
-}
-
-
-/* ==========================================
-   INTELIGÊNCIA DO MONSTRO
-   ========================================== */
-
-setInterval(
-    function() {
-
-        if (!gameStarted) return;
-
-        /* o barulho diminui com o tempo */
-
-        noise *= 0.85;
-
-        monsterAwareness *= 0.96;
-
-        document.getElementById(
-            "noise"
-        ).textContent =
-            Math.round(noise);
-
-        updateDanger();
-
-        /*
-         * Se o jogador fizer muito barulho,
-         * existe chance do monstro encontrar
-         * o jogador.
-         */
-
-        if (
-            monsterAwareness > 90 &&
-            Math.random() < 0.25
-        ) {
-
-            jumpscare();
-
-        }
-
-    },
-    1000
-);
-
-
-/* ==========================================
-   MOVIMENTO
-   ========================================== */
 
 document.addEventListener(
     "keydown",
-    function(event) {
+    function(event){
 
-        if (!gameStarted) return;
+        if(!state.running)
+            return;
 
         const key =
             event.key.toLowerCase();
 
-        if (
-            key === "w" ||
-            key === "a" ||
-            key === "s" ||
-            key === "d"
-        ) {
+        if(key === "w")
+            keysDown.w = true;
 
-            /*
-             * Cada passo produz
-             * uma pequena quantidade
-             * de som.
-             */
+        if(key === "a")
+            keysDown.a = true;
 
-            makeNoise(3);
+        if(key === "s")
+            keysDown.s = true;
+
+        if(key === "d")
+            keysDown.d = true;
+
+        if(key === "shift")
+            keysDown.shift = true;
+
+
+        if(key === "f"){
+
+            toggleFlashlight();
+
+        }
+
+
+        if(key === "h"){
+
+            toggleHiding();
+
+        }
+
+
+        if(key === "m"){
+
+            toggleMap();
+
+        }
+
+
+        if(key === "e"){
+
+            interact();
 
         }
 
     }
 );
+
+
+document.addEventListener(
+    "keyup",
+    function(event){
+
+        const key =
+            event.key.toLowerCase();
+
+        if(key === "w")
+            keysDown.w = false;
+
+        if(key === "a")
+            keysDown.a = false;
+
+        if(key === "s")
+            keysDown.s = false;
+
+        if(key === "d")
+            keysDown.d = false;
+
+        if(key === "shift")
+            keysDown.shift = false;
+
+    }
+);
+
+
+/* =========================================================
+   INICIAR
+   ========================================================= */
+
+startButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+function startGame(){
+
+    menu.style.display =
+        "none";
+
+    game.style.display =
+        "block";
+
+    state.running =
+        true;
+
+    state.keys =
+        0;
+
+    state.battery =
+        100;
+
+    state.stamina =
+        100;
+
+    state.noise =
+        0;
+
+    state.monsterAwareness =
+        0;
+
+    state.monsterDistance =
+        100;
+
+    state.hiding =
+        false;
+
+    state.flashlight =
+        true;
+
+    showMessage(
+        "Encontre as 8 chaves. Não faça barulho."
+    );
+
+    updateInterface();
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
+}
+
+
+/* =========================================================
+   MENSAGEM
+   ========================================================= */
+
+let messageTimer = null;
+
+
+function showMessage(text){
+
+    messageBox.textContent =
+        text;
+
+    messageBox.classList.add(
+        "show"
+    );
+
+    clearTimeout(
+        messageTimer
+    );
+
+    messageTimer =
+        setTimeout(
+            function(){
+
+                messageBox.classList.remove(
+                    "show"
+                );
+
+            },
+            3000
+        );
+
+}
+
+
+/* =========================================================
+   RUÍDO
+   ========================================================= */
+
+function makeNoise(amount){
+
+    if(!state.running)
+        return;
+
+    amount =
+        Math.max(
+            0,
+            Number(amount) || 0
+        );
+
+    state.noise =
+        Math.min(
+            100,
+            state.noise + amount
+        );
+
+    state.monsterAwareness =
+        Math.min(
+            100,
+            state.monsterAwareness +
+            amount * .65
+        );
+
+    showMessage(
+        "Você fez barulho..."
+    );
+
+}
+
+
+/* =========================================================
+   OBJETOS
+   ========================================================= */
+
+document
+    .querySelectorAll(".object")
+    .forEach(
+        function(object){
+
+            object.addEventListener(
+                "click",
+                function(){
+
+                    const amount =
+                        Number(
+                            object.dataset.noise
+                        ) || 20;
+
+                    makeNoise(
+                        amount
+                    );
+
+                    object.animate(
+                        [
+                            {
+                                transform:
+                                    "rotate(0deg)"
+                            },
+                            {
+                                transform:
+                                    "rotate(5deg)"
+                            },
+                            {
+                                transform:
+                                    "rotate(-5deg)"
+                            },
+                            {
+                                transform:
+                                    "rotate(0deg)"
+                            }
+                        ],
+                        {
+                            duration:300
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   CHAVES
+   ========================================================= */
+
+document
+    .querySelectorAll(".key")
+    .forEach(
+        function(key){
+
+            key.addEventListener(
+                "click",
+                function(){
+
+                    if(
+                        key.dataset.collected ===
+                        "true"
+                    )
+                        return;
+
+                    key.dataset.collected =
+                        "true";
+
+                    key.style.display =
+                        "none";
+
+                    state.keys++;
+
+                    makeNoise(4);
+
+                    showMessage(
+                        "Chave encontrada! " +
+                        state.keys +
+                        "/8"
+                    );
+
+                    const lock =
+                        document.getElementById(
+                            "lock" +
+                            state.keys
+                        );
+
+                    if(lock){
+
+                        lock.textContent =
+                            "🔓";
+
+                        lock.classList.add(
+                            "open"
+                        );
+
+                    }
+
+                    if(
+                        state.keys ===
+                        state.totalKeys
+                    ){
+
+                        showMessage(
+                            "Você tem todas as chaves. Vá ao portão!"
+                        );
+
+                    }
+
+                    updateInterface();
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   PORTÃO
+   ========================================================= */
+
+document
+    .getElementById("gate")
+    .addEventListener(
+        "click",
+        function(){
+
+            if(
+                state.keys <
+                state.totalKeys
+            ){
+
+                const missing =
+                    state.totalKeys -
+                    state.keys;
+
+                showMessage(
+                    "O portão possui " +
+                    missing +
+                    " fechadura(s) restante(s)."
+                );
+
+                makeNoise(15);
+
+                return;
+
+            }
+
+            winGame();
+
+        }
+    );
+
+
+/* =========================================================
+   PORTAS
+   ========================================================= */
+
+document
+    .querySelectorAll(".door")
+    .forEach(
+        function(door){
+
+            door.addEventListener(
+                "click",
+                function(){
+
+                    const room =
+                        door.dataset.room ||
+                        "Sala desconhecida";
+
+                    if(
+                        door.classList.contains(
+                            "locked"
+                        )
+                    ){
+
+                        showMessage(
+                            "Esta porta está trancada."
+                        );
+
+                        makeNoise(8);
+
+                        return;
+
+                    }
+
+                    door.classList.toggle(
+                        "open"
+                    );
+
+                    state.doorsOpened++;
+
+                    state.currentRoom =
+                        room;
+
+                    state.visitedRooms.add(
+                        room
+                    );
+
+                    locationBox.textContent =
+                        room;
+
+                    makeNoise(10);
+
+                    showMessage(
+                        "Você entrou em: " +
+                        room
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   INTERAÇÃO
+   ========================================================= */
+
+function interact(){
+
+    if(state.hiding){
+
+        showMessage(
+            "Você está escondido."
+        );
+
+        return;
+
+    }
+
+    showMessage(
+        "Você não encontrou nada para interagir aqui."
+    );
+
+}
+
+
+/* =========================================================
+   LANERNA
+   ========================================================= */
+
+function toggleFlashlight(){
+
+    state.flashlight =
+        !state.flashlight;
+
+    darkness.classList.toggle(
+        "flashlightOff",
+        !state.flashlight
+    );
+
+    if(state.flashlight){
+
+        showMessage(
+            "Lanterna ligada."
+        );
+
+    }else{
+
+        showMessage(
+            "Lanterna desligada."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCONDER
+   ========================================================= */
+
+const hideSpot =
+    document.getElementById(
+        "hideSpot"
+    );
+
+
+hideSpot.addEventListener(
+    "click",
+    toggleHiding
+);
+
+
+function toggleHiding(){
+
+    state.hiding =
+        !state.hiding;
+
+    if(state.hiding){
+
+        showMessage(
+            "Você se escondeu. Fique em silêncio."
+        );
+
+    }else{
+
+        showMessage(
+            "Você saiu do esconderijo."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   MAPA
+   ========================================================= */
+
+function toggleMap(){
+
+    state.mapOpen =
+        !state.mapOpen;
+
+    mapPanel.style.display =
+        state.mapOpen
+            ? "block"
+            : "none";
+
+}
+
+
+document
+    .getElementById("closeMap")
+    .addEventListener(
+        "click",
+        toggleMap
+    );
+
+
+/* =========================================================
+   MOVIMENTO
+   ========================================================= */
+
+function updateMovement(){
+
+    if(state.hiding)
+        return;
+
+    const moving =
+        keysDown.w ||
+        keysDown.a ||
+        keysDown.s ||
+        keysDown.d;
+
+    if(!moving)
+        return;
+
+    const running =
+        keysDown.shift &&
+        state.stamina > 1;
+
+    if(running){
+
+        state.stamina =
+            Math.max(
+                0,
+                state.stamina - .7
+            );
+
+        makeNoise(.9);
+
+    }else{
+
+        state.stamina =
+            Math.min(
+                100,
+                state.stamina + .15
+            );
+
+        makeNoise(.25);
+
+    }
+
+}
+
+
+/* =========================================================
+   MONSTRO
+   ========================================================= */
+
+function updateMonster(){
+
+    if(state.hiding){
+
+        state.monsterAwareness *= .97;
+
+        return;
+
+    }
+
+
+    /*
+     * A criatura não possui visão.
+     *
+     * Ela reage ao barulho.
+     */
+
+    if(
+        state.monsterAwareness >
+        35
+    ){
+
+        monster.classList.add(
+            "visible"
+        );
+
+    }
+
+
+    if(
+        state.monsterAwareness >
+        60
+    ){
+
+        state.monsterDistance -=
+            .35;
+
+    }
+
+
+    if(
+        state.monsterAwareness >
+        85
+    ){
+
+        state.monsterDistance -=
+            .7;
+
+    }
+
+
+    state.monsterDistance =
+        Math.max(
+            0,
+            state.monsterDistance
+        );
+
+
+    /*
+     * Quando o monstro está muito próximo,
+     * existe chance de jumpscare.
+     */
+
+    if(
+        state.monsterDistance <
+        18 &&
+        Math.random() <
+        .035
+    ){
+
+        triggerJumpscare();
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUÇÃO DO RUÍDO
+   ========================================================= */
+
+function updateNoise(){
+
+    state.noise *= .965;
+
+    state.monsterAwareness *= .992;
+
+}
+
+
+/* =========================================================
+   EVENTOS ALEATÓRIOS
+   ========================================================= */
+
+let eventCooldown = 0;
+
+
+function randomEvents(){
+
+    if(eventCooldown > 0){
+
+        eventCooldown--;
+
+        return;
+
+    }
+
+
+    eventCooldown =
+        300;
+
+
+    const chance =
+        Math.random();
+
+
+    if(chance < .18){
+
+        showMessage(
+            "Você ouviu uma porta bater em algum lugar..."
+        );
+
+        state.monsterAwareness +=
+            8;
+
+    }
+
+
+    if(
+        chance >= .18 &&
+        chance < .30
+    ){
+
+        showMessage(
+            "Um ruído veio do corredor."
+        );
+
+        state.monsterAwareness +=
+            12;
+
+    }
+
+
+    if(
+        chance >= .30 &&
+        chance < .36
+    ){
+
+        monster.classList.add(
+            "visible"
+        );
+
+        showMessage(
+            "Você sentiu que não está sozinho..."
+        );
+
+        state.monsterAwareness +=
+            18;
+
+    }
+
+}
+
+
+/* =========================================================
+   INTERFACE
+   ========================================================= */
+
+function updateInterface(){
+
+    keyCount.textContent =
+        state.keys;
+
+    inventoryKeys.textContent =
+        "🔑 " +
+        state.keys;
+
+    batteryBar.style.width =
+        state.battery +
+        "%";
+
+    staminaBar.style.width =
+        state.stamina +
+        "%";
+
+    noiseBar.style.width =
+        state.noise +
+        "%";
+
+
+    if(
+        state.monsterAwareness <
+        25
+    ){
+
+        dangerText.textContent =
+            "Perigo baixo";
+
+        dangerText.style.color =
+            "#3cff3c";
+
+    }else if(
+        state.monsterAwareness <
+        50
+    ){
+
+        dangerText.textContent =
+            "A criatura ouviu algo";
+
+        dangerText.style.color =
+            "#ffff00";
+
+    }else if(
+        state.monsterAwareness <
+        75
+    ){
+
+        dangerText.textContent =
+            "PERIGO ALTO";
+
+        dangerText.style.color =
+            "#ff8c00";
+
+    }else{
+
+        dangerText.textContent =
+            "ELA ESTÁ PERTO";
+
+        dangerText.style.color =
+            "#ff0000";
+
+    }
+
+}
+
+
+/* =========================================================
+   BATERIA
+   ========================================================= */
+
+function updateBattery(){
+
+    if(
+        state.flashlight &&
+        state.battery > 0
+    ){
+
+        state.battery -=
+            .015;
+
+    }
+
+
+    if(
+        state.battery <= 0
+    ){
+
+        state.battery =
+            0;
+
+        state.flashlight =
+            false;
+
+        darkness.classList.add(
+            "flashlightOff"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   JUMPSCARE
+   ========================================================= */
+
+let scareRunning = false;
+
+
+function triggerJumpscare(){
+
+    if(scareRunning)
+        return;
+
+    scareRunning =
+        true;
+
+    state.running =
+        false;
+
+    jumpscare.classList.add(
+        "active"
+    );
+
+
+    setTimeout(
+        function(){
+
+            jumpscare.classList.remove(
+                "active"
+            );
+
+            deathScreen.style.display =
+                "flex";
+
+            scareRunning =
+                false;
+
+        },
+        2200
+    );
+
+}
+
+
+/* =========================================================
+   VITÓRIA
+   ========================================================= */
+
+function winGame(){
+
+    state.running =
+        false;
+
+    victoryScreen.style.display =
+        "flex";
+
+}
+
+
+/* =========================================================
+   REINICIAR
+   ========================================================= */
+
+document
+    .getElementById("restartDeath")
+    .addEventListener(
+        "click",
+        function(){
+
+            location.reload();
+
+        }
+    );
+
+
+document
+    .getElementById("restartVictory")
+    .addEventListener(
+        "click",
+        function(){
+
+            location.reload();
+
+        }
+    );
+
+
+/* =========================================================
+   LOOP
+   ========================================================= */
+
+let lastFrame =
+    performance.now();
+
+
+function gameLoop(now){
+
+    if(!state.running)
+        return;
+
+
+    const delta =
+        Math.min(
+            100,
+            now - lastFrame
+        );
+
+    lastFrame =
+        now;
+
+
+    updateMovement();
+
+    updateMonster();
+
+    updateNoise();
+
+    updateBattery();
+
+    randomEvents();
+
+    updateInterface();
+
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
+}
+
 
 </script>
 
