@@ -3,524 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio de Terror: Sobreviva à Noite de Halloween</title>
-    <!-- Tailwind CSS -->
+    <title>Silêncio Mortal: O Portão B (Halloween Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Share+Tech+Mono&family=Nosifer&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Share Tech Mono', monospace;
-            background-color: #05020a;
+            background-color: #030206;
             color: #e2e8f0;
-            overflow-x: hidden;
+            overflow: hidden;
             user-select: none;
         }
 
-        .font-creepster {
-            font-family: 'Creepster', cursive;
-        }
+        .font-creepster { font-family: 'Creepster', cursive; }
+        .font-nosifer { font-family: 'Nosifer', cursive; }
 
-        .font-nosifer {
-            font-family: 'Nosifer', cursive;
-        }
-
-        /* Efeitos e Animações Visual de Terror */
-        .glow-red {
-            text-shadow: 0 0 10px #ff0000, 0 0 20px #990000, 0 0 30px #660000;
-        }
-
-        .glow-orange {
-            text-shadow: 0 0 10px #ff6600, 0 0 20px #cc5500;
-        }
-
-        .glow-green {
-            text-shadow: 0 0 10px #00ff66, 0 0 20px #009933;
-        }
-
-        /* Animação da tela piscando no Erro */
-        @keyframes flash-screen {
-            0% { background-color: #ff0000; opacity: 1; }
-            15% { background-color: #000000; opacity: 0.9; }
-            30% { background-color: #ffffff; opacity: 1; }
-            45% { background-color: #8b0000; opacity: 0.8; }
-            60% { background-color: #000000; opacity: 1; }
-            75% { background-color: #ff0000; opacity: 0.9; }
-            100% { background-color: #05020a; opacity: 1; }
-        }
-
-        .screen-flash {
-            animation: flash-screen 0.15s infinite;
-        }
-
-        /* Tremor de tela (Screen Shake) */
+        /* Animação de Trepidação da Tela (Screen Shake) */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-2px, -3px) rotate(-2deg); }
-            20% { transform: translate(-4px, 0px) rotate(2deg); }
-            30% { transform: translate(4px, 3px) rotate(0deg); }
-            40% { transform: translate(2px, -1px) rotate(2deg); }
-            50% { transform: translate(-2px, 3px) rotate(-2deg); }
+            10% { transform: translate(-2px, -3px) rotate(-1deg); }
+            20% { transform: translate(-4px, 0px) rotate(1deg); }
+            30% { transform: translate(4px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -2px) rotate(1deg); }
+            50% { transform: translate(-2px, 3px) rotate(-1deg); }
             60% { transform: translate(-4px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 2px) rotate(-2deg); }
-            80% { transform: translate(-2px, -2px) rotate(2deg); }
-            90% { transform: translate(2px, 3px) rotate(0deg); }
+            70% { transform: translate(4px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -2px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
+        /* Animação de Piscar da Tela no Jumpscare */
+        @keyframes strobeFlash {
+            0% { background-color: #ff0000; opacity: 1; }
+            20% { background-color: #ffffff; opacity: 1; }
+            40% { background-color: #000000; opacity: 1; }
+            60% { background-color: #ff0000; opacity: 1; }
+            80% { background-color: #ffffff; opacity: 1; }
+            100% { background-color: #000000; opacity: 1; }
+        }
+
         .screen-shake {
-            animation: shake 0.2s infinite;
+            animation: shake 0.12s infinite;
         }
 
-        /* Efeito de zoom assustador do monstro */
-        @keyframes monster-zoom {
-            0% { transform: scale(0.3) rotate(-5deg); opacity: 0; }
-            50% { transform: scale(1.1) rotate(3deg); opacity: 1; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        .screen-flash {
+            animation: strobeFlash 0.08s infinite;
         }
 
-        .monster-appear {
-            animation: monster-zoom 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        /* Vignette escuro */
-        .vignette {
-            box-shadow: inset 0 0 150px rgba(0,0,0,0.95);
-        }
-
-        /* Linhas de TV de Tubo / CRT Glitch */
-        .crt::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 20;
+        /* Scanlines CRT para estilo retrô aterrorizante */
+        .crt-overlay {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03)
+            );
             background-size: 100% 3px, 6px 100%;
             pointer-events: none;
         }
 
-        /* Botão estilizado */
-        .btn-option {
-            transition: all 0.2s ease-in-out;
-            background: rgba(20, 10, 30, 0.85);
-            border: 2px solid #3b0764;
-        }
-        .btn-option:hover {
-            background: rgba(88, 28, 135, 0.9);
-            border-color: #a855f7;
-            transform: translateX(6px);
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        /* Barra de ruído piscando se estiver alta */
+        .danger-noise {
+            animation: pulseDanger 0.5s infinite alternate;
         }
 
-        /* Scrollbar customizada macabra */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #090314;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #581c87;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #7e22ce;
+        @keyframes pulseDanger {
+            from { box-shadow: 0 0 5px #ef4444; }
+            to { box-shadow: 0 0 20px #ef4444; }
         }
     </style>
 </head>
-<body class="crt min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+<body class="w-screen h-screen flex flex-col justify-center items-center relative">
 
-    <!-- Canvas para Névoa e Partículas de Terror -->
-    <canvas id="fogCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
-    
-    <!-- Efeito Vignette na tela -->
-    <div class="fixed inset-0 pointer-events-none vignette z-10"></div>
+    <!-- Efeito CRT global -->
+    <div class="crt-overlay absolute inset-0 z-30 pointer-events-none"></div>
 
-    <!-- Barra de Controle de Áudio -->
-    <header class="relative z-30 p-4 flex justify-between items-center border-b border-purple-900/40 bg-black/50 backdrop-blur-md">
-        <div class="flex items-center gap-3">
-            <span class="text-3xl">🎃</span>
-            <h1 class="text-xl md:text-2xl font-creepster tracking-wider text-orange-500 glow-orange">NOITE DOS PESADELOS</h1>
-        </div>
-        
-        <div class="flex items-center gap-4">
-            <button id="audioToggleBtn" onclick="toggleAudio()" class="px-4 py-2 rounded-lg bg-purple-950 border border-purple-600 text-purple-200 hover:bg-purple-800 transition-all flex items-center gap-2 text-sm">
-                <span id="audioIcon">🔇</span> <span id="audioStatus">Som: Desativado</span>
-            </button>
-        </div>
-    </header>
+    <!-- CANVAS DO JOGO PRINCIPAL -->
+    <div id="gameContainer" class="relative w-full h-full max-w-7xl max-h-[900px] flex items-center justify-center p-2 hidden">
+        <canvas id="gameCanvas" class="w-full h-full bg-black rounded-lg border-2 border-red-950 shadow-[0_0_50px_rgba(150,0,0,0.3)]"></canvas>
 
-    <!-- Conteúdo Principal do Jogo -->
-    <main class="relative z-20 flex-1 flex flex-col items-center justify-center p-4 md:p-6 max-w-4xl mx-auto w-full">
-
-        <!-- TELA DE INÍCIO / BOAS-VINDAS -->
-        <div id="startScreen" class="w-full text-center bg-black/80 p-6 md:p-10 rounded-2xl border-2 border-purple-900/80 shadow-2xl backdrop-blur-md">
-            <h2 class="text-3xl md:text-5xl font-nosifer text-red-600 glow-red mb-6 leading-tight">MAMBEMBE DO TERROR</h2>
-            <p class="text-gray-300 mb-6 text-base md:text-lg leading-relaxed">
-                Você ousou entrar nos domínios da escuridão. Para escapar com vida desta noite de Halloween, você precisará provar seu conhecimento sobre as criaturas mais nefastas, lendas urbanas e rituais do terror.
-            </p>
-            
-            <div class="bg-red-950/40 border border-red-800/60 p-4 rounded-xl mb-8 text-left text-sm md:text-base text-red-200">
-                <p class="font-bold text-red-400 mb-1">⚠️ AVISO DE SOBREVIVÊNCIA:</p>
-                <ul class="list-disc list-inside space-spacing-y-1">
-                    <li>São <strong>20 Perguntas Assustadoras</strong> com 5 opções cada.</li>
-                    <li><strong>Se errar:</strong> O monstro irá te alcançar com um efeito aterrador!</li>
-                    <li>Recomendado usar fones de ouvido para uma experiência imersiva.</li>
-                </ul>
-            </div>
-
-            <button onclick="startGame()" class="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-red-700 to-purple-800 hover:from-red-600 hover:to-purple-700 text-white font-creepster text-2xl tracking-widest rounded-xl border-2 border-red-500 shadow-lg shadow-red-900/50 transform hover:scale-105 transition-all">
-                INICIAR O RITUAL DE SOBREVIVÊNCIA 💀
-            </button>
-        </div>
-
-        <!-- TELA DO QUIZ -->
-        <div id="quizScreen" class="w-full hidden bg-black/85 p-5 md:p-8 rounded-2xl border border-purple-900 shadow-2xl backdrop-blur-lg">
-            
-            <!-- Barra de Status / Progresso -->
-            <div class="mb-6">
-                <div class="flex justify-between items-center text-xs md:text-sm font-bold tracking-wider mb-2">
-                    <span class="text-purple-400">PERGUNTA <span id="currentQuestionNum" class="text-orange-500 text-lg">1</span> / 20</span>
-                    <span class="text-red-400">SANIDADE: <span id="sanityBarText">100%</span></span>
+        <!-- HUD DE JOGO -->
+        <div class="absolute top-6 left-6 right-6 flex justify-between items-start pointer-events-none z-10">
+            <!-- Painel Esquerdo: Chaves e Status -->
+            <div class="bg-black/80 border border-red-900/60 p-4 rounded-lg backdrop-blur-md text-sm space-y-2">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">🗝️</span>
+                    <div>
+                        <div class="text-xs text-zinc-400">CHAVES DO PORTÃO B</div>
+                        <div id="keysHUD" class="text-xl font-bold text-amber-500 font-mono">0 / 5 COLETADAS</div>
+                    </div>
                 </div>
-                <!-- Barra de Sangue/Progresso -->
-                <div class="w-full h-3 bg-gray-900 rounded-full overflow-hidden border border-purple-950">
-                    <div id="progressBar" class="h-full bg-gradient-to-r from-purple-700 via-red-600 to-orange-500 transition-all duration-300" style="width: 5%;"></div>
+                <div class="flex items-center space-x-2 pt-1">
+                    <div class="text-xs text-zinc-400">STATUS DO MONSTRO:</div>
+                    <div id="monsterStatusHUD" class="text-xs font-bold text-green-500 uppercase tracking-widest">CALMO</div>
                 </div>
             </div>
 
-            <!-- Caixas da Pergunta -->
-            <div class="min-h-[100px] flex items-center justify-center mb-6 bg-purple-950/30 p-4 rounded-xl border border-purple-900/50">
-                <h3 id="questionText" class="text-lg md:text-2xl font-bold text-center text-gray-100 leading-snug">
-                    Carregando pergunta macabra...
-                </h3>
+            <!-- Painel Central: Bússola / Indicador Portão B -->
+            <div id="gateIndicatorHUD" class="bg-black/80 border border-purple-900/60 px-6 py-2 rounded-lg backdrop-blur-md text-center">
+                <div class="text-xs text-zinc-400">OBJETIVO</div>
+                <div class="text-xs font-bold text-purple-400 tracking-wider">COLETE AS 5 CHAVES E VÁ AO PORTÃO B</div>
             </div>
 
-            <!-- 5 Opções de Resposta -->
-            <div id="optionsContainer" class="grid grid-cols-1 gap-3 md:gap-4 mb-4">
-                <!-- Inserido dinamicamente via JS -->
+            <!-- Painel Direito: Medidor de Ruído -->
+            <div class="bg-black/80 border border-red-900/60 p-4 rounded-lg backdrop-blur-md w-64 space-y-2">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-zinc-300">MEDIDOR DE RUÍDO</span>
+                    <span id="noiseTextHUD" class="text-xs font-bold text-green-400">SILÊNCIOSO</span>
+                </div>
+                <div class="w-full bg-zinc-950 h-4 rounded-full overflow-hidden p-0.5 border border-zinc-800">
+                    <div id="noiseBarHUD" class="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-600 w-0 rounded-full transition-all duration-75"></div>
+                </div>
+                <div id="stealthBadge" class="text-[10px] text-zinc-500 text-center uppercase tracking-widest">MODO: ANDANDO NORMAL</div>
             </div>
         </div>
 
-        <!-- TELA DE JUMPSCARE / MONSTRO (OVERLAY OCULTO POR PADRÃO) -->
-        <div id="jumpscareOverlay" class="fixed inset-0 z-50 hidden flex flex-col items-center justify-center bg-black p-4 text-center">
-            
-            <!-- SVG Dinâmico de Monstro Macabro -->
-            <div class="relative w-64 h-64 md:w-96 md:h-96 mb-4 monster-appear">
-                <svg viewBox="0 0 200 200" class="w-full h-full filter drop-shadow-[0_0_25px_rgba(255,0,0,0.8)]">
-                    <!-- Crânio / Rosto Demoníaco -->
-                    <path d="M 100 20 C 50 20 20 60 20 110 C 20 150 40 180 60 190 L 60 170 C 70 175 80 180 100 180 C 120 180 130 175 140 170 L 140 190 C 160 180 180 150 180 110 C 180 60 150 20 100 20 Z" fill="#110505" stroke="#8b0000" stroke-width="4"/>
-                    
-                    <!-- Olhos Vermelhos Brilhantes -->
-                    <ellipse cx="65" cy="85" rx="20" ry="25" fill="#000"/>
-                    <circle cx="65" cy="85" r="8" fill="#ff0000"/>
-                    <circle cx="67" cy="83" r="3" fill="#ffff00"/>
-                    
-                    <ellipse cx="135" cy="85" rx="20" ry="25" fill="#000"/>
-                    <circle cx="135" cy="85" r="8" fill="#ff0000"/>
-                    <circle cx="137" cy="83" r="3" fill="#ffff00"/>
-                    
-                    <!-- Nariz Aterrador -->
-                    <polygon points="100,105 90,125 110,125" fill="#000" stroke="#500" stroke-width="2"/>
+        <!-- Dicas de Controle na Parte Inferior -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/80 border border-zinc-800 px-6 py-2 rounded-full text-xs text-zinc-400 flex items-center gap-4 backdrop-blur-md pointer-events-none z-10">
+            <span><strong class="text-white">WASD / Setas</strong> Mover</span>
+            <span class="text-zinc-700">|</span>
+            <span><strong class="text-amber-400">Shift</strong> Correr (Gera Ruído)</span>
+            <span class="text-zinc-700">|</span>
+            <span><strong class="text-blue-400">C / Ctrl</strong> Agachar / Sigilo</span>
+            <span class="text-zinc-700">|</span>
+            <span class="text-red-400">⚠️ Evite folhas secas e vidros!</span>
+        </div>
+    </div>
 
-                    <!-- Bocarra com Dentes Afiados -->
-                    <path d="M 50 140 Q 100 180 150 140 Q 100 130 50 140 Z" fill="#200" stroke="#ff0000" stroke-width="3"/>
-                    <!-- Dentes -->
-                    <polygon points="60,142 65,155 70,143" fill="#fff"/>
-                    <polygon points="75,144 80,160 85,145" fill="#fff"/>
-                    <polygon points="90,145 95,163 100,146" fill="#fff"/>
-                    <polygon points="105,146 110,163 115,145" fill="#fff"/>
-                    <polygon points="120,145 125,160 130,144" fill="#fff"/>
-                    <polygon points="135,143 140,155 145,142" fill="#fff"/>
-                    
-                    <!-- Veias/Garras Sombrias -->
-                    <path d="M 10 90 Q 40 80 20 120" stroke="#ff0000" stroke-width="3" fill="none"/>
-                    <path d="M 190 90 Q 160 80 180 120" stroke="#ff0000" stroke-width="3" fill="none"/>
-                </svg>
-            </div>
+    <!-- TELA INICIAL / MENU PRINCIPAL -->
+    <div id="mainMenu" class="relative z-20 flex flex-col items-center justify-center p-8 max-w-2xl text-center bg-black/90 border-2 border-red-900/80 rounded-2xl shadow-[0_0_80px_rgba(255,0,0,0.25)] backdrop-blur-lg">
+        <h1 class="text-6xl md:text-7xl font-nosifer text-red-600 mb-2 tracking-wider drop-shadow-[0_5px_15px_rgba(255,0,0,0.8)]">
+            SILÊNCIO MORTAL
+        </h1>
+        <h2 class="text-xl font-creepster text-amber-500 mb-6 tracking-widest uppercase">
+            O Portão B — Edição de Halloween
+        </h2>
 
-            <h2 id="screamerMessage" class="text-2xl md:text-5xl font-nosifer text-red-600 glow-red mb-4 animate-bounce">
-                O MONSTRO TE CONSUMIU!
-            </h2>
-            <p id="screamerSubtext" class="text-base md:text-xl text-gray-300 mb-6 max-w-lg">
-                Sua resposta errada atraiu a besta das sombras...
-            </p>
-
-            <button onclick="retryQuestion()" class="px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-bold rounded-xl border-2 border-red-400 shadow-xl transition-all transform hover:scale-105">
-                🔄 TENTAR NOVAMENTE
-            </button>
+        <div class="text-left text-sm text-zinc-300 space-y-3 mb-8 bg-zinc-950/80 p-5 rounded-xl border border-zinc-800">
+            <p>🎃 <strong>HISTÓRIA:</strong> Você foi trancado em um jardim amaldiçoado de Halloween. A única saída é o <span class="text-purple-400 font-bold">PORTÃO B</span> no final do mapa.</p>
+            <p>🗝️ <strong>OBJETIVO:</strong> Encontre as <span class="text-amber-400 font-bold">5 CHAVES BRILHANTES</span> escondidas pela escuridão para destravar o portão.</p>
+            <p>👁️ <strong>O MONSTRO:</strong> Ele patrulha no escuro e é sensível ao barulho. Se você correr ou pisar em <span class="text-yellow-600 font-bold">folhas secas</span> ou <span class="text-cyan-400 font-bold">vidros quebrados</span>, ele virá imediatamente atrás de você!</p>
+            <p>🤫 <strong>SIGILO:</strong> Mantenha o medidor de ruído baixo. Agache para andar sem fazer som.</p>
         </div>
 
-        <!-- TELA DE VITÓRIA / SOBREVIVENTE -->
-        <div id="victoryScreen" class="w-full hidden text-center bg-black/90 p-6 md:p-10 rounded-2xl border-4 border-yellow-600 shadow-2xl backdrop-blur-md">
-            <div class="text-6xl mb-4 animate-pulse">👑🎃</div>
-            <h2 class="text-3xl md:text-5xl font-nosifer text-yellow-500 glow-orange mb-4">SOBREVIVENTE DO HALLOWEEN!</h2>
-            <p class="text-lg md:text-xl text-gray-200 mb-6">
-                Impressionante! Você enfrentou os 20 desafios das trevas, resistiu aos monstros e escapou com vida do ritual!
+        <button id="btnStartGame" class="group relative px-10 py-4 bg-red-950 hover:bg-red-800 border-2 border-red-600 text-red-100 font-bold text-xl rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer">
+            <span class="relative z-10 flex items-center gap-3 font-creepster tracking-widest text-2xl">
+                <span>INICIAR EXPERIÊNCIA</span> ➔
+            </span>
+            <div class="absolute inset-0 bg-red-600/20 rounded-xl blur-md group-hover:bg-red-600/40 transition-all"></div>
+        </button>
+
+        <div class="mt-6 text-xs text-zinc-600 uppercase tracking-widest">
+            Recomendado o uso de fones de ouvido para melhor imersão
+        </div>
+    </div>
+
+    <!-- TELA DE JUMPSCARE / GAME OVER -->
+    <div id="jumpscareOverlay" class="fixed inset-0 z-50 flex flex-col items-center justify-center hidden">
+        <!-- Rosto assustador em Canvas SVG -->
+        <div class="relative w-80 h-80 md:w-96 md:h-96 mb-6">
+            <svg id="jumpscareFace" class="w-full h-full filter drop-shadow-[0_0_30px_rgba(255,0,0,1)]" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" fill="#090202" stroke="#450a0a" stroke-width="4"/>
+                <!-- Olhos Assustadores -->
+                <ellipse cx="60" cy="75" rx="22" ry="28" fill="#110000" stroke="#ff0000" stroke-width="3"/>
+                <ellipse cx="140" cy="75" rx="22" ry="28" fill="#110000" stroke="#ff0000" stroke-width="3"/>
+                <circle cx="60" cy="75" r="8" fill="#ffffff"/>
+                <circle cx="140" cy="75" r="8" fill="#ffffff"/>
+                <circle cx="60" cy="75" r="3" fill="#ff0000"/>
+                <circle cx="140" cy="75" r="3" fill="#ff0000"/>
+                <!-- Nariz -->
+                <polygon points="100,95 90,115 110,115" fill="#1e0000"/>
+                <!-- Boca Aterradora com Dentes -->
+                <path d="M 40 140 Q 100 190 160 140 Q 100 120 40 140 Z" fill="#200000" stroke="#990000" stroke-width="3"/>
+                <!-- Dentes Afiados -->
+                <polygon points="50,137 56,155 62,138" fill="#ffffff"/>
+                <polygon points="70,135 77,160 84,134" fill="#ffffff"/>
+                <polygon points="92,133 100,162 108,133" fill="#ffffff"/>
+                <polygon points="116,134 123,160 130,135" fill="#ffffff"/>
+                <polygon points="138,138 144,155 150,137" fill="#ffffff"/>
+            </svg>
+        </div>
+
+        <h2 id="jumpscareTitle" class="text-5xl md:text-6xl font-nosifer text-red-600 mb-2 text-center tracking-widest drop-shadow-[0_0_20px_rgba(255,0,0,1)]">
+            VOCÊ FOI PEGO!
+        </h2>
+        <p id="jumpscareReason" class="text-zinc-300 text-lg mb-8 text-center max-w-md font-mono bg-black/80 px-4 py-2 border border-red-900/50 rounded-lg">
+            O monstro ouviu seus passos na escuridão...
+        </p>
+
+        <button id="btnRetryGame" class="px-8 py-3 bg-red-950 hover:bg-red-800 border-2 border-red-600 text-white font-bold text-xl rounded-xl shadow-[0_0_25px_rgba(255,0,0,0.8)] transition-all transform hover:scale-110 active:scale-95 font-creepster tracking-widest cursor-pointer">
+            TENTAR NOVAMENTE 🔄
+        </button>
+    </div>
+
+    <!-- TELA DE VITÓRIA -->
+    <div id="victoryOverlay" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-8 hidden">
+        <div class="max-w-xl text-center space-y-6 bg-zinc-950 p-8 rounded-2xl border-2 border-purple-600 shadow-[0_0_60px_rgba(147,51,234,0.4)]">
+            <div class="text-6xl animate-bounce">🎃</div>
+            <h2 class="text-5xl font-nosifer text-purple-500 tracking-wider">VOCÊ ESCAPOU!</h2>
+            <p class="text-zinc-300 text-sm leading-relaxed">
+                Você abriu o <strong class="text-purple-400">PORTÃO B</strong> e sobreviveu à noite assustadora de Halloween sem ser devorado pela criatura.
             </p>
 
-            <div class="bg-purple-950/60 border border-yellow-500/50 p-6 rounded-xl mb-8 max-w-md mx-auto text-left">
-                <h4 class="text-center font-creepster text-2xl text-yellow-400 mb-3">CERTIFICADO DE SOBREVIVÊNCIA</h4>
-                <p class="text-sm text-gray-300">Concedido ao bravo jogador que dominou o conhecimento macabro e sobreviveu à Noite dos Pesadelos.</p>
-                <div class="mt-4 pt-3 border-t border-purple-800 flex justify-between text-xs text-purple-300">
-                    <span>STATUS: VIVO</span>
-                    <span>31 DE OUTUBRO</span>
+            <div class="grid grid-cols-2 gap-4 bg-zinc-900/80 p-4 rounded-xl border border-zinc-800 text-left text-xs">
+                <div>
+                    <span class="text-zinc-500 block">TEMPO DE ESCAPE:</span>
+                    <span id="winTimeText" class="text-base font-bold text-amber-400">00:00</span>
+                </div>
+                <div>
+                    <span class="text-zinc-500 block">CHAVES COLETADAS:</span>
+                    <span class="text-base font-bold text-green-400">5 / 5</span>
                 </div>
             </div>
 
-            <div class="flex flex-col md:flex-row gap-4 justify-center">
-                <button onclick="restartGame()" class="px-8 py-3 bg-gradient-to-r from-purple-800 to-red-700 hover:from-purple-700 hover:to-red-600 text-white font-bold rounded-xl border border-purple-400 transition-all">
-                    🎮 JOGAR NOVAMENTE
-                </button>
-                <button onclick="shareResult()" class="px-8 py-3 bg-gradient-to-r from-yellow-700 to-orange-600 hover:from-yellow-600 hover:to-orange-500 text-white font-bold rounded-xl border border-yellow-400 transition-all">
-                    🔗 COMPARTILHAR VITÓRIA
-                </button>
-            </div>
+            <button id="btnPlayAgain" class="w-full py-4 bg-purple-900 hover:bg-purple-700 text-white font-bold text-xl rounded-xl border border-purple-500 shadow-lg font-creepster tracking-widest transition-all cursor-pointer">
+                JOGAR NOVAMENTE 🎃
+            </button>
         </div>
+    </div>
 
-    </main>
-
-    <!-- Rodapé -->
-    <footer class="relative z-30 p-4 text-center text-xs text-purple-400/60 bg-black/70 border-t border-purple-900/30">
-        Desenvolvido para o GitHub Pages • Edição Halloween de Terror Supremo 🕸️
-    </footer>
-
-    <!-- SCRIPT JS DO JOGO -->
+    <!-- SCRIPT COMPLETO DO JOGO -->
     <script>
         /* ==========================================================================
-           1. BANCO DE DADOS DAS 20 PERGUNTAS DE TERROR & HALLOWEEN
-           ========================================================================== */
-        const questions = [
-            {
-                question: "Qual é a origem histórica do festival de Halloween?",
-                options: [
-                    "O festival celta de Samhain",
-                    "Uma celebração romana ao deus Baco",
-                    "Um ritual viking de inverno",
-                    "Uma festa da colheita asteca",
-                    "O festival grego das sombras"
-                ],
-                correct: 0
-            },
-            {
-                question: "No filme 'O Iluminado' (1980), qual é a palavra aterrorizante escrita na porta?",
-                options: [
-                    "MURDER",
-                    "REDRUM",
-                    "HELP ME",
-                    "OVERLOOK",
-                    "DANNY"
-                ],
-                correct: 1
-            },
-            {
-                question: "Segundo as lendas dos Vampiros, qual elemento é mortal para eles além do alho e luz solar?",
-                options: [
-                    "Prata pura no coração",
-                    "Estaca de madeira no coração",
-                    "Água fervente",
-                    "Sal grosso",
-                    "Ferro frio"
-                ],
-                correct: 1
-            },
-            {
-                question: "Qual é o nome do demônio que possui a menina Regan no clássico 'O Exorcista'?",
-                options: [
-                    "Bael",
-                    "Asmodeus",
-                    "Pazuzu",
-                    "Belial",
-                    "Astaroth"
-                ],
-                correct: 2
-            },
-            {
-                question: "Na creepypasta famosa, qual é a característica marcante do 'Slenderman'?",
-                options: [
-                    "Possui asas de morcego e garras",
-                    "Sem rosto, veste terno e possui tentáculos",
-                    "Usa uma máscara de palhaço ensanguentada",
-                    "Aparece apenas através de espelhos",
-                    "Tem dentes de tubarão e olhos amarelos"
-                ],
-                correct: 1
-            },
-            {
-                question: "Qual objeto é usado tradicionalmente para esculpir as lanternas de Halloween (Jack-o'-lantern) originalmente na Irlanda?",
-                options: [
-                    "Abóbora gigante",
-                    "Melancia",
-                    "Nabo",
-                    "Melão",
-                    "Cranberry"
-                ],
-                correct: 2
-            },
-            {
-                question: "Em 'A Hora do Pesadelo', qual é o nome completo do vilão que ataca nos sonhos?",
-                options: [
-                    "Jason Voorhees",
-                    "Michael Myers",
-                    "Frederick Charles Krueger",
-                    "Charles Lee Ray",
-                    "Thomas Hewitt"
-                ],
-                correct: 2
-            },
-            {
-                question: "Qual lenda urbana brasileira fala sobre uma mulher vestida de branco que assombra banheiros escolares?",
-                options: [
-                    "Mulher do Algodão",
-                    "Lora do Banheiro",
-                    "Mula sem Cabeça",
-                    "Cuca",
-                    "Dama da Meia-Noite"
-                ],
-                correct: 1
-            },
-            {
-                question: "Em qual filme de terror a famosa frase 'Do you like scary movies?' (Você gosta de filmes de terror?) é dita?",
-                options: [
-                    "Pânico (Scream)",
-                    "Jogos Mortais",
-                    "Sexta-Feira 13",
-                    "Premonição",
-                    "Halloween"
-                ],
-                correct: 0
-            },
-            {
-                question: "Qual flor é historicamente associada aos mortos e usada no Dia dos Mortos no México?",
-                options: [
-                    "Rosa Negra",
-                    "Caxinde",
-                    "Cempasúchil (Calêndula)",
-                    "Lírio do Vale",
-                    "Lótus Negra"
-                ],
-                correct: 2
-            },
-            {
-                question: "Qual é o nome da boneca possuída real mantida no museu dos investigadores paranormais Ed e Lorraine Warren?",
-                options: [
-                    "Annabelle (uma boneca Raggedy Ann)",
-                    "Robert, o Boneco",
-                    "Tiffany",
-                    "Chucky",
-                    "Brahms"
-                ],
-                correct: 0
-            },
-            {
-                question: "No folclore europeu, o que transforma um homem em um Lobisomem?",
-                options: [
-                    "Mordida sob a lua cheia ou maldição hereditária",
-                    "Beber água da pegada de um lobo",
-                    "Pactuar com uma bruxa da floresta",
-                    "Usar uma pele de lobo encantada",
-                    "Todas as alternativas acima estão corretas no folclore"
-                ],
-                correct: 4
-            },
-            {
-                question: "Qual era a verdadeira identidade do assassino no primeiro filme 'Sexta-Feira 13' (1980)?",
-                options: [
-                    "Jason Voorhees",
-                    "Sra. Pamela Voorhees (mãe de Jason)",
-                    "O monitor do acampamento Steve",
-                    "Um doente mental fugido",
-                    "Roy Burns"
-                ],
-                correct: 1
-            },
-            {
-                question: "Qual é a regra principal para não transformar um Mogwai em um Gremlin maldoso no filme 'Gremlins'?",
-                options: [
-                    "Nunca expor à luz do sol",
-                    "Nunca molhar",
-                    "Nunca alimentar após a meia-noite",
-                    "Não deixar ouvir música alta",
-                    "Não colocar em caixas fechadas"
-                ],
-                correct: 2
-            },
-            {
-                question: "Na mitologia de 'Lycans e Vampiros', qual metal é considerado tóxico especificamente para vampiros em algumas lendas modernas?",
-                options: [
-                    "Chumbo",
-                    "Prata",
-                    "Ouro",
-                    "Mercúrio",
-                    "Cobre"
-                ],
-                correct: 1
-            },
-            {
-                question: "Qual o nome do livro dos mortos presente na franquia de filmes 'Evil Dead' (Uma Noite Alucinante)?",
-                options: [
-                    "Necronomicon Ex-Mortis",
-                    "Grimório de Salomão",
-                    "Codex Gigas",
-                    "Livro de Thoth",
-                    "Malleus Maleficarum"
-                ],
-                correct: 0
-            },
-            {
-                question: "Em 'O Chamado' (The Ring), quantos dias a vítima tem de vida após assistir à fita amaldiçoada?",
-                options: [
-                    "3 dias",
-                    "13 dias",
-                    "7 dias",
-                    "24 horas",
-                    "30 dias"
-                ],
-                correct: 2
-            },
-            {
-                question: "Qual ser mitológico grego tem cobras no lugar de cabelos e transforma quem a olha em pedra?",
-                options: [
-                    "Quimera",
-                    "Medusa (Górgona)",
-                    "Scylla",
-                    "Harpia",
-                    "Equidna"
-                ],
-                correct: 1
-            },
-            {
-                question: "Qual é o nome da entidade aterrorizante em forma de palhaço que habita a cidade de Derry em 'It - A Coisa'?",
-                options: [
-                    "Pennywise",
-                    "Art the Clown",
-                    "Twisty",
-                    "Sweet Tooth",
-                    "Jester"
-                ],
-                correct: 0
-            },
-            {
-                question: "Para afastar espíritos malignos no Halloween, qual tradição deu origem ao uso de fantasias assustadoras?",
-                options: [
-                    "Enganar os espíritos fazendo-os pensar que os vivos também eram fantasmas",
-                    "Homenagear os deuses da guerra",
-                    "Assustar os vizinhos para conseguir comida",
-                    "Ritual de acasalamento das tribos",
-                    "Nenhuma das anteriores"
-                ],
-                correct: 0
-            }
-        ];
-
-        /* ==========================================================================
-           2. SINTETIZADOR DE EFEITOS SONOROS (WEB AUDIO API)
+           1. SINTETIZADOR DE ÁUDIO WEB AUDIO API (SEM DEPENDÊNCIAS EXTERNAS)
            ========================================================================== */
         let audioCtx = null;
-        let isAudioEnabled = false;
 
         function initAudio() {
             if (!audioCtx) {
@@ -531,297 +244,796 @@
             }
         }
 
-        function toggleAudio() {
-            isAudioEnabled = !isAudioEnabled;
-            const btn = document.getElementById('audioToggleBtn');
-            const icon = document.getElementById('audioIcon');
-            const status = document.getElementById('audioStatus');
+        // Som de Passo (Ruído suave filtrado)
+        function playFootstepSound(isSprinting) {
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
 
-            if (isAudioEnabled) {
-                initAudio();
-                icon.textContent = '🔊';
-                status.textContent = 'Som: Ativado';
-                btn.classList.replace('bg-purple-950', 'bg-red-900');
-                playAmbientSound();
-            } else {
-                icon.textContent = '🔇';
-                status.textContent = 'Som: Desativado';
-                btn.classList.replace('bg-red-900', 'bg-purple-950');
+            const bufferSize = audioCtx.sampleRate * (isSprinting ? 0.08 : 0.05);
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
             }
-        }
 
-        // Som de Jumpscare / Grito Agudo Synth
-        function playScreamSound() {
-            if (!isAudioEnabled || !audioCtx) return;
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
 
-            const now = audioCtx.currentTime;
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = isSprinting ? 600 : 350;
 
-            // Oscilador de ruído/frequência para o grito
-            const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(isSprinting ? 0.25 : 0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + (isSprinting ? 0.08 : 0.05));
 
-            osc.type = 'sawtooth';
-            // Frequência caindo drasticamente (efeito de grito)
-            osc.frequency.setValueAtTime(1200, now);
-            osc.frequency.exponentialRampToValueAtTime(100, now + 0.8);
-
-            // Modulação para parecer estrépito/distorção
-            const osc2 = audioCtx.createOscillator();
-            osc2.type = 'square';
-            osc2.frequency.setValueAtTime(800, now);
-            osc2.frequency.linearRampToValueAtTime(200, now + 0.8);
-
-            gain.gain.setValueAtTime(0.8, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
-
-            osc.connect(gain);
-            osc2.connect(gain);
+            noise.connect(filter);
+            filter.connect(gain);
             gain.connect(audioCtx.destination);
 
-            osc.start(now);
-            osc2.start(now);
-            osc.stop(now + 0.8);
-            osc2.stop(now + 0.8);
+            noise.start(now);
         }
 
-        // Som de Acerto / Sucesso Sombrio
-        function playSuccessSound() {
-            if (!isAudioEnabled || !audioCtx) return;
-
+        // Som de Pisão em Armadilha de Barulho (Folhas Secas / Vidro)
+        function playCrunchSound() {
+            if (!audioCtx) return;
             const now = audioCtx.currentTime;
-            const osc = audioCtx.createOscillator();
+
+            const bufferSize = audioCtx.sampleRate * 0.2;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * (Math.sin(i * 0.05) > 0 ? 1 : 0.3);
+            }
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = 1200;
+
             const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.4, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
 
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(220, now);
-            osc.frequency.exponentialRampToValueAtTime(440, now + 0.3);
-
-            gain.gain.setValueAtTime(0.3, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-
-            osc.connect(gain);
+            noise.connect(filter);
+            filter.connect(gain);
             gain.connect(audioCtx.destination);
 
-            osc.start(now);
-            osc.stop(now + 0.4);
+            noise.start(now);
         }
 
-        // Som de fundo (Batimento cardíaco macabro periódico)
-        function playAmbientSound() {
-            if (!isAudioEnabled || !audioCtx) return;
+        // Som de Coleta de Chave
+        function playKeyCollectSound() {
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
 
-            const playHeartbeat = () => {
-                if (!isAudioEnabled) return;
-                const now = audioCtx.currentTime;
-
-                // Batida 1
+            [1046.50, 1318.51, 1567.98].forEach((freq, idx) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
+
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(60, now);
-                osc.frequency.exponentialRampToValueAtTime(30, now + 0.15);
-                gain.gain.setValueAtTime(0.4, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+
+                gain.gain.setValueAtTime(0.2, now + idx * 0.06);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.15);
+
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                osc.start(now);
-                osc.stop(now + 0.15);
 
-                // Batida 2
-                setTimeout(() => {
-                    if (!isAudioEnabled) return;
-                    const now2 = audioCtx.currentTime;
-                    const osc2 = audioCtx.createOscillator();
-                    const gain2 = audioCtx.createGain();
-                    osc2.type = 'sine';
-                    osc2.frequency.setValueAtTime(50, now2);
-                    osc2.frequency.exponentialRampToValueAtTime(25, now2 + 0.15);
-                    gain2.gain.setValueAtTime(0.3, now2);
-                    gain2.gain.exponentialRampToValueAtTime(0.01, now2 + 0.15);
-                    osc2.connect(gain2);
-                    gain2.connect(audioCtx.destination);
-                    osc2.start(now2);
-                    osc2.stop(now2 + 0.15);
-                }, 200);
-            };
-
-            playHeartbeat();
-            setInterval(() => {
-                if (isAudioEnabled) playHeartbeat();
-            }, 1800);
-        }
-
-
-        /* ==========================================================================
-           3. LÓGICA DO QUIZ E NAVEGAÇÃO
-           ========================================================================== */
-        let currentQuestionIndex = 0;
-        let lives = 100;
-
-        function startGame() {
-            initAudio();
-            currentQuestionIndex = 0;
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('quizScreen').classList.remove('hidden');
-            document.getElementById('victoryScreen').classList.add('hidden');
-            loadQuestion();
-        }
-
-        function loadQuestion() {
-            const q = questions[currentQuestionIndex];
-            
-            // Atualizar contadores visuais
-            document.getElementById('currentQuestionNum').textContent = currentQuestionIndex + 1;
-            const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
-            document.getElementById('progressBar').style.width = `${progressPercent}%`;
-
-            // Atualizar Pergunta
-            document.getElementById('questionText').textContent = q.question;
-
-            // Renderizar Opções
-            const container = document.getElementById('optionsContainer');
-            container.innerHTML = '';
-
-            q.options.forEach((opt, idx) => {
-                const button = document.createElement('button');
-                button.className = 'btn-option w-full p-4 text-left rounded-xl text-gray-200 font-medium text-sm md:text-base flex items-center justify-between group';
-                button.onclick = () => checkAnswer(idx);
-                
-                button.innerHTML = `
-                    <span><strong class="text-purple-400 group-hover:text-orange-400 mr-2">${String.fromCharCode(65 + idx)})</strong> ${opt}</span>
-                    <span class="opacity-0 group-hover:opacity-100 text-purple-400 transition-opacity">💀</span>
-                `;
-                container.appendChild(button);
+                osc.start(now + idx * 0.06);
+                osc.stop(now + idx * 0.06 + 0.15);
             });
         }
 
-        function checkAnswer(selectedIndex) {
-            const q = questions[currentQuestionIndex];
+        // Som de Batimento Cardíaco (Acelera quando o monstro aproxima)
+        let lastHeartbeatTime = 0;
+        function triggerHeartbeat(proximityRatio) {
+            if (!audioCtx) return;
+            const now = Date.now();
+            const interval = 1200 - (proximityRatio * 800); // 1200ms a 400ms
 
-            if (selectedIndex === q.correct) {
-                // ACERTOU
-                playSuccessSound();
-                
-                // Transição suave para próxima
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.length) {
-                    loadQuestion();
-                } else {
-                    showVictory();
-                }
-            } else {
-                // ERROU -> JUMPSCARE & TELA PISCANDO
-                triggerJumpscare();
+            if (now - lastHeartbeatTime > interval) {
+                lastHeartbeatTime = now;
+                const audioNow = audioCtx.currentTime;
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(60, audioNow);
+                osc.frequency.exponentialRampToValueAtTime(30, audioNow + 0.12);
+
+                gain.gain.setValueAtTime(0.4 * proximityRatio, audioNow);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioNow + 0.12);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(audioNow);
+                osc.stop(audioNow + 0.12);
             }
         }
 
-        const screamerMessages = [
-            "VOCÊ ERROU E O MONSTRO TE ENCONTROU!",
-            "A MACABRA ESCURIDÃO CONSUMIU SUA ALMA!",
-            "O RITUAL FALHOU! AS SOMBRAS TE ALCANÇARAM!",
-            "SEU SANGUE FOI DERRAMADO NA NOITE DE HALLOWEEN!"
-        ];
+        // Som Estridente de Jumpscare
+        function playJumpscareSound() {
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
 
-        function triggerJumpscare() {
-            playScreamSound();
+            // Oscilador Agudo Tenebroso
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
 
-            const overlay = document.getElementById('jumpscareOverlay');
-            const msg = document.getElementById('screamerMessage');
-            
-            // Escolher mensagem aleatória
-            msg.textContent = screamerMessages[Math.floor(Math.random() * screamerMessages.length)];
+            osc1.type = 'sawtooth';
+            osc1.frequency.setValueAtTime(1800, now);
+            osc1.frequency.linearRampToValueAtTime(200, now + 1.2);
 
-            // Exibir Overlay
-            overlay.classList.remove('hidden');
-            
-            // Aplicar efeitos de Tela Piscando e Shake no body
-            document.body.classList.add('screen-flash', 'screen-shake');
+            osc2.type = 'square';
+            osc2.frequency.setValueAtTime(1200, now);
+            osc2.frequency.linearRampToValueAtTime(150, now + 1.2);
+
+            gain.gain.setValueAtTime(0.9, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
+
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc1.start(now);
+            osc2.start(now);
+            osc1.stop(now + 1.2);
+            osc2.stop(now + 1.2);
         }
 
-        function retryQuestion() {
-            // Remover efeitos de erro
-            const overlay = document.getElementById('jumpscareOverlay');
-            overlay.classList.add('hidden');
+        /* ==========================================================================
+           2. VARIÁVEIS DE ESTADO E CONFIGURAÇÃO DO JOGO
+           ========================================================================== */
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-            document.body.classList.remove('screen-flash', 'screen-shake');
+        // Dimensões do Mapa do Jogo (Mundo 2D)
+        const WORLD_WIDTH = 2000;
+        const WORLD_HEIGHT = 2000;
 
-            // Recarregar a mesma pergunta para tentar novamente
-            loadQuestion();
-        }
+        let gameState = 'MENU'; // MENU, PLAYING, JUMPSCARE, VICTORY
+        let startTime = 0;
 
-        function showVictory() {
-            document.getElementById('quizScreen').classList.add('hidden');
-            document.getElementById('victoryScreen').classList.remove('hidden');
-        }
+        // Teclas pressionadas
+        const keys = {
+            w: false, a: false, s: false, d: false,
+            ArrowUp: false, ArrowLeft: false, ArrowDown: false, ArrowRight: false,
+            Shift: false, c: false, Control: false
+        };
 
-        function restartGame() {
-            startGame();
-        }
+        // Jogador
+        const player = {
+            x: 150,
+            y: 150,
+            radius: 16,
+            speedNormal: 3.2,
+            speedSprint: 5.5,
+            speedCrouch: 1.6,
+            currentSpeed: 3.2,
+            angle: 0,
+            isSprinting: false,
+            isCrouching: false,
+            noise: 0 // 0 a 100
+        };
 
-        function shareResult() {
-            const text = "🎃 Eu sobrevivi às 20 perguntas do Desafio de Horror de Halloween! Você consegue escapar do monstro?";
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Sobrevivente do Halloween',
-                    text: text,
-                    url: window.location.href
-                }).catch(() => {});
-            } else {
-                navigator.clipboard.writeText(`${text} ${window.location.href}`);
-                alert("Link de vitória copiado para a área de transferência!");
+        // Monstro
+        const monster = {
+            x: 1700,
+            y: 1700,
+            radius: 22,
+            speedPatrol: 2.1,
+            speedChase: 4.8,
+            state: 'PATROL', // PATROL, ALERT, CHASE
+            targetX: 1700,
+            targetY: 1700,
+            patrolTimer: 0,
+            alertTimer: 0,
+            angle: 0
+        };
+
+        // Portão B (Saída)
+        const gateB = {
+            x: 1850,
+            y: 1850,
+            width: 100,
+            height: 100,
+            isOpen: false
+        };
+
+        // Objetos do Mapa (Chaves, Armadilhas de Barulho, Paredes)
+        let mapKeys = [];
+        let noiseTraps = []; // Folhas secas, vidro quebrado
+        let obstacles = []; // Tumulos, arvores, cercas
+        let pumpkins = []; // Abóboras decorativas
+
+        let keysCollected = 0;
+        const TOTAL_KEYS = 5;
+
+        /* ==========================================================================
+           3. GERAÇÃO DO MAPA E OBJETOS
+           ========================================================================== */
+        function generateMap() {
+            mapKeys = [];
+            noiseTraps = [];
+            obstacles = [];
+            pumpkins = [];
+
+            // Paredes Externas do Mapa
+            obstacles.push({ x: 0, y: 0, w: WORLD_WIDTH, h: 20 });
+            obstacles.push({ x: 0, y: WORLD_HEIGHT - 20, w: WORLD_WIDTH, h: 20 });
+            obstacles.push({ x: 0, y: 0, w: 20, h: WORLD_HEIGHT });
+            obstacles.push({ x: WORLD_WIDTH - 20, y: 0, w: 20, h: WORLD_HEIGHT });
+
+            // Gerar Obstáculos Internos (Lápides e Muros de Cemitério)
+            for (let i = 0; i < 35; i++) {
+                const ox = Math.random() * (WORLD_WIDTH - 300) + 150;
+                const oy = Math.random() * (WORLD_HEIGHT - 300) + 150;
+                // Evitar spawn muito perto do nascimento do jogador
+                if (Math.hypot(ox - 150, oy - 150) > 200) {
+                    obstacles.push({
+                        x: ox,
+                        y: oy,
+                        w: Math.random() > 0.5 ? 120 : 35,
+                        h: Math.random() > 0.5 ? 35 : 120
+                    });
+                }
+            }
+
+            // Gerar 5 Chaves Espalhadas estrategicamente pelos 4 quadrantes
+            const quadrants = [
+                { minX: 300, maxX: 900, minY: 300, maxY: 900 },
+                { minX: 1100, maxX: 1800, minY: 200, maxY: 800 },
+                { minX: 200, maxX: 900, minY: 1100, maxY: 1800 },
+                { minX: 1000, maxX: 1600, minY: 1000, maxY: 1600 },
+                { minX: 800, maxX: 1200, minY: 800, maxY: 1200 }
+            ];
+
+            quadrants.forEach((q, index) => {
+                mapKeys.push({
+                    id: index + 1,
+                    x: Math.random() * (q.maxX - q.minX) + q.minX,
+                    y: Math.random() * (q.maxY - q.minY) + q.minY,
+                    collected: false,
+                    radius: 12
+                });
+            });
+
+            // Gerar Armadilhas de Barulho (Folhas Secas e Vidro Quebrado)
+            for (let i = 0; i < 45; i++) {
+                noiseTraps.push({
+                    x: Math.random() * (WORLD_WIDTH - 200) + 100,
+                    y: Math.random() * (WORLD_HEIGHT - 200) + 100,
+                    radius: Math.random() * 15 + 20,
+                    type: Math.random() > 0.5 ? 'LEAVES' : 'GLASS' // Folhas ou Vidro
+                });
+            }
+
+            // Gerar Abóboras Iluminadas (Jack-o'-Lantern)
+            for (let i = 0; i < 25; i++) {
+                pumpkins.push({
+                    x: Math.random() * (WORLD_WIDTH - 200) + 100,
+                    y: Math.random() * (WORLD_HEIGHT - 200) + 100,
+                    radius: 14
+                });
             }
         }
 
         /* ==========================================================================
-           4. EFEITO DE NÉVOA/FOG EM CANVAS (BACKGROUND ANIMAÇÃO)
+           4. CONTROLES E INPUTS
            ========================================================================== */
-        const canvas = document.getElementById('fogCanvas');
-        const ctx = canvas.getContext('2d');
+        window.addEventListener('keydown', (e) => {
+            if (keys.hasOwnProperty(e.key) || keys.hasOwnProperty(e.code)) {
+                keys[e.key] = true;
+                keys[e.code] = true;
+            }
+        });
 
-        let particles = [];
+        window.addEventListener('keyup', (e) => {
+            if (keys.hasOwnProperty(e.key) || keys.hasOwnProperty(e.code)) {
+                keys[e.key] = false;
+                keys[e.code] = false;
+            }
+        });
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // Suporte a Movimento de Lanterna pelo Mouse
+        let mouseWorldX = player.x;
+        let mouseWorldY = player.y;
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const canvasMouseX = (e.clientX - rect.left) * scaleX;
+            const canvasMouseY = (e.clientY - rect.top) * scaleY;
+
+            // Converter coordenada da tela para coordenada do mundo (com Câmera)
+            const cameraX = player.x - canvas.width / 2;
+            const cameraY = player.y - canvas.height / 2;
+
+            mouseWorldX = canvasMouseX + cameraX;
+            mouseWorldY = canvasMouseY + cameraY;
+        });
+
+        /* ==========================================================================
+           5. LÓGICA DE ATUALIZAÇÃO DO JOGO (UPDATE)
+           ========================================================================== */
+        let lastFootstepTime = 0;
+
+        function updateGame() {
+            if (gameState !== 'PLAYING') return;
+
+            // --- 1. Mover Jogador ---
+            let moveX = 0;
+            let moveY = 0;
+
+            if (keys.w || keys.ArrowUp) moveY -= 1;
+            if (keys.s || keys.ArrowDown) moveY += 1;
+            if (keys.a || keys.ArrowLeft) moveX -= 1;
+            if (keys.d || keys.ArrowRight) moveX += 1;
+
+            // Normalizar Vetor de Movimento
+            if (moveX !== 0 && moveY !== 0) {
+                moveX *= 0.7071;
+                moveY *= 0.7071;
+            }
+
+            // Modificadores de Furtividade / Corrida
+            player.isSprinting = keys.Shift && (moveX !== 0 || moveY !== 0);
+            player.isCrouching = (keys.c || keys.Control) && !player.isSprinting;
+
+            if (player.isSprinting) {
+                player.currentSpeed = player.speedSprint;
+            } else if (player.isCrouching) {
+                player.currentSpeed = player.speedCrouch;
+            } else {
+                player.currentSpeed = player.speedNormal;
+            }
+
+            const nextX = player.x + moveX * player.currentSpeed;
+            const nextY = player.y + moveY * player.currentSpeed;
+
+            // Colisão do Jogador com Obstáculos
+            if (!checkObstacleCollision(nextX, player.y, player.radius)) {
+                player.x = nextX;
+            }
+            if (!checkObstacleCollision(player.x, nextY, player.radius)) {
+                player.y = nextY;
+            }
+
+            // Rotação do Jogador para a Direção do Mouse
+            player.angle = Math.atan2(mouseWorldY - player.y, mouseWorldX - player.x);
+
+            // --- 2. Gerenciamento de Ruído / Barulho ---
+            let baseNoiseGen = 0;
+            const isMoving = moveX !== 0 || moveY !== 0;
+
+            if (isMoving) {
+                if (player.isSprinting) {
+                    baseNoiseGen = 2.2;
+                    // Tocar som de passos acelerado
+                    if (Date.now() - lastFootstepTime > 250) {
+                        playFootstepSound(true);
+                        lastFootstepTime = Date.now();
+                    }
+                } else if (!player.isCrouching) {
+                    baseNoiseGen = 0.8;
+                    if (Date.now() - lastFootstepTime > 420) {
+                        playFootstepSound(false);
+                        lastFootstepTime = Date.now();
+                    }
+                } else {
+                    baseNoiseGen = 0.1; // Quase silencioso ao agachar
+                }
+            }
+
+            // Verificar se pisou em Armadilhas de Barulho (Folhas / Vidro)
+            noiseTraps.forEach(trap => {
+                const dist = Math.hypot(player.x - trap.x, player.y - trap.y);
+                if (dist < player.radius + trap.radius && isMoving) {
+                    baseNoiseGen += trap.type === 'GLASS' ? 4.5 : 3.0; // Picos intensos de ruído
+                    if (Math.random() < 0.2) playCrunchSound();
+                }
+            });
+
+            // Atualizar barra de ruído (Sobe com movimento, cai gradualmente)
+            if (baseNoiseGen > 0) {
+                player.noise = Math.min(100, player.noise + baseNoiseGen);
+            } else {
+                player.noise = Math.max(0, player.noise - 0.6);
+            }
+
+            updateNoiseHUDUI();
+
+            // --- 3. Inteligência Artificial do Monstro ---
+            const distToPlayer = Math.hypot(monster.x - player.x, monster.y - player.y);
+
+            // Se o ruído do jogador estiver alto, atrai o monstro imediatamente
+            if (player.noise > 45 && monster.state !== 'CHASE') {
+                monster.state = 'ALERT';
+                monster.targetX = player.x;
+                monster.targetY = player.y;
+                monster.alertTimer = 180; // Fica em alerta por alguns segundos
+            }
+
+            // Visão do Monstro (Se estiver perto e sem obstáculo entre eles)
+            if (distToPlayer < 350 && hasLineOfSight(monster.x, monster.y, player.x, player.y)) {
+                monster.state = 'CHASE';
+            }
+
+            // Comportamento por Estado do Monstro
+            if (monster.state === 'CHASE') {
+                monster.targetX = player.x;
+                monster.targetY = player.y;
+                moveMonsterTowards(monster.targetX, monster.targetY, monster.speedChase);
+
+                // Tocar batimento cardíaco com base na proximidade
+                const proximityRatio = Math.max(0, 1 - (distToPlayer / 600));
+                triggerHeartbeat(proximityRatio);
+
+                // Se perdeu o jogador de vista por muito tempo
+                if (distToPlayer > 600) {
+                    monster.state = 'ALERT';
+                    monster.alertTimer = 120;
+                }
+            } else if (monster.state === 'ALERT') {
+                moveMonsterTowards(monster.targetX, monster.targetY, monster.speedPatrol);
+                monster.alertTimer--;
+                if (monster.alertTimer <= 0) {
+                    monster.state = 'PATROL';
+                }
+            } else {
+                // Modo PATRULHA (Caminhada aleatória)
+                monster.patrolTimer--;
+                if (monster.patrolTimer <= 0) {
+                    monster.targetX = Math.random() * (WORLD_WIDTH - 200) + 100;
+                    monster.targetY = Math.random() * (WORLD_HEIGHT - 200) + 100;
+                    monster.patrolTimer = Math.random() * 300 + 200;
+                }
+                moveMonsterTowards(monster.targetX, monster.targetY, monster.speedPatrol);
+            }
+
+            // Atualizar HUD do Monstro
+            const statusHUD = document.getElementById('monsterStatusHUD');
+            if (monster.state === 'CHASE') {
+                statusHUD.textContent = 'PERSEGUINDO! 🚨';
+                statusHUD.className = 'text-xs font-bold text-red-500 uppercase tracking-widest animate-pulse';
+            } else if (monster.state === 'ALERT') {
+                statusHUD.textContent = 'ALERTA (OUVIU ALGO) ⚠️';
+                statusHUD.className = 'text-xs font-bold text-yellow-400 uppercase tracking-widest';
+            } else {
+                statusHUD.textContent = 'PATRULHANDO 👁️';
+                statusHUD.className = 'text-xs font-bold text-green-500 uppercase tracking-widest';
+            }
+
+            // Verificar Colisão Fatal (Monstro pega Jogador)
+            if (distToPlayer < player.radius + monster.radius) {
+                triggerJumpscareGameOver("O MONSTRO TE ENCONTROU NA ESCURIDÃO!");
+            }
+
+            // --- 4. Coleta de Chaves ---
+            mapKeys.forEach(k => {
+                if (!k.collected) {
+                    const distKey = Math.hypot(player.x - k.x, player.y - k.y);
+                    if (distKey < player.radius + k.radius) {
+                        k.collected = true;
+                        keysCollected++;
+                        playKeyCollectSound();
+                        document.getElementById('keysHUD').textContent = `${keysCollected} / ${TOTAL_KEYS} COLETADAS`;
+
+                        if (keysCollected >= TOTAL_KEYS) {
+                            gateB.isOpen = true;
+                            document.getElementById('gateIndicatorHUD').innerHTML = `
+                                <div class="text-xs text-green-400 font-bold animate-bounce">O PORTÃO B ESTÁ ABERTO! ESCAPE!</div>
+                            `;
+                        }
+                    }
+                }
+            });
+
+            // --- 5. Checar Vitória no Portão B ---
+            if (keysCollected >= TOTAL_KEYS) {
+                const distGate = Math.hypot(player.x - (gateB.x + gateB.width / 2), player.y - (gateB.y + gateB.height / 2));
+                if (distGate < 60) {
+                    triggerVictory();
+                }
+            }
         }
 
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        /* Auxiliares de Colisão e Movimento do Monstro */
+        function checkObstacleCollision(x, y, radius) {
+            for (let obs of obstacles) {
+                if (x + radius > obs.x && x - radius < obs.x + obs.w &&
+                    y + radius > obs.y && y - radius < obs.y + obs.h) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 80 + 40;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.3 - 0.15;
-                this.opacity = Math.random() * 0.3 + 0.1;
+        function moveMonsterTowards(tx, ty, speed) {
+            const angle = Math.atan2(ty - monster.y, tx - monster.x);
+            monster.angle = angle;
+            const nextX = monster.x + Math.cos(angle) * speed;
+            const nextY = monster.y + Math.sin(angle) * speed;
+
+            if (!checkObstacleCollision(nextX, monster.y, monster.radius)) {
+                monster.x = nextX;
+            }
+            if (!checkObstacleCollision(monster.x, nextY, monster.radius)) {
+                monster.y = nextY;
+            }
+        }
+
+        function hasLineOfSight(x1, y1, x2, y2) {
+            // Simplificação de linha de visão
+            const steps = 15;
+            for (let i = 0; i <= steps; i++) {
+                const checkX = x1 + (x2 - x1) * (i / steps);
+                const checkY = y1 + (y2 - y1) * (i / steps);
+                if (checkObstacleCollision(checkX, checkY, 5)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function updateNoiseHUDUI() {
+            const bar = document.getElementById('noiseBarHUD');
+            const text = document.getElementById('noiseTextHUD');
+            const badge = document.getElementById('stealthBadge');
+
+            bar.style.width = `${player.noise}%`;
+
+            if (player.noise < 30) {
+                text.textContent = "SILENCIOSO";
+                text.className = "text-xs font-bold text-green-400";
+            } else if (player.noise < 70) {
+                text.textContent = "ALERTA DE RUÍDO";
+                text.className = "text-xs font-bold text-yellow-400";
+            } else {
+                text.textContent = "MUITO BARULHENTO!";
+                text.className = "text-xs font-bold text-red-500 animate-pulse";
             }
 
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
+            if (player.isSprinting) {
+                badge.textContent = "MODO: CORRENDO (MUITO BARULHO!)";
+                badge.className = "text-[10px] text-red-400 font-bold text-center uppercase tracking-widest";
+            } else if (player.isCrouching) {
+                badge.textContent = "MODO: AGACHADO (SIGILO ABSOLUTO)";
+                badge.className = "text-[10px] text-blue-400 font-bold text-center uppercase tracking-widest";
+            } else {
+                badge.textContent = "MODO: ANDANDO NORMAL";
+                badge.className = "text-[10px] text-zinc-500 text-center uppercase tracking-widest";
+            }
+        }
 
-                if (this.x < -this.size) this.x = canvas.width + this.size;
-                if (this.x > canvas.width + this.size) this.x = -this.size;
-                if (this.y < -this.size) this.y = canvas.height + this.size;
-                if (this.y > canvas.height + this.size) this.y = -this.size;
+        /* ==========================================================================
+           6. RENDERIZAÇÃO GRÁFICA (CANVAS, LANTERNA, NÉVOA E FOG OF WAR)
+           ========================================================================== */
+        function renderGame() {
+            // Ajustar Tamanho do Canvas Dinamicamente
+            if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
             }
 
-            draw() {
+            // Posição da Câmera (Centralizada no Jogador)
+            const cameraX = player.x - canvas.width / 2;
+            const cameraY = player.y - canvas.height / 2;
+
+            ctx.save();
+            // Limpar Canvas com Fundo Escuro
+            ctx.fillStyle = '#05020a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Aplicar Translação da Câmera
+            ctx.translate(-cameraX, -cameraY);
+
+            // 1. Desenhar Chão do Terreno
+            ctx.fillStyle = '#0a0612';
+            ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+
+            // 2. Desenhar Armadilhas de Barulho (Folhas Secas e Vidro Quebrado)
+            noiseTraps.forEach(trap => {
+                ctx.fillStyle = trap.type === 'LEAVES' ? 'rgba(180, 83, 9, 0.4)' : 'rgba(34, 211, 238, 0.3)';
                 ctx.beginPath();
-                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-                gradient.addColorStop(0, `rgba(88, 28, 135, ${this.opacity})`);
-                gradient.addColorStop(1, 'rgba(5, 2, 10, 0)');
-                ctx.fillStyle = gradient;
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.arc(trap.x, trap.y, trap.radius, 0, Math.PI * 2);
                 ctx.fill();
-            }
+            });
+
+            // 3. Desenhar Obstáculos (Lápides e Muros)
+            ctx.fillStyle = '#1e1b2e';
+            ctx.strokeStyle = '#3b0764';
+            ctx.lineWidth = 3;
+            obstacles.forEach(obs => {
+                ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                ctx.strokeRect(obs.x, obs.y, obs.w, obs.h);
+            });
+
+            // 4. Desenhar Abóboras de Halloween (Jack-o'-Lantern)
+            pumpkins.forEach(p => {
+                ctx.fillStyle = '#d97706';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                // Chama da abóbora
+                ctx.fillStyle = '#fef08a';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 5 + Math.random() * 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 5. Desenhar Chaves Misteriosas (Brilho Amarelo/Dourado)
+            mapKeys.forEach(k => {
+                if (!k.collected) {
+                    ctx.shadowColor = '#eab308';
+                    ctx.shadowBlur = 15;
+                    ctx.fillStyle = '#facc15';
+                    ctx.beginPath();
+                    ctx.arc(k.x, k.y, k.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0; // Resetar sombra
+                }
+            });
+
+            // 6. Desenhar Portão B (Saída)
+            ctx.fillStyle = gateB.isOpen ? '#22c55e' : '#581c87';
+            ctx.fillRect(gateB.x, gateB.y, gateB.width, gateB.height);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 16px "Share Tech Mono"';
+            ctx.fillText(gateB.isOpen ? "PORTÃO B (ABERTO)" : "PORTÃO B (TRANCADO)", gateB.x - 20, gateB.y - 15);
+
+            // 7. Desenhar Monstro
+            ctx.save();
+            ctx.translate(monster.x, monster.y);
+            ctx.rotate(monster.angle);
+            // Corpo do Monstro
+            ctx.fillStyle = monster.state === 'CHASE' ? '#991b1b' : '#3f0f3f';
+            ctx.beginPath();
+            ctx.arc(0, 0, monster.radius, 0, Math.PI * 2);
+            ctx.fill();
+            // Olhos Vermelhos Brilhantes
+            ctx.fillStyle = '#ff0000';
+            ctx.beginPath(); ctx.arc(8, -7, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(8, 7, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+
+            // 8. Desenhar Jogador
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            ctx.rotate(player.angle);
+            ctx.fillStyle = player.isCrouching ? '#3b82f6' : '#e2e8f0';
+            ctx.beginPath();
+            ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+            ctx.fill();
+            // Indicador de lanterna segurada
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(8, -3, 8, 6);
+            ctx.restore();
+
+            ctx.restore(); // Restaurar Câmera
+
+            // 9. EFEITO DE ILUMINAÇÃO DE LANTERNA & FOG OF WAR (ESCURIDÃO ABSOLUTA)
+            ctx.save();
+            // Criar camada escura global
+            ctx.fillStyle = 'rgba(2, 1, 5, 0.97)';
+            ctx.beginPath();
+            ctx.rect(0, 0, canvas.width, canvas.height);
+
+            // Recortar feixe da lanterna ao redor do jogador
+            const playerCanvasX = canvas.width / 2;
+            const playerCanvasY = canvas.height / 2;
+
+            const flashlightAngle = player.angle;
+            const coneAngle = Math.PI / 3.2; // Largura do feixe da lanterna
+            const flashlightRadius = 260; // Alcance do feixe
+
+            ctx.arc(playerCanvasX, playerCanvasY, flashlightRadius, flashlightAngle - coneAngle / 2, flashlightAngle + coneAngle / 2, true);
+            ctx.closePath();
+            ctx.fill();
+
+            // Gradiente suave de iluminação no feixe
+            const lightGradient = ctx.createRadialGradient(
+                playerCanvasX, playerCanvasY, 20,
+                playerCanvasX, playerCanvasY, flashlightRadius
+            );
+            lightGradient.addColorStop(0, 'rgba(255, 235, 180, 0.25)');
+            lightGradient.addColorStop(0.8, 'rgba(255, 180, 80, 0.05)');
+            lightGradient.addColorStop(1, 'rgba(0, 0, 0, 0.97)');
+
+            ctx.fillStyle = lightGradient;
+            ctx.beginPath();
+            ctx.arc(playerCanvasX, playerCanvasY, flashlightRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
         }
 
-        function initFog() {
-            particles = [];
-            for (let i = 0; i < 40; i++) {
-                particles.push(new Particle());
+        /* ==========================================================================
+           7. LOOP PRINCIPAL DO JOGO (GAME LOOP)
+           ========================================================================== */
+        function gameLoop() {
+            if (gameState === 'PLAYING') {
+                updateGame();
+                renderGame();
             }
+            requestAnimationFrame(gameLoop);
         }
+
+        /* ==========================================================================
+           8. GERENCIAMENTO DE ESTADOS (INÍCIO, JUMPSCARE & VITÓRIA)
+           ========================================================================== */
+        function startGame() {
+            initAudio();
+            generateMap();
+
+            // Resetar Jogador
+            player.x = 150;
+            player.y = 150;
+            player.noise = 0;
+
+            // Resetar Monstro
+            monster.x = 1700;
+            monster.y = 1700;
+            monster.state = 'PATROL';
+
+            keysCollected = 0;
+            gateB.isOpen = false;
+            startTime = Date.now();
+
+            document.getElementById('keysHUD').textContent = `0 / ${TOTAL_KEYS} COLETADAS`;
+            document.getElementById('gateIndicatorHUD').innerHTML = `
+                <div class="text-xs text-zinc-400">OBJETIVO</div>
+                <div class="text-xs font-bold text-purple-400 tracking-wider">COLETE AS 5 CHAVES E VÁ AO PORTÃO B</div>
+            `;
+
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('jumpscareOverlay').classList.add('hidden');
+            document.getElementById('victoryOverlay').classList.add('hidden');
+            document.getElementById('gameContainer').classList.remove('hidden');
+
+            document.body.classList.remove('screen-flash', 'screen-shake');
+
+            gameState = 'PLAYING';
+        }
+
+        function triggerJumpscareGameOver(reason) {
+            gameState = 'JUMPSCARE';
+            playJumpscareSound();
+
+            document.getElementById('jumpscareReason').textContent = reason;
+            document.getElementById('jumpscareOverlay').classList.remove('hidden');
+
+            // Ativar Trepidação e Flash na Tela
+            document.body.classList.add('screen-flash', 'screen-shake');
+        }
+
+        function triggerVictory() {
+            gameState = 'VICTORY';
+            playKeyCollectSound();
+
+            const totalSeconds = Math.floor((Date.now() - startTime) / 1000);
+            const mins = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+            const secs = (totalSeconds % 60).toString().padStart(2, '0');
+
+            document.getElementById('winTimeText').textContent = `${mins}:${secs}`;
+            document.getElementById('gameContainer').classList.add('hidden');
+            document.getElementById('victoryOverlay').classList.remove('hidden');
+        }
+
+        /* Bindings dos Botões da Interface */
+        document.getElementById('btnStartGame').addEventListener('click', startGame);
+        document.getElementById('btnRetryGame').addEventListener('click', startGame);
+        document.getElementById('btnPlayAgain').addEventListener('click', startGame);
+
+        // Iniciar Game Loop
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
