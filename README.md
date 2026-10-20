@@ -1,2 +1,2 @@
-# administracao-sistemas-http
-Projeto prático da disciplina de Administração de Sistemas Proprietários.
+# programaçao-aplicada
+Projeto prático da disciplina de Programação aplicada 
