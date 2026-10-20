@@ -1,2384 +1,506 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESCOLA NIGHTMARE</title>
+<title>MEIA-NOITE | Contos do Além</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap');
+
+:root {
+  --orange: #ff5e00;
+  --red: #a30000;
+  --bg: #080707;
+  --panel: #151010;
 }
 
-body{
-    background:#020202;
-    color:#eee;
-    font-family:Arial,Helvetica,sans-serif;
-    overflow:hidden;
-}
-
-button{
-    border:1px solid #8b0000;
-    background:#260000;
-    color:white;
-    padding:12px 20px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-button:hover{
-    background:#720000;
-}
-
-button:disabled{
-    opacity:.35;
-    cursor:not-allowed;
-}
-
-/* =========================================================
-   MENU
-   ========================================================= */
-
-#menu{
-    position:fixed;
-    inset:0;
-    z-index:1000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:
-        radial-gradient(circle at center,#3b0000,#050505 65%,#000);
-}
-
-.menu{
-    width:min(90%,650px);
-    padding:45px;
-    background:rgba(3,3,3,.95);
-    border:1px solid #610000;
-    text-align:center;
-    box-shadow:0 0 80px rgba(120,0,0,.25);
-}
-
-.menu h1{
-    font-size:clamp(42px,8vw,82px);
-    letter-spacing:12px;
-    text-shadow:0 0 20px red;
-}
-
-.menu h2{
-    color:#a00000;
-    letter-spacing:8px;
-    margin-bottom:25px;
-}
-
-.menu p{
-    color:#aaa;
-    margin:12px 0;
-    line-height:1.6;
-}
-
-.warning{
-    color:#ff4444!important;
-}
-
-/* =========================================================
-   JOGO
-   ========================================================= */
-
-#game{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:#000;
-}
-
-#world{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-    background:
-        radial-gradient(
-            ellipse at center,
-            #3d3d3d 0%,
-            #181818 42%,
-            #030303 100%
-        );
-}
-
-/* chão */
-
-#floor{
-    position:absolute;
-    left:-10%;
-    bottom:-20%;
-    width:120%;
-    height:58%;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            #111 0px,
-            #111 70px,
-            #191919 71px,
-            #191919 140px
-        );
-    transform:perspective(600px) rotateX(55deg);
-    transform-origin:center bottom;
-}
-
-/* teto */
-
-#ceiling{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:32%;
-    background:
-        linear-gradient(#090909,#181818);
-}
-
-/* paredes */
-
-.wall{
-    position:absolute;
-    top:18%;
-    height:65%;
-    width:18%;
-    background:
-        linear-gradient(
-            90deg,
-            #050505,
-            #252525,
-            #090909
-        );
-}
-
-.wall.left{
-    left:0;
-}
-
-.wall.right{
-    right:0;
-}
-
-/* =========================================================
-   HUD
-   ========================================================= */
-
-#hud{
-    position:absolute;
-    top:15px;
-    left:15px;
-    z-index:100;
-    width:260px;
-    padding:15px;
-    background:rgba(0,0,0,.65);
-    border-left:3px solid #700000;
-    font-size:14px;
-}
-
-.hud-title{
-    color:#b00000;
-    font-weight:bold;
-    margin-bottom:10px;
-}
-
-.bar{
-    height:8px;
-    background:#222;
-    margin-top:4px;
-    margin-bottom:10px;
-}
-
-.bar span{
-    display:block;
-    height:100%;
-    width:100%;
-}
-
-#batteryBar{
-    background:#e1c300;
-}
-
-#staminaBar{
-    background:#28d94f;
-}
-
-#noiseBar{
-    background:#c50000;
-}
-
-#dangerText{
-    color:#3cff3c;
-}
-
-/* =========================================================
-   OBJETOS
-   ========================================================= */
-
-.object{
-    position:absolute;
-    z-index:20;
-    cursor:pointer;
-    user-select:none;
-}
-
-.table{
-    width:120px;
-    height:65px;
-    background:
-        linear-gradient(#5a361d,#241206);
-    border:2px solid #120803;
-}
-
-.chair{
-    width:58px;
-    height:75px;
-    background:
-        linear-gradient(#3b3b3b,#111);
-    border:2px solid #080808;
-}
-
-.cabinet{
-    width:70px;
-    height:130px;
-    background:#292929;
-    border:3px solid #111;
-}
-
-/* =========================================================
-   PORTAS
-   ========================================================= */
-
-.door{
-    position:absolute;
-    z-index:25;
-    width:90px;
-    height:170px;
-    background:
-        linear-gradient(
-            90deg,
-            #151515,
-            #3c2719,
-            #121212
-        );
-    border:4px solid #080808;
-    cursor:pointer;
-}
-
-.door.locked{
-    box-shadow:0 0 12px rgba(180,0,0,.35);
-}
-
-.door.open{
-    background:#050505;
-}
-
-/* =========================================================
-   CHAVES
-   ========================================================= */
-
-.key{
-    position:absolute;
-    z-index:40;
-    font-size:30px;
-    cursor:pointer;
-    filter:drop-shadow(0 0 8px gold);
-    animation:floatKey 1.4s ease-in-out infinite;
-}
-
-@keyframes floatKey{
-    0%,100%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(-8px);
-    }
-}
-
-/* =========================================================
-   ESCONDERIJOS
-   ========================================================= */
-
-.hideSpot{
-    position:absolute;
-    z-index:30;
-    width:100px;
-    height:100px;
-    border:2px dashed #555;
-    background:rgba(0,0,0,.35);
-    color:#777;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    cursor:pointer;
-    font-size:12px;
-}
-
-/* =========================================================
-   PORTÃO
-   ========================================================= */
-
-#gate{
-    position:absolute;
-    right:4%;
-    top:23%;
-    width:240px;
-    height:370px;
-    z-index:35;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            #101010 0px,
-            #101010 18px,
-            #3b3b3b 19px,
-            #3b3b3b 23px
-        );
-    border:10px solid #222;
-    cursor:pointer;
-}
-
-.gateTitle{
-    background:#030303;
-    padding:12px;
-    text-align:center;
-    color:#aaa;
-}
-
-.locks{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    padding:25px;
-}
-
-.lock{
-    font-size:30px;
-    text-align:center;
-}
-
-.lock.open{
-    opacity:.25;
-}
-
-/* =========================================================
-   MIRA
-   ========================================================= */
-
-#crosshair{
-    position:absolute;
-    z-index:80;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    font-size:26px;
-    color:rgba(255,255,255,.5);
-}
-
-/* =========================================================
-   LOCAL
-   ========================================================= */
-
-#location{
-    position:absolute;
-    z-index:90;
-    top:15px;
-    right:15px;
-    padding:10px 15px;
-    background:rgba(0,0,0,.7);
-    border-right:3px solid #700000;
-    font-weight:bold;
-}
-
-/* =========================================================
-   INVENTÁRIO
-   ========================================================= */
-
-#inventory{
-    position:absolute;
-    bottom:20px;
-    left:20px;
-    z-index:100;
-    padding:10px;
-    background:rgba(0,0,0,.75);
-}
-
-.inventoryItem{
-    display:inline-block;
-    min-width:38px;
-    padding:8px;
-    margin:3px;
-    text-align:center;
-    border:1px solid #444;
-}
-
-/* =========================================================
-   MENSAGEM
-   ========================================================= */
-
-#message{
-    position:absolute;
-    z-index:200;
-    bottom:18%;
-    left:50%;
-    transform:translateX(-50%);
-    max-width:80%;
-    padding:14px 22px;
-    background:rgba(0,0,0,.88);
-    border:1px solid #444;
-    text-align:center;
-    opacity:0;
-    transition:.3s;
-}
-
-#message.show{
-    opacity:1;
-}
+* { box-sizing: border-box; }
 
-/* =========================================================
-   MONSTRO
-   ========================================================= */
-
-#monster{
-    position:absolute;
-    z-index:70;
-    width:220px;
-    height:400px;
-    left:50%;
-    top:-450px;
-    transform:translateX(-50%);
-    transition:top 1.2s,transform .2s;
-    pointer-events:none;
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #eee;
+  font-family: 'Special Elite', monospace;
+  overflow-x: hidden;
 }
 
-#monster.visible{
-    top:5%;
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  opacity: .13;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
 }
 
-.monsterHair{
-    position:absolute;
-    width:210px;
-    height:190px;
-    background:
-        linear-gradient(
-            90deg,
-            #574000,
-            #d4ad2d,
-            #634900
-        );
-    border-radius:50%;
+header {
+  padding: 20px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #38201a;
+  background: #0b0808;
 }
 
-.monsterFace{
-    position:absolute;
-    top:70px;
-    left:30px;
-    width:160px;
-    height:210px;
-    background:
-        linear-gradient(
-            #d7c9ae,
-            #8d8171
-        );
-    border-radius:48%;
+.logo {
+  font-family: 'Creepster', cursive;
+  font-size: 30px;
+  color: var(--orange);
+  letter-spacing: 2px;
 }
 
-.monsterEye{
-    position:absolute;
-    top:68px;
-    width:25px;
-    height:35px;
-    background:#000;
+header a {
+  color: #ddd;
+  text-decoration: none;
+  margin-left: 18px;
+  font-size: 12px;
 }
 
-.monsterEye.left{
-    left:38px;
-}
-
-.monsterEye.right{
-    right:38px;
-}
+header a:hover { color: var(--orange); }
 
-.monsterMouth{
-    position:absolute;
-    bottom:25px;
-    left:32px;
-    width:95px;
-    height:60px;
-    background:#050505;
-    color:#c00000;
-    text-align:center;
-    padding-top:18px;
+.hero {
+  min-height: 470px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 50px 20px;
+  background:
+    linear-gradient(#08070788,#080707),
+    url("https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=1600&q=85")
+    center/cover;
 }
 
-.monsterBody{
-    position:absolute;
-    bottom:0;
-    left:10px;
-    width:200px;
-    height:170px;
-    background:
-        linear-gradient(#191919,#050505);
+.hero small {
+  color: var(--orange);
+  letter-spacing: 5px;
 }
 
-/* =========================================================
-   TELA DE JUMPSCARE
-   ========================================================= */
-
-#jumpscare{
-    position:fixed;
-    inset:0;
-    z-index:1000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background:#000;
+h1 {
+  font-family: 'Creepster', cursive;
+  font-size: clamp(52px, 10vw, 100px);
+  color: #f5e7dd;
+  text-shadow: 0 0 25px #ff3c00aa;
+  margin: 20px 0;
 }
 
-#jumpscare.active{
-    display:flex;
-    animation:scareFlash .09s infinite;
+.hero p {
+  max-width: 570px;
+  line-height: 1.8;
+  color: #c4b8b1;
 }
 
-@keyframes scareFlash{
-    0%{background:#000}
-    50%{background:#500000}
-    100%{background:#000}
+button {
+  border: 1px solid var(--orange);
+  background: #1b0d08;
+  color: #ff7938;
+  padding: 13px 20px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: .2s;
 }
 
-.scareFace{
-    width:350px;
-    height:440px;
-    background:#d0c0a6;
-    border-radius:50%;
-    position:relative;
-    transform:scale(1.3);
+button:hover {
+  background: var(--orange);
+  color: black;
+  box-shadow: 0 0 22px #ff5e0066;
 }
 
-.scareEye{
-    position:absolute;
-    top:110px;
-    width:60px;
-    height:85px;
-    background:#000;
+.section {
+  padding: 55px 7%;
 }
 
-.scareEye.one{
-    left:65px;
+.section h2 {
+  font-family: 'Creepster', cursive;
+  font-size: 37px;
+  color: var(--orange);
+  font-weight: normal;
 }
 
-.scareEye.two{
-    right:65px;
+.stories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 20px;
 }
 
-.scareMouth{
-    position:absolute;
-    bottom:45px;
-    left:50px;
-    width:250px;
-    height:130px;
-    background:#000;
-    color:#ff0000;
-    text-align:center;
-    padding-top:40px;
-    font-size:28px;
+.story {
+  background: var(--panel);
+  border: 1px solid #33211b;
+  padding: 25px;
+  min-height: 230px;
+  transition: .25s;
+  position: relative;
 }
 
-/* =========================================================
-   TELAS FINAIS
-   ========================================================= */
-
-.endScreen{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:2000;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
+.story:hover {
+  transform: translateY(-5px);
+  border-color: var(--orange);
+  box-shadow: 0 0 25px #ff4d0018;
 }
 
-#deathScreen{
-    background:
-        radial-gradient(circle,#550000,#000);
-}
-
-#victoryScreen{
-    background:
-        radial-gradient(circle,#005000,#000);
-}
+.story .emoji { font-size: 35px; }
+.story h3 { color: #f4d5c2; }
+.story p { color: #9e928c; line-height: 1.6; font-size: 13px; }
 
-.endBox{
-    padding:50px;
+.reader {
+  display: none;
+  max-width: 850px;
+  margin: 35px auto;
+  padding: 35px;
+  background: #100c0c;
+  border: 1px solid #5a2417;
+  line-height: 2;
 }
 
-.endBox h1{
-    font-size:50px;
-    margin-bottom:20px;
+.reader.active { display: block; }
+.reader h2 {
+  color: var(--orange);
+  font-family: 'Creepster', cursive;
+  font-size: 40px;
+  line-height: 1.2;
 }
 
-#deathScreen h1{
-    color:#ff0000;
-}
+.story-text p { margin-bottom: 25px; }
 
-#victoryScreen h1{
-    color:#00ff55;
+.warning {
+  color: #ff5b45;
+  text-align: center;
+  animation: pulse 2s infinite;
 }
 
-/* =========================================================
-   MAPA
-   ========================================================= */
-
-#mapPanel{
-    display:none;
-    position:absolute;
-    z-index:500;
-    inset:8%;
-    background:#080808;
-    border:2px solid #550000;
-    padding:25px;
+@keyframes pulse {
+  50% { opacity: .45; }
 }
 
-#mapPanel h2{
-    color:#b00000;
-    margin-bottom:20px;
+footer {
+  text-align: center;
+  padding: 35px;
+  color: #6f625d;
+  border-top: 1px solid #30201b;
+  font-size: 12px;
 }
 
-#schoolMap{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:8px;
+#scare {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
-.mapRoom{
-    min-height:60px;
-    padding:10px;
-    border:1px solid #333;
-    background:#151515;
-    text-align:center;
-    font-size:12px;
+#scare.show {
+  display: flex;
+  animation: flash .13s steps(2) 5;
 }
 
-.mapRoom.current{
-    border-color:#00ff66;
-    color:#00ff66;
+#scare .face {
+  font-size: clamp(120px, 35vw, 300px);
+  filter: drop-shadow(0 0 30px red);
 }
 
-.mapRoom.visited{
-    background:#242424;
+#scare h2 {
+  font-family: 'Creepster', cursive;
+  font-size: clamp(35px, 8vw, 70px);
+  color: red;
+  margin: 0;
 }
 
-.closeMap{
-    margin-top:20px;
+@keyframes flash {
+  0%,100% { background: #000; }
+  50% { background: #710000; }
 }
 
-/* =========================================================
-   CONTROLES
-   ========================================================= */
-
-#controls{
-    position:absolute;
-    right:20px;
-    bottom:20px;
-    z-index:100;
-    color:#888;
-    font-size:12px;
-    text-align:right;
+#flashlight {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  background: radial-gradient(
+    circle 150px at var(--x,50%) var(--y,50%),
+    transparent 0%, transparent 35%, #000e 100%
+  );
+  display: none;
 }
 
-/* =========================================================
-   ESCURIDÃO
-   ========================================================= */
-
-#darkness{
-    position:absolute;
-    inset:0;
-    z-index:60;
-    pointer-events:none;
-    background:
-        radial-gradient(
-            circle at center,
-            transparent 0,
-            transparent 18%,
-            rgba(0,0,0,.5) 50%,
-            rgba(0,0,0,.96) 100%
-        );
-    transition:.3s;
-}
+body.lantern #flashlight { display: block; }
 
-#darkness.flashlightOff{
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(0,0,0,.65),
-            rgba(0,0,0,.98)
-        );
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
 }
-
-/* =========================================================
-   RESPONSIVO
-   ========================================================= */
-
-@media(max-width:700px){
-
-    #hud{
-        width:200px;
-        font-size:11px;
-    }
-
-    #gate{
-        transform:scale(.7);
-        transform-origin:right top;
-    }
-
-    #controls{
-        display:none;
-    }
-
-    #schoolMap{
-        grid-template-columns:repeat(2,1fr);
-    }
 
+@media(max-width:600px) {
+  header { padding: 18px 5%; }
+  header a { margin-left: 8px; font-size: 10px; }
+  .logo { font-size: 24px; }
+  .section { padding: 35px 5%; }
+  .reader { padding: 20px; margin: 20px 5%; }
 }
 </style>
 </head>
 
 <body>
+<div id="flashlight"></div>
 
-<!-- =======================================================
-     MENU
-     ======================================================= -->
+<header>
+  <div class="logo">☠ MEIA-NOITE</div>
+  <nav>
+    <a href="#inicio">INÍCIO</a>
+    <a href="#historias">CONTOS</a>
+  </nav>
+</header>
 
-<div id="menu">
+<section class="hero" id="inicio">
+  <small>⚠ VOCÊ FOI AVISADO ⚠</small>
+  <h1>CONTOS DO ALÉM</h1>
+  <p>
+    Existem histórias que deveriam permanecer enterradas.
+    Nesta noite, você vai descobrir por que algumas portas
+    nunca devem ser abertas.
+  </p>
+  <button onclick="document.querySelector('#historias').scrollIntoView({behavior:'smooth'})">
+    ☠ ENTRAR SE TIVER CORAGEM
+  </button>
+</section>
 
-    <div class="menu">
+<section class="section" id="historias">
+  <h2>📖 Arquivos Proibidos</h2>
+  <p>Escolha uma história. Mas não diga que não avisamos...</p>
 
-        <h1>ESCOLA</h1>
+  <div class="stories">
+    <article class="story">
+      <div class="emoji">🏚️</div>
+      <h3>A Casa do Último Grito</h3>
+      <p>Uma casa abandonada. Uma janela acesa. Alguém sabe que você chegou.</p>
+      <button onclick="openStory(0)">Ler conto →</button>
+    </article>
 
-        <h2>NIGHTMARE</h2>
+    <article class="story">
+      <div class="emoji">🪞</div>
+      <h3>O Reflexo Errado</h3>
+      <p>Ele sempre imitava seus movimentos. Até aquela noite.</p>
+      <button onclick="openStory(1)">Ler conto →</button>
+    </article>
 
-        <p>
-            Você ficou preso dentro de uma escola abandonada.
-        </p>
+    <article class="story">
+      <div class="emoji">📞</div>
+      <h3>A Ligação das 03:00</h3>
+      <p>O telefone toca. Do outro lado, uma voz pede para entrar.</p>
+      <button onclick="openStory(2)">Ler conto →</button>
+    </article>
 
-        <p>
-            Existem <strong>8 chaves</strong> espalhadas pelo prédio.
-        </p>
+    <article class="story">
+      <div class="emoji">🎃</div>
+      <h3>O Espantalho de Halloween</h3>
+      <p>Todo ano ele aparece mais perto da porta de casa.</p>
+      <button onclick="openStory(3)">Ler conto →</button>
+    </article>
+  </div>
 
-        <p>
-            Cada chave abre uma fechadura do portão principal.
-        </p>
+  <div class="reader" id="reader">
+    <h2 id="storyTitle"></h2>
+    <div class="story-text" id="storyText"></div>
+    <p class="warning" id="warning"></p>
 
-        <p class="warning">
-            Existe uma criatura dentro da escola.
-            Ela não consegue enxergar você.
-            Ela escuta.
-        </p>
-
-        <p>
-            Correr, bater em mesas, cadeiras ou portas
-            pode revelar sua posição.
-        </p>
-
-        <button id="startButton">
-            ENTRAR NA ESCOLA
-        </button>
-
+    <div class="controls">
+      <button onclick="toggleLantern()">🔦 Ligar/desligar lanterna</button>
+      <button onclick="closeStory()">✕ Fechar história</button>
     </div>
+  </div>
+</section>
 
+<section class="section" style="text-align:center">
+  <h2>☠ Regras da Meia-Noite</h2>
+  <p>Não leia sozinho se tiver medo do escuro.</p>
+  <p>Use fones de ouvido para uma experiência mais imersiva.</p>
+  <p>Se ouvir seu nome durante a leitura... verifique se está sozinho.</p>
+</section>
+
+<footer>
+  MEIA-NOITE © 2026 — Histórias fictícias para quem não teme o escuro.
+  <p>Feito para os corajosos. Ou para os que fingem ser.</p>
+</footer>
+
+<div id="scare" role="alert" aria-live="assertive">
+  <div class="face">👹</div>
+  <h2>ELE ESTÁ ATRÁS DE VOCÊ!</h2>
+  <p>Você realmente achou que estava sozinho?</p>
+  <button onclick="dismissScare()">VOLTAR AO ESCURO</button>
 </div>
-
-
-<!-- =======================================================
-     JOGO
-     ======================================================= -->
-
-<div id="game">
-
-    <div id="world">
-
-        <div id="ceiling"></div>
-
-        <div id="floor"></div>
-
-        <div class="wall left"></div>
-
-        <div class="wall right"></div>
-
-
-        <!-- PORTAS -->
-
-        <div
-            class="door"
-            data-room="Sala 01"
-            style="left:18%;top:32%;"
-        ></div>
-
-        <div
-            class="door"
-            data-room="Biblioteca"
-            style="left:32%;top:28%;"
-        ></div>
-
-        <div
-            class="door"
-            data-room="Laboratório"
-            style="left:46%;top:30%;"
-        ></div>
-
-        <div
-            class="door"
-            data-room="Porão"
-            style="left:60%;top:27%;"
-        ></div>
-
-
-        <!-- MESAS -->
-
-        <div
-            class="object table"
-            data-noise="28"
-            style="left:20%;top:60%;"
-        ></div>
-
-        <div
-            class="object table"
-            data-noise="32"
-            style="left:42%;top:67%;"
-        ></div>
-
-        <div
-            class="object table"
-            data-noise="25"
-            style="left:68%;top:62%;"
-        ></div>
-
-
-        <!-- CADEIRAS -->
-
-        <div
-            class="object chair"
-            data-noise="38"
-            style="left:31%;top:65%;"
-        ></div>
-
-        <div
-            class="object chair"
-            data-noise="42"
-            style="left:56%;top:72%;"
-        ></div>
-
-
-        <!-- ARMÁRIO -->
-
-        <div
-            class="object cabinet"
-            data-noise="20"
-            style="left:75%;top:38%;"
-        ></div>
-
-
-        <!-- ESCONDERIJO -->
-
-        <div
-            class="hideSpot"
-            id="hideSpot"
-            style="left:7%;top:55%;"
-        >
-            ESCONDERIJO
-            <br>
-            [H]
-        </div>
-
-
-        <!-- CHAVES -->
-
-        <div
-            class="key"
-            data-key="1"
-            style="left:15%;top:45%;"
-        >
-            🔑
-        </div>
-
-        <div
-            class="key"
-            data-key="2"
-            style="left:28%;top:24%;"
-        >
-            🔑
-        </div>
-
-        <div
-            class="key"
-            data-key="3"
-            style="left:41%;top:43%;"
-        >
-            🔑
-        </div>
-
-        <div
-            class="key"
-            data-key="4"
-            style="left:55%;top:22%;"
-        >
-            🔑
-        </div>
-
-        <div
-            class="key"
-            data-key="5"
-            style="left:69%;top:35%;"
-        >
-            🔑
-        </div>
-
-        <div
-            class="key"
-            data-key="6"
-            style="left:81%;top:53%;"
-        >
-            🔑
-        </div>
-
-        <div
-            class="key"
-            data-key="7"
-            style="left:36%;top:78%;"
-        >
-            🔑
-        </div>
-
-        <div
-            class="key"
-            data-key="8"
-            style="left:63%;top:80%;"
-        >
-            🔑
-        </div>
-
-
-        <!-- PORTÃO -->
-
-        <div id="gate">
-
-            <div class="gateTitle">
-                PORTÃO PRINCIPAL
-            </div>
-
-            <div class="locks">
-
-                <div class="lock" id="lock1">🔒</div>
-                <div class="lock" id="lock2">🔒</div>
-
-                <div class="lock" id="lock3">🔒</div>
-                <div class="lock" id="lock4">🔒</div>
-
-                <div class="lock" id="lock5">🔒</div>
-                <div class="lock" id="lock6">🔒</div>
-
-                <div class="lock" id="lock7">🔒</div>
-                <div class="lock" id="lock8">🔒</div>
-
-            </div>
-
-        </div>
-
-
-        <!-- MONSTRO -->
-
-        <div id="monster">
-
-            <div class="monsterHair"></div>
-
-            <div class="monsterFace">
-
-                <div class="monsterEye left"></div>
-
-                <div class="monsterEye right"></div>
-
-                <div class="monsterMouth">
-                    █████
-                </div>
-
-            </div>
-
-            <div class="monsterBody"></div>
-
-        </div>
-
-
-        <!-- ESCURIDÃO -->
-
-        <div id="darkness"></div>
-
-    </div>
-
-
-    <!-- HUD -->
-
-    <div id="hud">
-
-        <div class="hud-title">
-            ESCOLA NIGHTMARE
-        </div>
-
-        <div>
-            🔑 Chaves:
-            <strong>
-                <span id="keyCount">0</span>/8
-            </strong>
-        </div>
-
-        <div>
-            🔋 Lanterna
-        </div>
-
-        <div class="bar">
-            <span id="batteryBar"></span>
-        </div>
-
-        <div>
-            🏃 Energia
-        </div>
-
-        <div class="bar">
-            <span id="staminaBar"></span>
-        </div>
-
-        <div>
-            🔊 Ruído
-        </div>
-
-        <div class="bar">
-            <span id="noiseBar"></span>
-        </div>
-
-        <div>
-            👂
-            <span id="dangerText">
-                Perigo baixo
-            </span>
-        </div>
-
-    </div>
-
-
-    <!-- LOCAL -->
-
-    <div id="location">
-        Entrada
-    </div>
-
-
-    <!-- MIRA -->
-
-    <div id="crosshair">
-        +
-    </div>
-
-
-    <!-- INVENTÁRIO -->
-
-    <div id="inventory">
-
-        <strong>Inventário:</strong>
-
-        <span
-            class="inventoryItem"
-            id="inventoryKeys"
-        >
-            🔑 0
-        </span>
-
-    </div>
-
-
-    <!-- CONTROLES -->
-
-    <div id="controls">
-
-        WASD — andar<br>
-        SHIFT — correr<br>
-        F — lanterna<br>
-        H — esconder<br>
-        M — mapa<br>
-        E — interagir
-
-    </div>
-
-
-    <!-- MENSAGEM -->
-
-    <div id="message"></div>
-
-
-    <!-- MAPA -->
-
-    <div id="mapPanel">
-
-        <h2>MAPA DA ESCOLA</h2>
-
-        <div id="schoolMap">
-
-            <div class="mapRoom current">
-                ENTRADA
-            </div>
-
-            <div class="mapRoom">
-                CORREDOR A
-            </div>
-
-            <div class="mapRoom">
-                SALA 01
-            </div>
-
-            <div class="mapRoom">
-                SALA 02
-            </div>
-
-            <div class="mapRoom">
-                BIBLIOTECA
-            </div>
-
-            <div class="mapRoom">
-                LABORATÓRIO
-            </div>
-
-            <div class="mapRoom">
-                REFEITÓRIO
-            </div>
-
-            <div class="mapRoom">
-                GINÁSIO
-            </div>
-
-            <div class="mapRoom">
-                PORÃO
-            </div>
-
-            <div class="mapRoom">
-                PÁTIO / PORTÃO
-            </div>
-
-        </div>
-
-        <button
-            class="closeMap"
-            id="closeMap"
-        >
-            FECHAR MAPA
-        </button>
-
-    </div>
-
-
-</div>
-
-
-<!-- =======================================================
-     JUMPSCARE
-     ======================================================= -->
-
-<div id="jumpscare">
-
-    <div class="scareFace">
-
-        <div class="scareEye one"></div>
-
-        <div class="scareEye two"></div>
-
-        <div class="scareMouth">
-            AAAAAAA!
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =======================================================
-     MORTE
-     ======================================================= -->
-
-<div
-    id="deathScreen"
-    class="endScreen"
->
-
-    <div class="endBox">
-
-        <h1>
-            VOCÊ FOI ENCONTRADO
-        </h1>
-
-        <p>
-            A criatura seguiu o som até você.
-        </p>
-
-        <button id="restartDeath">
-            TENTAR NOVAMENTE
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =======================================================
-     VITÓRIA
-     ======================================================= -->
-
-<div
-    id="victoryScreen"
-    class="endScreen"
->
-
-    <div class="endBox">
-
-        <h1>
-            VOCÊ ESCAPOU
-        </h1>
-
-        <p>
-            As oito fechaduras foram abertas.
-        </p>
-
-        <p>
-            Você conseguiu deixar a escola.
-        </p>
-
-        <button id="restartVictory">
-            JOGAR NOVAMENTE
-        </button>
-
-    </div>
-
-</div>
-
 
 <script>
-
-/* =========================================================
-   ESTADO DO JOGO
-   ========================================================= */
-
-const state = {
-
-    running:false,
-
-    keys:0,
-
-    totalKeys:8,
-
-    battery:100,
-
-    stamina:100,
-
-    noise:0,
-
-    monsterAwareness:0,
-
-    monsterDistance:100,
-
-    hiding:false,
-
-    flashlight:true,
-
-    mapOpen:false,
-
-    currentRoom:"Entrada",
-
-    visitedRooms:new Set(["Entrada"]),
-
-    doorsOpened:0,
-
-    time:0
-
-};
-
-
-/* =========================================================
-   ELEMENTOS
-   ========================================================= */
-
-const menu =
-    document.getElementById("menu");
-
-const game =
-    document.getElementById("game");
-
-const startButton =
-    document.getElementById("startButton");
-
-const keyCount =
-    document.getElementById("keyCount");
-
-const inventoryKeys =
-    document.getElementById("inventoryKeys");
-
-const batteryBar =
-    document.getElementById("batteryBar");
-
-const staminaBar =
-    document.getElementById("staminaBar");
-
-const noiseBar =
-    document.getElementById("noiseBar");
-
-const dangerText =
-    document.getElementById("dangerText");
-
-const messageBox =
-    document.getElementById("message");
-
-const monster =
-    document.getElementById("monster");
-
-const darkness =
-    document.getElementById("darkness");
-
-const locationBox =
-    document.getElementById("location");
-
-const mapPanel =
-    document.getElementById("mapPanel");
-
-const jumpscare =
-    document.getElementById("jumpscare");
-
-const deathScreen =
-    document.getElementById("deathScreen");
-
-const victoryScreen =
-    document.getElementById("victoryScreen");
-
-
-/* =========================================================
-   TECLAS
-   ========================================================= */
-
-const keysDown = {
-
-    w:false,
-    a:false,
-    s:false,
-    d:false,
-    shift:false
-
-};
-
-
-document.addEventListener(
-    "keydown",
-    function(event){
-
-        if(!state.running)
-            return;
-
-        const key =
-            event.key.toLowerCase();
-
-        if(key === "w")
-            keysDown.w = true;
-
-        if(key === "a")
-            keysDown.a = true;
-
-        if(key === "s")
-            keysDown.s = true;
-
-        if(key === "d")
-            keysDown.d = true;
-
-        if(key === "shift")
-            keysDown.shift = true;
-
-
-        if(key === "f"){
-
-            toggleFlashlight();
-
-        }
-
-
-        if(key === "h"){
-
-            toggleHiding();
-
-        }
-
-
-        if(key === "m"){
-
-            toggleMap();
-
-        }
-
-
-        if(key === "e"){
-
-            interact();
-
-        }
-
+const stories = [
+  {
+    title: "A Casa do Último Grito",
+    paragraphs: [
+      "Eram 23h47 quando Lucas chegou à velha casa no fim da estrada. As janelas estavam pregadas com tábuas, mas uma luz amarela brilhava no andar de cima.",
+      "Ele empurrou a porta. O rangido ecoou pelo corredor. Na parede, dezenas de fotografias mostravam pessoas desconhecidas. Em todas elas, os olhos haviam sido riscados.",
+      "No andar superior, encontrou uma porta entreaberta. Lá dentro, uma cadeira de balanço se movia sozinha.",
+      "Então ouviu três batidas atrás de si. Toc. Toc. Toc. Lucas se virou. Não havia ninguém.",
+      "Quando olhou novamente para a cadeira, havia alguém sentado nela. Era uma cópia perfeita dele mesmo, sorrindo com a boca aberta demais.",
+      "A figura levantou um dedo até os lábios e sussurrou: 'Você demorou. Agora é minha vez de sair.'"
+    ],
+    scareAt: 4
+  },
+  {
+    title: "O Reflexo Errado",
+    paragraphs: [
+      "Marina comprou um espelho antigo em um mercado de objetos usados. O vendedor só fez um pedido: nunca olhe para ele depois da meia-noite.",
+      "Na primeira noite, tudo parecia normal. Na segunda, seu reflexo demorou um segundo a acompanhar seus movimentos.",
+      "Na terceira noite, Marina levantou a mão direita. O reflexo levantou a esquerda.",
+      "Ela recuou. O reflexo permaneceu imóvel. Então sorriu, mesmo quando Marina começou a chorar.",
+      "O vidro estalou. Uma mão pálida surgiu do outro lado e pressionou a superfície, como se procurasse uma saída.",
+      "Marina correu até a porta. No corredor, seu celular vibrou com uma notificação: uma foto dela dormindo, tirada de dentro do espelho."
+    ],
+    scareAt: 3
+  },
+  {
+    title: "A Ligação das 03:00",
+    paragraphs: [
+      "Às três da manhã, o telefone fixo tocou na casa de Daniel. O aparelho estava desconectado havia anos.",
+      "Ele atendeu. Do outro lado, ouviu sua própria voz, ofegante: 'Não abra a porta. Seja lá o que acontecer, não abra.'",
+      "Três batidas soaram na entrada. Uma voz idêntica à de Daniel chamou: 'Sou eu. Esqueci minhas chaves.'",
+      "O telefone chiou. Sua voz do outro lado começou a contar: 'Dez... nove... oito...' As batidas ficaram mais fortes.",
+      "Daniel espiou pelo olho mágico. Do lado de fora, havia um homem idêntico a ele, com o rosto coberto de sangue.",
+      "O telefone ficou em silêncio. A fechadura começou a girar sozinha. E a voz dentro do aparelho sussurrou: 'Eu avisei para não abrir.'"
+    ],
+    scareAt: 4
+  },
+  {
+    title: "O Espantalho de Halloween",
+    paragraphs: [
+      "Todos os outubros, a família Oliveira colocava um espantalho no jardim para decorar o Halloween. Ninguém lembrava quem havia trazido aquele boneco.",
+      "Na primeira noite, ele estava perto da cerca. Na segunda, perto da janela da cozinha.",
+      "Na terceira, o pai o encontrou parado na varanda. A cabeça de palha apontava diretamente para o quarto de sua filha.",
+      "Ele jogou o espantalho no lixo e trancou todas as portas. Naquela noite, sua filha acordou gritando que havia alguém no quarto.",
+      "O pai entrou correndo. A cama estava vazia. Na janela, marcas de mãos sujas de terra desciam pelo vidro.",
+      "Lá fora, o espantalho estava novamente no jardim. Desta vez, usava o pijama da menina."
+    ],
+    scareAt: 3
+  }
+];
+
+let scareTimer;
+let active = false;
+let audioContext;
+
+function openStory(index) {
+  clearTimeout(scareTimer);
+  document.getElementById("scare").classList.remove("show");
+
+  const story = stories[index];
+  const reader = document.getElementById("reader");
+
+  document.getElementById("storyTitle").textContent = story.title;
+  const text = document.getElementById("storyText");
+  text.innerHTML = "";
+
+  story.paragraphs.forEach((paragraph, i) => {
+    const p = document.createElement("p");
+    p.textContent = paragraph;
+    text.appendChild(p);
+
+    if (i === story.scareAt) {
+      const warning = document.createElement("p");
+      warning.className = "warning";
+      warning.textContent = "Algo se moveu no canto do seu olho...";
+      text.appendChild(warning);
     }
-);
+  });
 
+  document.getElementById("warning").textContent =
+    "A leitura continua... você tem certeza de que está sozinho?";
 
-document.addEventListener(
-    "keyup",
-    function(event){
+  reader.classList.add("active");
+  reader.scrollIntoView({behavior:"smooth", block:"start"});
+  active = true;
 
-        const key =
-            event.key.toLowerCase();
-
-        if(key === "w")
-            keysDown.w = false;
-
-        if(key === "a")
-            keysDown.a = false;
-
-        if(key === "s")
-            keysDown.s = false;
-
-        if(key === "d")
-            keysDown.d = false;
-
-        if(key === "shift")
-            keysDown.shift = false;
-
-    }
-);
-
-
-/* =========================================================
-   INICIAR
-   ========================================================= */
-
-startButton.addEventListener(
-    "click",
-    startGame
-);
-
-
-function startGame(){
-
-    menu.style.display =
-        "none";
-
-    game.style.display =
-        "block";
-
-    state.running =
-        true;
-
-    state.keys =
-        0;
-
-    state.battery =
-        100;
-
-    state.stamina =
-        100;
-
-    state.noise =
-        0;
-
-    state.monsterAwareness =
-        0;
-
-    state.monsterDistance =
-        100;
-
-    state.hiding =
-        false;
-
-    state.flashlight =
-        true;
-
-    showMessage(
-        "Encontre as 8 chaves. Não faça barulho."
-    );
-
-    updateInterface();
-
-    requestAnimationFrame(
-        gameLoop
-    );
-
+  // O susto ocorre depois de um intervalo imprevisível.
+  scareTimer = setTimeout(() => {
+    if (active) triggerScare();
+  }, 18000 + Math.random() * 18000);
 }
 
-
-/* =========================================================
-   MENSAGEM
-   ========================================================= */
-
-let messageTimer = null;
-
-
-function showMessage(text){
-
-    messageBox.textContent =
-        text;
-
-    messageBox.classList.add(
-        "show"
-    );
-
-    clearTimeout(
-        messageTimer
-    );
-
-    messageTimer =
-        setTimeout(
-            function(){
-
-                messageBox.classList.remove(
-                    "show"
-                );
-
-            },
-            3000
-        );
-
+function closeStory() {
+  active = false;
+  clearTimeout(scareTimer);
+  document.getElementById("reader").classList.remove("active");
+  document.getElementById("scare").classList.remove("show");
+  document.body.classList.remove("lantern");
 }
 
-
-/* =========================================================
-   RUÍDO
-   ========================================================= */
-
-function makeNoise(amount){
-
-    if(!state.running)
-        return;
-
-    amount =
-        Math.max(
-            0,
-            Number(amount) || 0
-        );
-
-    state.noise =
-        Math.min(
-            100,
-            state.noise + amount
-        );
-
-    state.monsterAwareness =
-        Math.min(
-            100,
-            state.monsterAwareness +
-            amount * .65
-        );
-
-    showMessage(
-        "Você fez barulho..."
-    );
-
+function toggleLantern() {
+  document.body.classList.toggle("lantern");
 }
 
+function playHorrorSound() {
+  // Som sintético, sem precisar baixar arquivos.
+  try {
+    audioContext = audioContext || new (
+      window.AudioContext || window.webkitAudioContext
+    )();
 
-/* =========================================================
-   OBJETOS
-   ========================================================= */
+    if (audioContext.state === "suspended") audioContext.resume();
 
-document
-    .querySelectorAll(".object")
-    .forEach(
-        function(object){
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
 
-            object.addEventListener(
-                "click",
-                function(){
-
-                    const amount =
-                        Number(
-                            object.dataset.noise
-                        ) || 20;
-
-                    makeNoise(
-                        amount
-                    );
-
-                    object.animate(
-                        [
-                            {
-                                transform:
-                                    "rotate(0deg)"
-                            },
-                            {
-                                transform:
-                                    "rotate(5deg)"
-                            },
-                            {
-                                transform:
-                                    "rotate(-5deg)"
-                            },
-                            {
-                                transform:
-                                    "rotate(0deg)"
-                            }
-                        ],
-                        {
-                            duration:300
-                        }
-                    );
-
-                }
-            );
-
-        }
+    oscillator.type = "sawtooth";
+    oscillator.frequency.setValueAtTime(900, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(
+      65, audioContext.currentTime + 1.1
     );
 
-
-/* =========================================================
-   CHAVES
-   ========================================================= */
-
-document
-    .querySelectorAll(".key")
-    .forEach(
-        function(key){
-
-            key.addEventListener(
-                "click",
-                function(){
-
-                    if(
-                        key.dataset.collected ===
-                        "true"
-                    )
-                        return;
-
-                    key.dataset.collected =
-                        "true";
-
-                    key.style.display =
-                        "none";
-
-                    state.keys++;
-
-                    makeNoise(4);
-
-                    showMessage(
-                        "Chave encontrada! " +
-                        state.keys +
-                        "/8"
-                    );
-
-                    const lock =
-                        document.getElementById(
-                            "lock" +
-                            state.keys
-                        );
-
-                    if(lock){
-
-                        lock.textContent =
-                            "🔓";
-
-                        lock.classList.add(
-                            "open"
-                        );
-
-                    }
-
-                    if(
-                        state.keys ===
-                        state.totalKeys
-                    ){
-
-                        showMessage(
-                            "Você tem todas as chaves. Vá ao portão!"
-                        );
-
-                    }
-
-                    updateInterface();
-
-                }
-            );
-
-        }
+    gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      0.5, audioContext.currentTime + 0.06
+    );
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001, audioContext.currentTime + 1.5
     );
 
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
 
-/* =========================================================
-   PORTÃO
-   ========================================================= */
-
-document
-    .getElementById("gate")
-    .addEventListener(
-        "click",
-        function(){
-
-            if(
-                state.keys <
-                state.totalKeys
-            ){
-
-                const missing =
-                    state.totalKeys -
-                    state.keys;
-
-                showMessage(
-                    "O portão possui " +
-                    missing +
-                    " fechadura(s) restante(s)."
-                );
-
-                makeNoise(15);
-
-                return;
-
-            }
-
-            winGame();
-
-        }
-    );
-
-
-/* =========================================================
-   PORTAS
-   ========================================================= */
-
-document
-    .querySelectorAll(".door")
-    .forEach(
-        function(door){
-
-            door.addEventListener(
-                "click",
-                function(){
-
-                    const room =
-                        door.dataset.room ||
-                        "Sala desconhecida";
-
-                    if(
-                        door.classList.contains(
-                            "locked"
-                        )
-                    ){
-
-                        showMessage(
-                            "Esta porta está trancada."
-                        );
-
-                        makeNoise(8);
-
-                        return;
-
-                    }
-
-                    door.classList.toggle(
-                        "open"
-                    );
-
-                    state.doorsOpened++;
-
-                    state.currentRoom =
-                        room;
-
-                    state.visitedRooms.add(
-                        room
-                    );
-
-                    locationBox.textContent =
-                        room;
-
-                    makeNoise(10);
-
-                    showMessage(
-                        "Você entrou em: " +
-                        room
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   INTERAÇÃO
-   ========================================================= */
-
-function interact(){
-
-    if(state.hiding){
-
-        showMessage(
-            "Você está escondido."
-        );
-
-        return;
-
-    }
-
-    showMessage(
-        "Você não encontrou nada para interagir aqui."
-    );
-
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 1.5);
+  } catch (error) {
+    console.log("Áudio indisponível neste navegador.");
+  }
 }
 
-
-/* =========================================================
-   LANERNA
-   ========================================================= */
-
-function toggleFlashlight(){
-
-    state.flashlight =
-        !state.flashlight;
-
-    darkness.classList.toggle(
-        "flashlightOff",
-        !state.flashlight
-    );
-
-    if(state.flashlight){
-
-        showMessage(
-            "Lanterna ligada."
-        );
-
-    }else{
-
-        showMessage(
-            "Lanterna desligada."
-        );
-
-    }
-
+function triggerScare() {
+  if (!active) return;
+  document.getElementById("scare").classList.add("show");
+  playHorrorSound();
+  active = false;
 }
 
-
-/* =========================================================
-   ESCONDER
-   ========================================================= */
-
-const hideSpot =
-    document.getElementById(
-        "hideSpot"
-    );
-
-
-hideSpot.addEventListener(
-    "click",
-    toggleHiding
-);
-
-
-function toggleHiding(){
-
-    state.hiding =
-        !state.hiding;
-
-    if(state.hiding){
-
-        showMessage(
-            "Você se escondeu. Fique em silêncio."
-        );
-
-    }else{
-
-        showMessage(
-            "Você saiu do esconderijo."
-        );
-
-    }
-
+function dismissScare() {
+  document.getElementById("scare").classList.remove("show");
+  document.getElementById("warning").textContent =
+    "Você sobreviveu... desta vez.";
 }
 
-
-/* =========================================================
-   MAPA
-   ========================================================= */
-
-function toggleMap(){
-
-    state.mapOpen =
-        !state.mapOpen;
-
-    mapPanel.style.display =
-        state.mapOpen
-            ? "block"
-            : "none";
-
-}
-
-
-document
-    .getElementById("closeMap")
-    .addEventListener(
-        "click",
-        toggleMap
-    );
-
-
-/* =========================================================
-   MOVIMENTO
-   ========================================================= */
-
-function updateMovement(){
-
-    if(state.hiding)
-        return;
-
-    const moving =
-        keysDown.w ||
-        keysDown.a ||
-        keysDown.s ||
-        keysDown.d;
-
-    if(!moving)
-        return;
-
-    const running =
-        keysDown.shift &&
-        state.stamina > 1;
-
-    if(running){
-
-        state.stamina =
-            Math.max(
-                0,
-                state.stamina - .7
-            );
-
-        makeNoise(.9);
-
-    }else{
-
-        state.stamina =
-            Math.min(
-                100,
-                state.stamina + .15
-            );
-
-        makeNoise(.25);
-
-    }
-
-}
-
-
-/* =========================================================
-   MONSTRO
-   ========================================================= */
-
-function updateMonster(){
-
-    if(state.hiding){
-
-        state.monsterAwareness *= .97;
-
-        return;
-
-    }
-
-
-    /*
-     * A criatura não possui visão.
-     *
-     * Ela reage ao barulho.
-     */
-
-    if(
-        state.monsterAwareness >
-        35
-    ){
-
-        monster.classList.add(
-            "visible"
-        );
-
-    }
-
-
-    if(
-        state.monsterAwareness >
-        60
-    ){
-
-        state.monsterDistance -=
-            .35;
-
-    }
-
-
-    if(
-        state.monsterAwareness >
-        85
-    ){
-
-        state.monsterDistance -=
-            .7;
-
-    }
-
-
-    state.monsterDistance =
-        Math.max(
-            0,
-            state.monsterDistance
-        );
-
-
-    /*
-     * Quando o monstro está muito próximo,
-     * existe chance de jumpscare.
-     */
-
-    if(
-        state.monsterDistance <
-        18 &&
-        Math.random() <
-        .035
-    ){
-
-        triggerJumpscare();
-
-    }
-
-}
-
-
-/* =========================================================
-   REDUÇÃO DO RUÍDO
-   ========================================================= */
-
-function updateNoise(){
-
-    state.noise *= .965;
-
-    state.monsterAwareness *= .992;
-
-}
-
-
-/* =========================================================
-   EVENTOS ALEATÓRIOS
-   ========================================================= */
-
-let eventCooldown = 0;
-
-
-function randomEvents(){
-
-    if(eventCooldown > 0){
-
-        eventCooldown--;
-
-        return;
-
-    }
-
-
-    eventCooldown =
-        300;
-
-
-    const chance =
-        Math.random();
-
-
-    if(chance < .18){
-
-        showMessage(
-            "Você ouviu uma porta bater em algum lugar..."
-        );
-
-        state.monsterAwareness +=
-            8;
-
-    }
-
-
-    if(
-        chance >= .18 &&
-        chance < .30
-    ){
-
-        showMessage(
-            "Um ruído veio do corredor."
-        );
-
-        state.monsterAwareness +=
-            12;
-
-    }
-
-
-    if(
-        chance >= .30 &&
-        chance < .36
-    ){
-
-        monster.classList.add(
-            "visible"
-        );
-
-        showMessage(
-            "Você sentiu que não está sozinho..."
-        );
-
-        state.monsterAwareness +=
-            18;
-
-    }
-
-}
-
-
-/* =========================================================
-   INTERFACE
-   ========================================================= */
-
-function updateInterface(){
-
-    keyCount.textContent =
-        state.keys;
-
-    inventoryKeys.textContent =
-        "🔑 " +
-        state.keys;
-
-    batteryBar.style.width =
-        state.battery +
-        "%";
-
-    staminaBar.style.width =
-        state.stamina +
-        "%";
-
-    noiseBar.style.width =
-        state.noise +
-        "%";
-
-
-    if(
-        state.monsterAwareness <
-        25
-    ){
-
-        dangerText.textContent =
-            "Perigo baixo";
-
-        dangerText.style.color =
-            "#3cff3c";
-
-    }else if(
-        state.monsterAwareness <
-        50
-    ){
-
-        dangerText.textContent =
-            "A criatura ouviu algo";
-
-        dangerText.style.color =
-            "#ffff00";
-
-    }else if(
-        state.monsterAwareness <
-        75
-    ){
-
-        dangerText.textContent =
-            "PERIGO ALTO";
-
-        dangerText.style.color =
-            "#ff8c00";
-
-    }else{
-
-        dangerText.textContent =
-            "ELA ESTÁ PERTO";
-
-        dangerText.style.color =
-            "#ff0000";
-
-    }
-
-}
-
-
-/* =========================================================
-   BATERIA
-   ========================================================= */
-
-function updateBattery(){
-
-    if(
-        state.flashlight &&
-        state.battery > 0
-    ){
-
-        state.battery -=
-            .015;
-
-    }
-
-
-    if(
-        state.battery <= 0
-    ){
-
-        state.battery =
-            0;
-
-        state.flashlight =
-            false;
-
-        darkness.classList.add(
-            "flashlightOff"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   JUMPSCARE
-   ========================================================= */
-
-let scareRunning = false;
-
-
-function triggerJumpscare(){
-
-    if(scareRunning)
-        return;
-
-    scareRunning =
-        true;
-
-    state.running =
-        false;
-
-    jumpscare.classList.add(
-        "active"
-    );
-
-
-    setTimeout(
-        function(){
-
-            jumpscare.classList.remove(
-                "active"
-            );
-
-            deathScreen.style.display =
-                "flex";
-
-            scareRunning =
-                false;
-
-        },
-        2200
-    );
-
-}
-
-
-/* =========================================================
-   VITÓRIA
-   ========================================================= */
-
-function winGame(){
-
-    state.running =
-        false;
-
-    victoryScreen.style.display =
-        "flex";
-
-}
-
-
-/* =========================================================
-   REINICIAR
-   ========================================================= */
-
-document
-    .getElementById("restartDeath")
-    .addEventListener(
-        "click",
-        function(){
-
-            location.reload();
-
-        }
-    );
-
-
-document
-    .getElementById("restartVictory")
-    .addEventListener(
-        "click",
-        function(){
-
-            location.reload();
-
-        }
-    );
-
-
-/* =========================================================
-   LOOP
-   ========================================================= */
-
-let lastFrame =
-    performance.now();
-
-
-function gameLoop(now){
-
-    if(!state.running)
-        return;
-
-
-    const delta =
-        Math.min(
-            100,
-            now - lastFrame
-        );
-
-    lastFrame =
-        now;
-
-
-    updateMovement();
-
-    updateMonster();
-
-    updateNoise();
-
-    updateBattery();
-
-    randomEvents();
-
-    updateInterface();
-
-
-    requestAnimationFrame(
-        gameLoop
-    );
-
-}
-
-
+document.addEventListener("mousemove", event => {
+  document.documentElement.style.setProperty("--x", event.clientX + "px");
+  document.documentElement.style.setProperty("--y", event.clientY + "px");
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeStory();
+});
 </script>
-
 </body>
 </html>
