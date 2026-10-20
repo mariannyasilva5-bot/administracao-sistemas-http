@@ -1,506 +1,278 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MEIA-NOITE | Contos do Além</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contos de Terror - Halloween Special</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap');
+    <!-- Elementos Flutuantes (Animações de Halloween) -->
+    <div id="fantasma" class="elemento-flutuante">👻</div>
+    <div id="abobora" class="elemento-flutuante">🎃</div>
+    <div id="morcego" class="elemento-flutuante">🦇</div>
 
+    <!-- Cabeçalho -->
+    <header class="header-terror">
+        <h1 class="titulo-principal">🕯️ Contos da Escuridão 🕯️</h1>
+        <p class="subtitulo">Sinta o arrepio da noite de Halloween...</p>
+    </header>
+
+    <!-- Container Principal -->
+    <main class="container">
+        
+        <!-- Galeria de Histórias -->
+        <section class="galeria-cards">
+            {% for historia in historias %}
+            <article class="card-historia" onclick="abrirLeitor({{ historia.id }})">
+                <div class="capa-card" style="background-image: url('{{ historia.imagem }}');">
+                    <span class="tag-categoria">{{ historia.categoria }}</span>
+                </div>
+                <div class="info-card">
+                    <h2>{{ historia.titulo }}</h2>
+                    <p>{{ historia.resumo }}</p>
+                    <button class="btn-ler">Ler História 💀</button>
+                </div>
+            </article>
+            {% endfor %}
+        </section>
+
+        <!-- Modal do Leitor Interativo -->
+        <div id="modal-leitor" class="modal">
+            <div class="conteudo-modal">
+                <span class="fechar" onclick="fecharLeitor()">&times;</span>
+                <h2 id="modal-titulo"></h2>
+                <div class="imagem-detalhe">
+                    <img id="modal-imagem" src="" alt="Capa da História">
+                </div>
+                <p id="modal-texto" class="texto-historia"></p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 - Biblioteca Obscura de Halloween. Cuidado ao olhar para trás...</p>
+    </footer>
+
+    <!-- Script com os dados das histórias para o JavaScript -->
+    <script>
+        const historiasData = {{ historias | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
 :root {
-  --orange: #ff5e00;
-  --red: #a30000;
-  --bg: #080707;
-  --panel: #151010;
+    --cor-fundo: #0d0d0d;
+    --cor-card: #1a1a1a;
+    --laranja-halloween: #ff6600;
+    --roxo-sombrio: #660099;
+    --texto-claro: #e0e0e0;
+    --vermelho-sangue: #8b0000;
 }
-
-* { box-sizing: border-box; }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: #eee;
-  font-family: 'Special Elite', monospace;
-  overflow-x: hidden;
+    background-color: var(--cor-fundo);
+    color: var(--texto-claro);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  opacity: .13;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+/* Cabeçalho */
+.header-terror {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(180deg, rgba(102,0,153,0.3) 0%, rgba(13,13,13,1) 100%);
 }
 
-header {
-  padding: 20px 7%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #38201a;
-  background: #0b0808;
+.titulo-principal {
+    font-family: 'Creepster', cursive;
+    font-size: 3.5rem;
+    color: var(--laranja-halloween);
+    text-shadow: 3px 3px 10px rgba(255, 102, 0, 0.5);
+    margin: 0;
 }
 
-.logo {
-  font-family: 'Creepster', cursive;
-  font-size: 30px;
-  color: var(--orange);
-  letter-spacing: 2px;
+.subtitulo {
+    font-size: 1.2rem;
+    color: #aaa;
 }
 
-header a {
-  color: #ddd;
-  text-decoration: none;
-  margin-left: 18px;
-  font-size: 12px;
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-header a:hover { color: var(--orange); }
-
-.hero {
-  min-height: 470px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 50px 20px;
-  background:
-    linear-gradient(#08070788,#080707),
-    url("https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=1600&q=85")
-    center/cover;
+.galeria-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
 }
 
-.hero small {
-  color: var(--orange);
-  letter-spacing: 5px;
+/* Cards */
+.card-historia {
+    background-color: var(--cor-card);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #333;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
-h1 {
-  font-family: 'Creepster', cursive;
-  font-size: clamp(52px, 10vw, 100px);
-  color: #f5e7dd;
-  text-shadow: 0 0 25px #ff3c00aa;
-  margin: 20px 0;
+.card-historia:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(255, 102, 0, 0.3);
+    border-color: var(--laranja-halloween);
 }
 
-.hero p {
-  max-width: 570px;
-  line-height: 1.8;
-  color: #c4b8b1;
+.capa-card {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
 }
 
-button {
-  border: 1px solid var(--orange);
-  background: #1b0d08;
-  color: #ff7938;
-  padding: 13px 20px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: .2s;
+.tag-categoria {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--roxo-sombrio);
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    text-transform: uppercase;
 }
 
-button:hover {
-  background: var(--orange);
-  color: black;
-  box-shadow: 0 0 22px #ff5e0066;
+.info-card {
+    padding: 20px;
 }
 
-.section {
-  padding: 55px 7%;
+.info-card h2 {
+    color: var(--laranja-halloween);
+    margin-top: 0;
 }
 
-.section h2 {
-  font-family: 'Creepster', cursive;
-  font-size: 37px;
-  color: var(--orange);
-  font-weight: normal;
+.btn-ler {
+    background-color: var(--vermelho-sangue);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 15px;
+    transition: background 0.2s;
 }
 
-.stories {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 20px;
+.btn-ler:hover {
+    background-color: #b30000;
 }
 
-.story {
-  background: var(--panel);
-  border: 1px solid #33211b;
-  padding: 25px;
-  min-height: 230px;
-  transition: .25s;
-  position: relative;
+/* Elementos Flutuantes (Animações) */
+.elemento-flutuante {
+    position: fixed;
+    font-size: 2.5rem;
+    pointer-events: none;
+    z-index: 999;
+    transition: transform 0.1s linear;
 }
 
-.story:hover {
-  transform: translateY(-5px);
-  border-color: var(--orange);
-  box-shadow: 0 0 25px #ff4d0018;
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
 }
 
-.story .emoji { font-size: 35px; }
-.story h3 { color: #f4d5c2; }
-.story p { color: #9e928c; line-height: 1.6; font-size: 13px; }
-
-.reader {
-  display: none;
-  max-width: 850px;
-  margin: 35px auto;
-  padding: 35px;
-  background: #100c0c;
-  border: 1px solid #5a2417;
-  line-height: 2;
+.conteudo-modal {
+    background-color: var(--cor-card);
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    border: 2px solid var(--laranja-halloween);
 }
 
-.reader.active { display: block; }
-.reader h2 {
-  color: var(--orange);
-  font-family: 'Creepster', cursive;
-  font-size: 40px;
-  line-height: 1.2;
+.fechar {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
 }
 
-.story-text p { margin-bottom: 25px; }
-
-.warning {
-  color: #ff5b45;
-  text-align: center;
-  animation: pulse 2s infinite;
+.imagem-detalhe img {
+    width: 100%;
+    border-radius: 8px;
+    margin: 15px 0;
 }
 
-@keyframes pulse {
-  50% { opacity: .45; }
+.texto-historia {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #ccc;
 }
 
 footer {
-  text-align: center;
-  padding: 35px;
-  color: #6f625d;
-  border-top: 1px solid #30201b;
-  font-size: 12px;
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    border-top: 1px solid #222;
+    margin-top: 50px;
+}
+// Abrir e Fechar Modal de Histórias
+function abrirLeitor(id) {
+    const historia = historiasData.find(h => h.id === id);
+    if (!historia) return;
+
+    document.getElementById('modal-titulo').innerText = historia.titulo;
+    document.getElementById('modal-imagem').src = historia.imagem;
+    document.getElementById('modal-texto').innerText = historia.conteudo;
+    
+    document.getElementById('modal-leitor').style.display = 'flex';
 }
 
-#scare {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  background: #000;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
+function fecharLeitor() {
+    document.getElementById('modal-leitor').style.display = 'none';
 }
 
-#scare.show {
-  display: flex;
-  animation: flash .13s steps(2) 5;
-}
+// Animação de elementos flutuantes
+document.addEventListener('DOMContentLoaded', () => {
+    const elementos = [
+        document.getElementById('fantasma'),
+        document.getElementById('abobora'),
+        document.getElementById('morcego')
+    ];
 
-#scare .face {
-  font-size: clamp(120px, 35vw, 300px);
-  filter: drop-shadow(0 0 30px red);
-}
+    // Posicionamento inicial aleatório
+    elementos.forEach(elem => {
+        if (!elem) return;
+        moverElemento(elem);
+        setInterval(() => moverElemento(elem), 4000);
+    });
 
-#scare h2 {
-  font-family: 'Creepster', cursive;
-  font-size: clamp(35px, 8vw, 70px);
-  color: red;
-  margin: 0;
-}
-
-@keyframes flash {
-  0%,100% { background: #000; }
-  50% { background: #710000; }
-}
-
-#flashlight {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-  background: radial-gradient(
-    circle 150px at var(--x,50%) var(--y,50%),
-    transparent 0%, transparent 35%, #000e 100%
-  );
-  display: none;
-}
-
-body.lantern #flashlight { display: block; }
-
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-@media(max-width:600px) {
-  header { padding: 18px 5%; }
-  header a { margin-left: 8px; font-size: 10px; }
-  .logo { font-size: 24px; }
-  .section { padding: 35px 5%; }
-  .reader { padding: 20px; margin: 20px 5%; }
-}
-</style>
-</head>
-
-<body>
-<div id="flashlight"></div>
-
-<header>
-  <div class="logo">☠ MEIA-NOITE</div>
-  <nav>
-    <a href="#inicio">INÍCIO</a>
-    <a href="#historias">CONTOS</a>
-  </nav>
-</header>
-
-<section class="hero" id="inicio">
-  <small>⚠ VOCÊ FOI AVISADO ⚠</small>
-  <h1>CONTOS DO ALÉM</h1>
-  <p>
-    Existem histórias que deveriam permanecer enterradas.
-    Nesta noite, você vai descobrir por que algumas portas
-    nunca devem ser abertas.
-  </p>
-  <button onclick="document.querySelector('#historias').scrollIntoView({behavior:'smooth'})">
-    ☠ ENTRAR SE TIVER CORAGEM
-  </button>
-</section>
-
-<section class="section" id="historias">
-  <h2>📖 Arquivos Proibidos</h2>
-  <p>Escolha uma história. Mas não diga que não avisamos...</p>
-
-  <div class="stories">
-    <article class="story">
-      <div class="emoji">🏚️</div>
-      <h3>A Casa do Último Grito</h3>
-      <p>Uma casa abandonada. Uma janela acesa. Alguém sabe que você chegou.</p>
-      <button onclick="openStory(0)">Ler conto →</button>
-    </article>
-
-    <article class="story">
-      <div class="emoji">🪞</div>
-      <h3>O Reflexo Errado</h3>
-      <p>Ele sempre imitava seus movimentos. Até aquela noite.</p>
-      <button onclick="openStory(1)">Ler conto →</button>
-    </article>
-
-    <article class="story">
-      <div class="emoji">📞</div>
-      <h3>A Ligação das 03:00</h3>
-      <p>O telefone toca. Do outro lado, uma voz pede para entrar.</p>
-      <button onclick="openStory(2)">Ler conto →</button>
-    </article>
-
-    <article class="story">
-      <div class="emoji">🎃</div>
-      <h3>O Espantalho de Halloween</h3>
-      <p>Todo ano ele aparece mais perto da porta de casa.</p>
-      <button onclick="openStory(3)">Ler conto →</button>
-    </article>
-  </div>
-
-  <div class="reader" id="reader">
-    <h2 id="storyTitle"></h2>
-    <div class="story-text" id="storyText"></div>
-    <p class="warning" id="warning"></p>
-
-    <div class="controls">
-      <button onclick="toggleLantern()">🔦 Ligar/desligar lanterna</button>
-      <button onclick="closeStory()">✕ Fechar história</button>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="text-align:center">
-  <h2>☠ Regras da Meia-Noite</h2>
-  <p>Não leia sozinho se tiver medo do escuro.</p>
-  <p>Use fones de ouvido para uma experiência mais imersiva.</p>
-  <p>Se ouvir seu nome durante a leitura... verifique se está sozinho.</p>
-</section>
-
-<footer>
-  MEIA-NOITE © 2026 — Histórias fictícias para quem não teme o escuro.
-  <p>Feito para os corajosos. Ou para os que fingem ser.</p>
-</footer>
-
-<div id="scare" role="alert" aria-live="assertive">
-  <div class="face">👹</div>
-  <h2>ELE ESTÁ ATRÁS DE VOCÊ!</h2>
-  <p>Você realmente achou que estava sozinho?</p>
-  <button onclick="dismissScare()">VOLTAR AO ESCURO</button>
-</div>
-
-<script>
-const stories = [
-  {
-    title: "A Casa do Último Grito",
-    paragraphs: [
-      "Eram 23h47 quando Lucas chegou à velha casa no fim da estrada. As janelas estavam pregadas com tábuas, mas uma luz amarela brilhava no andar de cima.",
-      "Ele empurrou a porta. O rangido ecoou pelo corredor. Na parede, dezenas de fotografias mostravam pessoas desconhecidas. Em todas elas, os olhos haviam sido riscados.",
-      "No andar superior, encontrou uma porta entreaberta. Lá dentro, uma cadeira de balanço se movia sozinha.",
-      "Então ouviu três batidas atrás de si. Toc. Toc. Toc. Lucas se virou. Não havia ninguém.",
-      "Quando olhou novamente para a cadeira, havia alguém sentado nela. Era uma cópia perfeita dele mesmo, sorrindo com a boca aberta demais.",
-      "A figura levantou um dedo até os lábios e sussurrou: 'Você demorou. Agora é minha vez de sair.'"
-    ],
-    scareAt: 4
-  },
-  {
-    title: "O Reflexo Errado",
-    paragraphs: [
-      "Marina comprou um espelho antigo em um mercado de objetos usados. O vendedor só fez um pedido: nunca olhe para ele depois da meia-noite.",
-      "Na primeira noite, tudo parecia normal. Na segunda, seu reflexo demorou um segundo a acompanhar seus movimentos.",
-      "Na terceira noite, Marina levantou a mão direita. O reflexo levantou a esquerda.",
-      "Ela recuou. O reflexo permaneceu imóvel. Então sorriu, mesmo quando Marina começou a chorar.",
-      "O vidro estalou. Uma mão pálida surgiu do outro lado e pressionou a superfície, como se procurasse uma saída.",
-      "Marina correu até a porta. No corredor, seu celular vibrou com uma notificação: uma foto dela dormindo, tirada de dentro do espelho."
-    ],
-    scareAt: 3
-  },
-  {
-    title: "A Ligação das 03:00",
-    paragraphs: [
-      "Às três da manhã, o telefone fixo tocou na casa de Daniel. O aparelho estava desconectado havia anos.",
-      "Ele atendeu. Do outro lado, ouviu sua própria voz, ofegante: 'Não abra a porta. Seja lá o que acontecer, não abra.'",
-      "Três batidas soaram na entrada. Uma voz idêntica à de Daniel chamou: 'Sou eu. Esqueci minhas chaves.'",
-      "O telefone chiou. Sua voz do outro lado começou a contar: 'Dez... nove... oito...' As batidas ficaram mais fortes.",
-      "Daniel espiou pelo olho mágico. Do lado de fora, havia um homem idêntico a ele, com o rosto coberto de sangue.",
-      "O telefone ficou em silêncio. A fechadura começou a girar sozinha. E a voz dentro do aparelho sussurrou: 'Eu avisei para não abrir.'"
-    ],
-    scareAt: 4
-  },
-  {
-    title: "O Espantalho de Halloween",
-    paragraphs: [
-      "Todos os outubros, a família Oliveira colocava um espantalho no jardim para decorar o Halloween. Ninguém lembrava quem havia trazido aquele boneco.",
-      "Na primeira noite, ele estava perto da cerca. Na segunda, perto da janela da cozinha.",
-      "Na terceira, o pai o encontrou parado na varanda. A cabeça de palha apontava diretamente para o quarto de sua filha.",
-      "Ele jogou o espantalho no lixo e trancou todas as portas. Naquela noite, sua filha acordou gritando que havia alguém no quarto.",
-      "O pai entrou correndo. A cama estava vazia. Na janela, marcas de mãos sujas de terra desciam pelo vidro.",
-      "Lá fora, o espantalho estava novamente no jardim. Desta vez, usava o pijama da menina."
-    ],
-    scareAt: 3
-  }
-];
-
-let scareTimer;
-let active = false;
-let audioContext;
-
-function openStory(index) {
-  clearTimeout(scareTimer);
-  document.getElementById("scare").classList.remove("show");
-
-  const story = stories[index];
-  const reader = document.getElementById("reader");
-
-  document.getElementById("storyTitle").textContent = story.title;
-  const text = document.getElementById("storyText");
-  text.innerHTML = "";
-
-  story.paragraphs.forEach((paragraph, i) => {
-    const p = document.createElement("p");
-    p.textContent = paragraph;
-    text.appendChild(p);
-
-    if (i === story.scareAt) {
-      const warning = document.createElement("p");
-      warning.className = "warning";
-      warning.textContent = "Algo se moveu no canto do seu olho...";
-      text.appendChild(warning);
+    function moverElemento(elem) {
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 100);
+        elem.style.transform = `translate(${x}px, ${y}px)`;
     }
-  });
-
-  document.getElementById("warning").textContent =
-    "A leitura continua... você tem certeza de que está sozinho?";
-
-  reader.classList.add("active");
-  reader.scrollIntoView({behavior:"smooth", block:"start"});
-  active = true;
-
-  // O susto ocorre depois de um intervalo imprevisível.
-  scareTimer = setTimeout(() => {
-    if (active) triggerScare();
-  }, 18000 + Math.random() * 18000);
-}
-
-function closeStory() {
-  active = false;
-  clearTimeout(scareTimer);
-  document.getElementById("reader").classList.remove("active");
-  document.getElementById("scare").classList.remove("show");
-  document.body.classList.remove("lantern");
-}
-
-function toggleLantern() {
-  document.body.classList.toggle("lantern");
-}
-
-function playHorrorSound() {
-  // Som sintético, sem precisar baixar arquivos.
-  try {
-    audioContext = audioContext || new (
-      window.AudioContext || window.webkitAudioContext
-    )();
-
-    if (audioContext.state === "suspended") audioContext.resume();
-
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-
-    oscillator.type = "sawtooth";
-    oscillator.frequency.setValueAtTime(900, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(
-      65, audioContext.currentTime + 1.1
-    );
-
-    gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(
-      0.5, audioContext.currentTime + 0.06
-    );
-    gain.gain.exponentialRampToValueAtTime(
-      0.0001, audioContext.currentTime + 1.5
-    );
-
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 1.5);
-  } catch (error) {
-    console.log("Áudio indisponível neste navegador.");
-  }
-}
-
-function triggerScare() {
-  if (!active) return;
-  document.getElementById("scare").classList.add("show");
-  playHorrorSound();
-  active = false;
-}
-
-function dismissScare() {
-  document.getElementById("scare").classList.remove("show");
-  document.getElementById("warning").textContent =
-    "Você sobreviveu... desta vez.";
-}
-
-document.addEventListener("mousemove", event => {
-  document.documentElement.style.setProperty("--x", event.clientX + "px");
-  document.documentElement.style.setProperty("--y", event.clientY + "px");
 });
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeStory();
-});
-</script>
-</body>
-</html>
